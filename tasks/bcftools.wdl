@@ -222,3 +222,157 @@ task merge {
 		}
     }
 }
+
+task norm {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-07-24"
+	}
+
+	input {
+		String path_exe = "bcftools"
+
+		File in
+		String outputPath
+		String? sample
+		String addSuffix = ".norm"
+		String suffix = ".vcf.gz"
+
+		File referenceFasta
+
+		String checkRef = "e"
+		Boolean removeDuplicates = false
+		String rmDup = "none"
+		String multiallelics = "+both"
+		Boolean noVersion = false
+		Boolean doNotNormalize = false
+		String outputType = "z"
+		String? regions
+		File? regionsFile
+		Boolean strictFilter = false
+		String? targets
+		File? targetsFile
+		Int siteWin = 1000
+		Int threads = 0
+	}
+
+	String ext = if outputType == "v" then ".vcf" else if outputType == "b" then ".bcf.gz" else if outputType == "u" then ".bcf" else ".vcf.gz"
+	String outputFile = "~{outputPath}/" + basename(in,suffix) + "~{addSuffix}~{ext}"
+
+	String regionsOpt = if defined(regions) then "--regions ~{regions} " else ""
+	String regionsFileOpt = if defined(regionsFile) then "--regions-file ~{regionsFile} " else ""
+	String targetsOpt = if defined(targets) then "--targets ~{targets} " else ""
+	String targetsFileOpt = if defined(targetsFile) then "--targets-file ~{targetsFile} " else ""
+
+	String rmDupOpt = if removeDuplicates then "--remove-duplicates --rm-dup ~{rmDup} " else ""
+	command <<<
+
+		if [[ ! -f ~{outputFile} ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+		
+		~{path_exe} norm ~{rmDupOpt}~{true="--no-version " false="" noVersion}~{true="--do-not-normalize " false="" doNotNormalize}~{regionsOpt}~{regionsFileOpt}~{targetsOpt}~{targetsFileOpt}~{true="--strict-filter " false="" strictFilter}\
+			--check-ref ~{checkRef} \
+			--fasta-ref ~{referenceFasta} \
+			--multiallelics ~{multiallelics} \
+			--output ~{outputFile} \
+			--output-type ~{outputType} \
+			--threads ~{threads} \
+			--site-win ~{siteWin} \
+			~{in}
+
+	>>>
+
+	output {
+		File vcf = "~{outputFile}"
+  	}
+
+    parameter_meta {
+        path_exe: {
+			description: "Path used as executable [default: 'bcftools']",
+			category: "optional"
+		}
+		in: {
+			description: "VCF/BCF file to left-align and normalize indels (extension: '.vcf.gz|.bcf')",
+			category: "required"
+		}
+		outputPath: {
+			description: 'Path where was generated output',
+			category: "required"
+		}
+		sample: {
+			description: 'The sample name wich is used as basename for output file. [default: basename(in) without suffix]',
+			category: "optional"
+		}
+		addSuffix: {
+			description: 'Add a suffix to the basename file or sample [default: .norm]',
+			category: "optional"
+		}
+		suffix: {
+			description: 'The suffix of the input file [default: .vcf.gz]',
+			category: "optional"
+		}
+		referenceFasta: {
+			description: 'Reference used to merge in gvcf mode',
+			category: "required"
+		}
+		checkRef: {
+			description: 'Check REF alleles and exit (e), warn (w), exclude (x), or set (s) bad sites [default: e]',
+			category: "optional"
+		}
+		removeDuplicates: {
+			description: 'Remove duplicate lines of the same type.',
+			category: "optional"
+		}
+		rmDup: {
+			description: 'Remove duplicate snps|indels|both|all|none [default: none]',
+			category: "optional"
+		}
+		multiallelics: {
+			description: "Split multiallelics (-) or join biallelics (+), type: snps|indels|both|any [default: +both]",
+			category: "optional"
+		}
+		noVersion: {
+			description: 'Do not append version and command line to the header [default: false]',
+			category: "optional"
+		}
+		doNotNormalize: {
+			description: 'Do not normalize indels (with -m or -c s) [default: false]',
+			category: "optional"
+		}
+		outputType: {
+			description: '"b" compressed BCF; "u" uncompressed BCF; "z" compressed VCF; "v" uncompressed VCF [default: "v"]',
+			category: "optional"
+		}
+		regions: {
+			description: "Restrict to comma-separated list of regions",
+			category: "optional"
+		}
+		regionsFile: {
+			description: "Restrict to regions listed in a file",
+			category: "optional"
+		}
+		strictFilter: {
+			description: "When merging (-m+), merged site is PASS only if all sites being merged PASS [default: false]",
+			category: "optional"
+		}
+		targets: {
+			description: "Similar to 'regions' but streams rather than index-jumps",
+			category: "optional"
+		}
+		targetsFile: {
+			description: "Similar to 'regionsFile' but streams rather than index-jumps",
+			category: "optional"
+		}
+		threads: {
+			description: "Sets the number of extra-threads [default: 0]",
+			category: "optional"
+		}
+		siteWin: {
+			description: "Buffer for sorting lines which changed position during realignment [default: 1000]",
+			category: "optional"
+		}
+	}
+}
