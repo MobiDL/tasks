@@ -108,8 +108,8 @@ task merge {
 		String merge = "both"
 		Boolean noVersion = false
 		String outputType = "v"
-		String? region
-		File? regionFile
+		String? regions
+		File? regionsFile
 		Int threads   = 0
 	}
 
@@ -117,8 +117,8 @@ task merge {
 	String applyFilterOpt = if defined(applyFilter) then "--apply-filter '~{sep=',' applyFilter}' " else ""
 	String gvcfOpt = if gvcf then if defined(referenceFasta) then "--gvcf ~{referenceFasta} " else "--gvcf - " else ""
 	String fileListOpt = if defined(fileList) then "--file-list ~{fileList} " else ""
-	String regionOpt = if defined(region) then "--region ~{region} " else ""
-	String regionFileOpt = if defined(regionFile) then "--region-file ~{regionFile} " else ""
+	String regionsOpt = if defined(regions) then "--regions ~{regions} " else ""
+	String regionsFileOpt = if defined(regionsFile) then "--regions-file ~{regionsFile} " else ""
 
 	String ext = if outputType == "v" then ".vcf" else if outputType == "b" then ".bcf.gz" else if outputType == "u" then ".bcf" else ".vcf.gz"
 
@@ -129,7 +129,7 @@ task merge {
 		if [[ ! -f ~{outputFile} ]]; then
 			mkdir -p $(dirname ~{outputFile})
 		fi
-		~{path_exe} merge ~{true="--force-samples " false="" forceSamples}~{true="--print-header " false="" printHeader}~{useHeaderOpt}~{true="--missing-to-ref " false="" missingToRef}~{applyFilterOpt}~{gvcfOpt}~{fileListOpt}~{true="--no-version " false="" noVersion}~{regionOpt}~{regionFileOpt}\
+		~{path_exe} merge ~{true="--force-samples " false="" forceSamples}~{true="--print-header " false="" printHeader}~{useHeaderOpt}~{true="--missing-to-ref " false="" missingToRef}~{applyFilterOpt}~{gvcfOpt}~{fileListOpt}~{true="--no-version " false="" noVersion}~{regionsOpt}~{regionsFileOpt}\
 			--info-rules '~{infoRules}' \
 			--merge '~{merge}' \
 			--filter-logic '~{filterLogic}' \
@@ -208,12 +208,12 @@ task merge {
 			description: '"b" compressed BCF; "u" uncompressed BCF; "z" compressed VCF; "v" uncompressed VCF [default: "v"]',
 			category: "optional"
 		}
-		region: {
-			description: "Restrict to comma-separated list of regions",
+		regions: {
+			description: "Restrict to comma-separated list of regions.",
 			category: "optional"
 		}
-		regionFile: {
-			description: "Restrict to regions listed in a file",
+		regionsFile: {
+			description: "Restrict to regions listed in a file.",
 			category: "optional"
 		}
 		threads: {
@@ -272,7 +272,7 @@ task norm {
 		if [[ ! -f ~{outputFile} ]]; then
 			mkdir -p $(dirname ~{outputFile})
 		fi
-		
+
 		~{path_exe} norm ~{rmDupOpt}~{true="--no-version " false="" noVersion}~{true="--do-not-normalize " false="" doNotNormalize}~{regionsOpt}~{regionsFileOpt}~{targetsOpt}~{targetsFileOpt}~{true="--strict-filter " false="" strictFilter}\
 			--check-ref ~{checkRef} \
 			--fasta-ref ~{referenceFasta} \
