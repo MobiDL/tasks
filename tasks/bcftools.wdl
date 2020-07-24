@@ -7,6 +7,7 @@ task index {
 		version: "0.0.1"
 		date: "2020-07-24"
 	}
+
 	input {
 		String path_exe = "bcftools"
 
@@ -26,7 +27,6 @@ task index {
 
 	String minShiftOpt = if ! tabix then "--min-shift " + minShift else ""
 
-
 	command <<<
 
 		if [[ ! -f ~{outputRaw} ]]; then
@@ -43,7 +43,6 @@ task index {
   	}
 
     parameter_meta {
-
         path_exe: {
 			description: "Path used as executable [default: 'bcftools']",
 			category: "optional"
@@ -72,7 +71,6 @@ task index {
 			description: "Sets the number of extra-threads [default: 0]",
 			category: "optional"
 		}
-
     }
 }
 
@@ -88,6 +86,7 @@ task merge {
 		version: "0.0.1"
 		date: "2020-07-24"
 	}
+
 	input {
 		String path_exe = "bcftools"
 
@@ -144,7 +143,6 @@ task merge {
   	}
 
     parameter_meta {
-
         path_exe: {
 			description: 'Path used as executable [default: "bcftools"]',
 			category: "optional"

@@ -49,9 +49,8 @@ task findFiles {
 	}
 
     parameter_meta {
-
         path: {
-			description: "Path used as executable [default: 'bcftools']",
+			description: "Path where find will work on.",
 			category: "required"
 		}
         regexpName: {
@@ -90,7 +89,6 @@ task findFiles {
 			description: "Matches files which are executable and directories which are searchable (in a file name resolution sense).",
 			category: "tests"
 		}
-
 	}
 }
 
@@ -130,7 +128,6 @@ task bgzip {
 	}
 
     parameter_meta {
-
         in: {
 			description: "File to compres/decompress.",
 			category: "required"
@@ -155,6 +152,5 @@ task bgzip {
 			description: "Sets the number of threads [default: 1]",
 			category: "optional"
 		}
-
 	}
 }
