@@ -140,6 +140,7 @@ task merge {
 	>>>
 
 	output {
+		File output = ~{outputFile}
   	}
 
     parameter_meta {
