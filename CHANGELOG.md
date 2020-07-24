@@ -7,3 +7,4 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Tasks for bcftools : index and merge
+- Tasks for bash command : findFiles
