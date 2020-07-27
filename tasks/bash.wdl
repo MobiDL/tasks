@@ -92,8 +92,6 @@ task findFiles {
 	}
 }
 
-# TODO:
-#	-
 task bgzip {
 	meta {
 		author: "Charles VAN GOETHEM"
