@@ -133,31 +133,31 @@ task reorderSam {
 		}
 		quiet: {
 			description: 'Whether to suppress job-summary info on System.err. [Default: false]',
-			category: 'optional'
+			category: 'Common options'
 		}
 		tmpDir: {
 			description: 'Path to a directory with space available to be used by this program for temporary storage of working files. [Default: null]',
-			category: 'optional'
+			category: 'Common options'
 		}
 		useJDKDeflater: {
 			description: 'Use the JDK Deflater instead of the Intel Deflater for writing compressed output. [Default: false]',
-			category: 'optional'
+			category: 'Common options'
 		}
 		useJDKInflater: {
 			description: 'Use the JDK Inflater instead of the Intel Inflater for reading compressed input. [Default: false]',
-			category: 'optional'
+			category: 'Common options'
 		}
 		validationStringency: {
 			description: ' Validation stringency for all SAM files read by this program.  Setting stringency to SILENT can improve performance when processing a BAM file in which variable-length data (read, qualities, tags) do not otherwise need to be decoded. [Default: "STRIC"]',
-			category: 'optional'
+			category: 'Common options'
 		}
 		verbosity: {
 			description: 'Control verbosity of logging. [Default: "INFO"]',
-			category: 'optional'
+			category: 'Common options'
 		}
 		showHidden: {
 			description: 'Display hidden arguments. [Default: false]',
-			category: 'optional'
+			category: 'Common options'
 		}
 	}
 }
@@ -332,31 +332,31 @@ task depthOfCoverage {
 		}
 		quiet: {
 			description: 'Whether to suppress job-summary info on System.err. [Default: false]',
-			category: 'optional'
+			category: 'Common options'
 		}
 		tmpDir: {
 			description: 'Path to a directory with space available to be used by this program for temporary storage of working files. [Default: null]',
-			category: 'optional'
+			category: 'Common options'
 		}
 		useJDKDeflater: {
 			description: 'Use the JDK Deflater instead of the Intel Deflater for writing compressed output. [Default: false]',
-			category: 'optional'
+			category: 'Common options'
 		}
 		useJDKInflater: {
 			description: 'Use the JDK Inflater instead of the Intel Inflater for reading compressed input. [Default: false]',
-			category: 'optional'
+			category: 'Common options'
 		}
 		validationStringency: {
 			description: ' Validation stringency for all SAM files read by this program.  Setting stringency to SILENT can improve performance when processing a BAM file in which variable-length data (read, qualities, tags) do not otherwise need to be decoded. [Default: "STRIC"]',
-			category: 'optional'
+			category: 'Common options'
 		}
 		verbosity: {
 			description: 'Control verbosity of logging. [Default: "INFO"]',
-			category: 'optional'
+			category: 'Common options'
 		}
 		showHidden: {
 			description: 'Display hidden arguments. [Default: false]',
-			category: 'optional'
+			category: 'Common options'
 		}
 	}
 }
