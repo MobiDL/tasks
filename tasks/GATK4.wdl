@@ -334,6 +334,10 @@ task depthOfCoverage {
 			description: 'Whether to suppress job-summary info on System.err. [Default: false]',
 			category: 'optional'
 		}
+		tmpDir: {
+			description: 'Path to a directory with space available to be used by this program for temporary storage of working files. [Default: null]',
+			category: 'optional'
+		}
 		useJDKDeflater: {
 			description: 'Use the JDK Deflater instead of the Intel Deflater for writing compressed output. [Default: false]',
 			category: 'optional'
