@@ -76,7 +76,7 @@ task reorderSam {
 			category: 'optional'
 		}
 		in: {
-			description: 'Output path where file (SAM or BAM) were generated.',
+			description: 'Input file (SAM or BAM) to extract reads from..',
 			category: 'Required'
 		}
 		outputPath: {
