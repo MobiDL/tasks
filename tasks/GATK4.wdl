@@ -131,6 +131,10 @@ task reorderSam {
 			description: 'Reference sequence file. [Default: null]',
 			category: 'optional'
 		}
+		quiet: {
+			description: 'Whether to suppress job-summary info on System.err. [Default: false]',
+			category: 'optional'
+		}
 		tmpDir: {
 			description: 'One or more directories with space available to be used by this program for temporary storage of working files. [Default: null]',
 			category: 'optional'
