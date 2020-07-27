@@ -26,9 +26,10 @@ task reorderSam {
 		Boolean createMD5 = false
 		File? GA4GHClientSecrets
 		Int maxRecordsInRam = 500000
-		Boolean quiet = false
 		File? referenceSequence
-		Array[File]? tmpDir
+
+		Boolean quiet = false
+		File? tmpDir
 		Boolean useJDKDeflater = false
 		Boolean useJDKInflater = false
 		String validationStringency = "STRICT"
@@ -38,8 +39,6 @@ task reorderSam {
 
 	String GA4GHClientSecretsOpt = if defined(GA4GHClientSecrets) then "--GA4GH_CLIENT_SECRETS ~{GA4GHClientSecrets} " else ""
 	String referenceSequenceOpt = if defined(referenceSequence) then "--REFERENCE_SEQUENCE ~{referenceSequence} " else ""
-	String tmpDirOpt = if defined(tmpDir) then "~{prefix='--TMP_DIR ' sep=' ' tmpDir} " else ""
-	String prefixTmpDirOpt = if defined(tmpDir) then "--TMP_DIR " else ""
 
 	String outputName = if defined(prefix) then "~{prefix}.~{suffix}~{ext}" else basename(in,ext) + ".~{suffix}~{ext}"
 	String outputFile = "~{outputPath}/~{outputName}"
@@ -50,7 +49,7 @@ task reorderSam {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		~{path_exe} ReorderSam ~{GA4GHClientSecrets}~{referenceSequenceOpt}~{prefixTmpDirOpt}~{sep=' --TMP_DIR ' tmpDir} \
+		~{path_exe} ReorderSam ~{GA4GHClientSecrets}~{referenceSequenceOpt} \
 			--java-options '~{sep=" " javaOptions}' \
 			--ALLOW_CONTIG_LENGTH_DISCORDANCE '~{allowIncompleteLengthDiscordance}' \
 			--ALLOW_INCOMPLETE_DICT_CONCORDANCE '~{allowIncompleteDictDiscordance}' \
@@ -59,6 +58,7 @@ task reorderSam {
 			--CREATE_MD5_FILE '~{createMD5}' \
 			--MAX_RECORDS_IN_RAM ~{maxRecordsInRam} \
 			--QUIET '~{quiet}' \
+			--TMP_DIR ~{default='null' tmpDir} \
 			--USE_JDK_DEFLATER '~{useJDKDeflater}' \
 			--USE_JDK_INFLATER '~{useJDKInflater}' \
 			--VALIDATION_STRINGENCY '~{validationStringency}' \
@@ -136,7 +136,7 @@ task reorderSam {
 			category: 'optional'
 		}
 		tmpDir: {
-			description: 'One or more directories with space available to be used by this program for temporary storage of working files. [Default: null]',
+			description: 'Path to a directory with space available to be used by this program for temporary storage of working files. [Default: null]',
 			category: 'optional'
 		}
 		useJDKDeflater: {
