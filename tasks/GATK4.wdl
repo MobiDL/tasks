@@ -70,6 +70,10 @@ task reorderSam {
 
 	>>>
 
+	output {
+		File outputFile = "~{outputFile}"
+	}
+
 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
@@ -244,6 +248,10 @@ task depthOfCoverage {
 				~{sep=" " summaryCoverageThresholdOpt}
 		"""
 	>>>
+
+	output {
+		File outputFile = "~{outputFile}"
+	}
 
 	parameter_meta {
 		path_exe: {
