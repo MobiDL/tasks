@@ -17,7 +17,7 @@ task index {
 		Boolean tabix = false
 		Boolean force = false
 		Int minShift  = 14
-		Int threads   = 0
+		Int threads   = 1
 	}
 
 	String ext = if tabix then ".tbi" else ".csi"
@@ -33,7 +33,7 @@ task index {
 			mkdir -p $(dirname ~{outputRaw})
 			ln ~{in} ~{outputRaw}
 		fi
-		~{path_exe} index ~{true="--tbi" false="--csi" tabix} ~{true="--force" false="" force} ~{minShiftOpt} --threads ~{threads} -o ~{outputIndex} ~{outputRaw}
+		~{path_exe} index ~{true="--tbi" false="--csi" tabix} ~{true="--force" false="" force} ~{minShiftOpt} --threads ~{threads - 1} -o ~{outputIndex} ~{outputRaw}
 
 	>>>
 
@@ -68,7 +68,7 @@ task index {
 			category: "optional"
 		}
 		threads: {
-			description: "Sets the number of extra-threads [default: 0]",
+			description: "Sets the number of threads [default: 1]",
 			category: "optional"
 		}
     }
@@ -110,7 +110,7 @@ task merge {
 		String outputType = "v"
 		String? regions
 		File? regionsFile
-		Int threads   = 0
+		Int threads = 1
 	}
 
 	String useHeaderOpt = if defined(useHeader) then "--use-header ~{useHeader} " else ""
@@ -130,6 +130,7 @@ task merge {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 		~{path_exe} merge ~{true="--force-samples " false="" forceSamples}~{true="--print-header " false="" printHeader}~{useHeaderOpt}~{true="--missing-to-ref " false="" missingToRef}~{applyFilterOpt}~{gvcfOpt}~{fileListOpt}~{true="--no-version " false="" noVersion}~{regionsOpt}~{regionsFileOpt}\
+			--threads ~{threads - 1} \
 			--info-rules '~{infoRules}' \
 			--merge '~{merge}' \
 			--filter-logic '~{filterLogic}' \
@@ -217,7 +218,7 @@ task merge {
 			category: "optional"
 		}
 		threads: {
-			description: "Sets the number of extra-threads [default: 0]",
+			description: "Sets the number of threads [default: 1]",
 			category: "optional"
 		}
     }
@@ -255,7 +256,7 @@ task norm {
 		String? targets
 		File? targetsFile
 		Int siteWin = 1000
-		Int threads = 0
+		Int threads = 1
 	}
 
 	String ext = if outputType == "v" then ".vcf" else if outputType == "b" then ".bcf.gz" else if outputType == "u" then ".bcf" else ".vcf.gz"
@@ -279,7 +280,7 @@ task norm {
 			--multiallelics ~{multiallelics} \
 			--output ~{outputFile} \
 			--output-type ~{outputType} \
-			--threads ~{threads} \
+			--threads ~{threads - 1} \
 			--site-win ~{siteWin} \
 			~{in}
 
@@ -367,7 +368,7 @@ task norm {
 			category: "optional"
 		}
 		threads: {
-			description: "Sets the number of extra-threads [default: 0]",
+			description: "Sets the number of threads [default: 0]",
 			category: "optional"
 		}
 		siteWin: {
