@@ -197,3 +197,89 @@ task sort {
 		}
 	}
 }
+
+task coverage {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-07-29"
+	}
+
+	input {
+		String path_exe = "bedtools"
+
+		File bedA
+		File bedB
+
+		String? outputPath
+		String? name = "coverage.bed"
+
+		String? outMode # values possible => "-hist" "-d" "-counts" or "-mean"
+		Boolean d = false
+
+		Boolean v = false
+
+		Float? f
+		Float? F
+
+		Boolean? reciprocal
+		Boolean? strandness
+	}
+
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{name}" else "~{name}"
+
+	command <<<
+
+		if [[ ! -f ~{outputFile} ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} intersect \
+			~{default="" true="-r " false="-e " reciprocal}~{default="" true="-s " false="-S " strandness}\
+			~{default="" "-f " + f} \
+			~{default="" "-F " + F} \
+			-a ~{bedA} \
+			-b ~{bedB} > ~{outputFile}
+
+	>>>
+
+	output {
+		File out = "~{outputFile}"
+	}
+
+	parameter_meta {
+        path_exe: {
+			description: "Path used as executable [default: 'bedtools']",
+			category: "Optional"
+		}
+		outputPath: {
+			description: 'Path where was generated output. [default: pwd(script)]',
+			category: "Optional"
+		}
+		bedA: {
+			description: 'BAM/BED/GFF/VCF file "A".',
+			category: "Required"
+		}
+		bedB: {
+			description: 'BAM/BED/GFF/VCF file "B".',
+			category: "Required"
+		}
+		f: {
+			description: 'Minimum overlap required as a fraction of A (e.g 0.1). (default: null = 1bp)',
+			category: "Optional"
+		}
+        F: {
+			description: 'Minimum overlap required as a fraction of B(e.g 0.9). (default: null = 1bp)',
+			category: "Optional"
+		}
+		strandness: {
+			description: 'Force "strandedness" (true) or "different strandness" (false). [default: null]',
+			category: "Optional"
+		}
+        reciprocal: {
+			description: 'true : F = f ; false : fileter OR (f OR F is OK) ; default: need to respect f AND F ',
+			category: "Optional"
+		}
+	}
+}
