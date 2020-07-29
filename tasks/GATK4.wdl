@@ -221,32 +221,37 @@ task depthOfCoverage {
 	String outputFile = "~{outputPath}/~{outputName}"
 
 	command <<<
-		echo """
-			~{path_exe} DepthOfCoverage \
-				--java-options '~{sep=" " javaOptions}' \
-				--calculate-coverage-over-genes ~{default='null' geneList} \
-				--count-type ~{countType} \
-				--disable-bam-index-caching ~{disableBamIndexCaching} \
-				--disable-sequence-dictionary-validation ~{disableSequenceDictionaryValidation} \
-				--interval-merging-rule ~{intervalMergingRule} \
-				--max-base-quality ~{maxBaseQuality} \
-				--max-depth-per-sample ~{maxDepthPerSample} \
-				--min-base-quality ~{minBaseQuality} \
-				--output-format ~{outputFormat} \
-				--partition-type ~{partitionType} \
-				--print-base-counts ~{printBaseCounts} \
-				--QUIET '~{quiet}' \
-				--use-jdk-deflater '~{useJDKDeflater}' \
-				--use-jdk-inflater '~{useJDKInflater}' \
-				--read-validation-stringency '~{validationStringency}' \
-				--verbosity ~{verbosity} \
-				--showHidden ~{showHidden} \
-				--input ~{in} \
-				--intervals ~{intervals} \
-				--reference ~{referenceFasta} \
-				--output ~{outputFile} \
-				~{sep=" " summaryCoverageThresholdOpt}
-		"""
+
+		if [[ ! -f ~{outputFile} ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+
+		~{path_exe} DepthOfCoverage \
+			--java-options '~{sep=" " javaOptions}' \
+			--calculate-coverage-over-genes ~{default='null' geneList} \
+			--count-type ~{countType} \
+			--disable-bam-index-caching ~{disableBamIndexCaching} \
+			--disable-sequence-dictionary-validation ~{disableSequenceDictionaryValidation} \
+			--interval-merging-rule ~{intervalMergingRule} \
+			--max-base-quality ~{maxBaseQuality} \
+			--max-depth-per-sample ~{maxDepthPerSample} \
+			--min-base-quality ~{minBaseQuality} \
+			--output-format ~{outputFormat} \
+			--partition-type ~{partitionType} \
+			--print-base-counts ~{printBaseCounts} \
+			--QUIET '~{quiet}' \
+			--use-jdk-deflater '~{useJDKDeflater}' \
+			--use-jdk-inflater '~{useJDKInflater}' \
+			--read-validation-stringency '~{validationStringency}' \
+			--verbosity ~{verbosity} \
+			--showHidden ~{showHidden} \
+			--input ~{in} \
+			--intervals ~{intervals} \
+			--reference ~{referenceFasta} \
+			--output ~{outputFile} \
+			~{sep=" " summaryCoverageThresholdOpt}
+
 	>>>
 
 	output {
