@@ -10,3 +10,4 @@ All notable changes to this project will be documented in this file.
 - Tasks for bcftools : index, merge, norm
 - Tasks for bedtools : intersect, sort, coverage
 - Tasks for GATK4 : ReorderSam and DepthOfCoverage (BETA)
+- Task for bwa : mem
