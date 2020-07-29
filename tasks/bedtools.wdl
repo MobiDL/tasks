@@ -50,6 +50,8 @@ task intersect {
 		~{path_exe} intersect ~{true="-wa " false="" wa}~{true="-wb " false="" wb}\
 			~{default="" true="-r " false="-e " reciprocal}~{default="" true="-s " false="-S " strandness}\
 			~{true="-filenames " false="" filenames}\
+			~{default="" "-f " + f} \
+			~{default="" "-F " + F} \
 			-a ~{bedA} \
 			-b ~{sep=" " bedB} > ~{outputFile}
 
@@ -189,7 +191,7 @@ task sort {
 			description: 'true: sort by chrom then by score asc; false: sort by chrom then by score desc; default: null',
 			category: 'optional'
 		}
-		faidx: {
+		idx: {
 			description: 'sort according to chromosome in file; default: null',
 			category: 'optional'
 		}
