@@ -47,8 +47,9 @@ task intersect {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		~{path_exe} intersect ~{true="-wa " false="" wa}~{true="-wb " false="" wb}\
-			~{default="" true="-r " false="-e " reciprocal}~{default="" true="-s " false="-S " strandness}\
+		~{path_exe} intersect \
+			~{true="-wa" false="" wa} ~{true="-wb" false="" wb} \
+			~{default="" true="-r" false="-e" reciprocal} ~{default="" true="-s" false="-S" strandness} \
 			~{true="-filenames " false="" filenames}\
 			~{default="" "-f " + f} \
 			~{default="" "-F " + F} \
@@ -142,9 +143,10 @@ task sort {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		~{path_exe} sort ~{default="" true="-sizeA " false="-sizeD " sortBySizeAsc}\
-			~{default="" true="-chrThenSizeA " false="-chrThenSizeD " sortByChrSizeAsc}\
-			~{default="" true="-chrThenScoreA " false="-chrThenScoreD " sortByChrScoreAsc}\
+		~{path_exe} sort \
+			~{default="" true="-sizeA" false="-sizeD" sortBySizeAsc} \
+			~{default="" true="-chrThenSizeA" false="-chrThenSizeD" sortByChrSizeAsc} \
+			~{default="" true="-chrThenScoreA" false="-chrThenScoreD" sortByChrScoreAsc} \
 			~{"-faidx " + idx} \
 			-i ~{in}  > ~{outputFile}
 
@@ -236,7 +238,7 @@ task coverage {
 		fi
 
 		~{path_exe} intersect \
-			~{default="" true="-r " false="-e " reciprocal}~{default="" true="-s " false="-S " strandness}\
+			~{default="" true="-r" false="-e" reciprocal} ~{default="" true="-s" false="-S" strandness} \
 			~{default="" "-f " + f} \
 			~{default="" "-F " + F} \
 			-a ~{bedA} \

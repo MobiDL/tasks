@@ -17,6 +17,7 @@ task index {
 		Boolean tabix = false
 		Boolean force = false
 		Int minShift  = 14
+
 		Int threads   = 1
 	}
 
@@ -33,7 +34,14 @@ task index {
 			mkdir -p $(dirname ~{outputRaw})
 			ln ~{in} ~{outputRaw}
 		fi
-		~{path_exe} index ~{true="--tbi" false="--csi" tabix} ~{true="--force" false="" force} ~{minShiftOpt} --threads ~{threads - 1} -o ~{outputIndex} ~{outputRaw}
+
+		~{path_exe} index \
+			~{true="--tbi" false="--csi" tabix} \
+			~{true="--force" false="" force} \
+			~{minShiftOpt} \
+			--threads ~{threads - 1} \
+			-o ~{outputIndex} \
+			~{outputRaw}
 
 	>>>
 
@@ -129,7 +137,18 @@ task merge {
 		if [[ ! -f ~{outputFile} ]]; then
 			mkdir -p $(dirname ~{outputFile})
 		fi
-		~{path_exe} merge ~{true="--force-samples " false="" forceSamples}~{true="--print-header " false="" printHeader}~{useHeaderOpt}~{true="--missing-to-ref " false="" missingToRef}~{applyFilterOpt}~{gvcfOpt}~{fileListOpt}~{true="--no-version " false="" noVersion}~{regionsOpt}~{regionsFileOpt}\
+
+		~{path_exe} merge \
+			~{true="--force-samples" false="" forceSamples} \
+			~{true="--print-header" false="" printHeader} \
+			~{useHeaderOpt} \
+			~{true="--missing-to-ref" false="" missingToRef} \
+			~{applyFilterOpt} \
+			~{gvcfOpt} \
+			~{fileListOpt} \
+			~{true="--no-version" false="" noVersion} \
+			~{regionsOpt} \
+			~{regionsFileOpt} \
 			--threads ~{threads - 1} \
 			--info-rules '~{infoRules}' \
 			--merge '~{merge}' \
@@ -274,7 +293,15 @@ task norm {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		~{path_exe} norm ~{rmDupOpt}~{true="--no-version " false="" noVersion}~{true="--do-not-normalize " false="" doNotNormalize}~{regionsOpt}~{regionsFileOpt}~{targetsOpt}~{targetsFileOpt}~{true="--strict-filter " false="" strictFilter}\
+		~{path_exe} norm \
+			~{rmDupOpt} \
+			~{true="--no-version " false="" noVersion}\
+			~{true="--do-not-normalize " false="" doNotNormalize} \
+			~{regionsOpt} \
+			~{regionsFileOpt} \
+			~{targetsOpt} \
+			~{targetsFileOpt} \
+			~{true="--strict-filter" false="" strictFilter} \
 			--check-ref ~{checkRef} \
 			--fasta-ref ~{referenceFasta} \
 			--multiallelics ~{multiallelics} \
