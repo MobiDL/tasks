@@ -57,7 +57,7 @@ task mem {
 	>>>
 
 	output {
-		File output = '~{outputPath + "/"}~{sample}.bam'
+		File outputFile = '~{outputPath + "/"}~{sample}.bam'
 	}
 
 	parameter_meta {
