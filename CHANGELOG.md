@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 	- coverage
 - Task for bwa :
 	- mem
+	- index
 - Tasks for FastQC :
 	- fastqc
 	- fastqcNano

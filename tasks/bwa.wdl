@@ -107,3 +107,81 @@ task mem {
 		}
 	}
 }
+
+task index {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-07-30"
+	}
+
+	input {
+		String path_exe = "bwa"
+
+		File in
+		String? outputPath
+
+		String? algo
+		String? name
+		Int? blockSize
+		Boolean sixtyFour = false
+	}
+
+	String baseName = if defined(name) then name else basename(in)
+	String outputBaseName = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputBaseName}) ]]; then
+			mkdir -p $(dirname ~{outputBaseName})
+		fi
+
+		~{path_exe} index \
+			~{default="" "-a " + algo} \
+			~{default="" "-b " + blockSize} \
+			~{true="-6" false="" sixtyFour} \
+			-p ~{outputBaseName} \
+			~{in}
+
+	>>>
+
+	output {
+		File refAmb = outputBaseName + ".amb"
+		File refAnn = outputBaseName + ".ann"
+		File refPac = outputBaseName + ".pac"
+		File refBwt = outputBaseName + ".bwt"
+		File refSa = outputBaseName + ".sa"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "bwa"]',
+			category: 'optional'
+		}
+		outputPath: {
+			description: 'Output path where bam file was generated. [default: pwd()]',
+			category: 'optional'
+		}
+		in:	{
+			description: 'Fasta file to index by bwa.',
+			category: 'required'
+		}
+		algo: {
+			description: 'BWT construction algorithm: bwtsw, is or rb2 [auto]',
+			category: 'optional'
+		}
+		name: {
+			description: 'Prefix of the index files names [fasta name]',
+			category: 'optional'
+		}
+		blockSize: {
+			description: 'Block size for the bwtsw algorithm (effective with algo: bwtsw)',
+			category: 'optional'
+		}
+		sixtyFour: {
+			description: 'Index files named as <in.fasta>.64.* instead of <in.fasta>.*',
+			category: 'optional'
+		}
+	}
+}

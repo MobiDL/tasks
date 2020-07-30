@@ -18,6 +18,7 @@ MobiDL 2 is a collection of tools wrapped in WDL to be used in any WDL pipelines
 	- coverage
 - BWA (0.7.17-r1188) :
 	- mem
+	- index
 - FastQC (v0.11.9) :
 	- fastqc
 	- fastqcNano
