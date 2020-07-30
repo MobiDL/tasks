@@ -5,7 +5,7 @@ task markdup {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
 		version: "0.0.1"
-		date: "2020-07-29"
+		date: "2020-07-30"
 	}
 
 	input {
@@ -66,7 +66,7 @@ task markdup {
 			category: 'optional'
 		}
 		sample: {
-			description: 'Sample name to use for output file name [default: sub(basename(fastqR1),"(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?","")]',
+			description: 'Sample name to use for output file name [default: sub(basename(in),"(\.bam|\.sam|\.cram)","")]',
 			category: 'optional'
 		}
 		in: {
