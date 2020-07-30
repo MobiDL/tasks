@@ -4,7 +4,7 @@ MobiDL 2 is a collection of tools wrapped in WDL to be used in any WDL pipelines
 
 ## Tools implemented
 
-- bash : findFiles, bgzip (compress, decompress)
+- bash : findFiles, bgzip (compress, decompress), convertBedToIntervals
 - bcftools (v1.9) : index, merge, norm
 - bedtools (v2.29.2) : intersect, sort, coverage
 - BWA (0.7.17-r1188) : mem

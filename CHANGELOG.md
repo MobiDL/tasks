@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Tasks for bash command : findFiles and bgzip (compress and decompress)
+- Tasks for bash command : findFiles and bgzip (compress and decompress), convertBedToIntervals
 - Tasks for bcftools : index, merge, norm
 - Tasks for bedtools : intersect, sort, coverage
 - Task for bwa : mem

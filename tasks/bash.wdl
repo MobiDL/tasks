@@ -152,3 +152,64 @@ task bgzip {
 		}
 	}
 }
+
+task convertBedToIntervals {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-07-30"
+	}
+
+	input {
+		File in
+
+		String? outputPath
+		String? name
+
+		String ext =".intervals"
+	}
+
+	String outputName = if defined(name) then name else sub(basename(in),".bed", "")
+	String outputFile = if defined(outputPath) then outputPath + "/" + outputName + ext else outputName + ext
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		grep -E -v "^track|^browser|^#" ~{in} | \
+		awk -F "\t" '{ 
+			if($2 == $3){ 
+				$3++ 
+			} 
+			$2++; 
+			print $1":"$2"-"$3; 
+		}' > ~{outputFile}
+
+	>>>
+
+	output {
+		File intervals = outputFile
+	}
+
+	parameter_meta {
+		in: {
+			description: 'Input bed to convert.',
+			category: 'required'
+		}
+		outputPath: {
+			description: 'Path where was generated output. [default: "."]',
+			category: "optional"
+		}
+		name: {
+			description: 'Basename of the output file. [default: sub(basename(in), ".bed")]',
+			category: 'optional'
+		}
+		ext: {
+			description: 'Extension of the output file. [default: ".intervals"]',
+			category: 'optional'
+		}
+	}
+}
