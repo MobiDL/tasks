@@ -10,5 +10,6 @@ All notable changes to this project will be documented in this file.
 - Tasks for bcftools : index, merge, norm
 - Tasks for bedtools : intersect, sort, coverage
 - Task for bwa : mem
-- Tasks for GATK4 : ReorderSam and DepthOfCoverage (BETA)
 - Tasks for FastQC : fastqc, fastqcNano, fastqcCasava
+- Tasks for GATK4 : ReorderSam and DepthOfCoverage (BETA)
+- Task for Sambamba : markdup
