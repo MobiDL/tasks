@@ -108,3 +108,80 @@ task sort {
 		}
 	}
 }
+
+task dict {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-07-30"
+	}
+
+	input {
+		String path_exe = "samtools"
+
+		File in
+		String? outputPath
+		String? name
+		String suffix = ".dict"
+
+		String? assembly
+		Boolean header = true
+		String? species
+		String? uri
+	}
+
+	String baseName = if defined(name) then name else basename(in)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}" else "~{baseName}~{suffix}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} dict \
+			~{default="" "--assembly " + assembly} \
+			~{true="" false="--no-header"} \
+			~{default="" "--species " + species} \
+			~{default="" "--uri " + uri} \
+			-o ~{outputFile} \
+			~{in}
+
+	>>>
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "samtools"]',
+			category: 'optional'
+		}
+		outputPath: {
+			description: 'Output path where dict file was generated. [default: pwd()]',
+			category: 'optional'
+		}
+		name: {
+			description: 'Name to use for output file name [default: basename(in)]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Fasta file.',
+			category: 'Required'
+		}
+		suffix: {
+			description: 'Suffix to add on the output file (e.g. mygenome.fasta.dict) [default: ".dict"]',
+			category: 'optional'
+		}
+		assembly: {
+			description: 'Assembly',
+			category: 'optional'
+		}
+		header: {
+			description: 'Print the header (@HD line) [default: true]',
+			category: 'optional'
+		}
+		uri: {
+			description: 'URI (e.g. file:///abs/path/to/file.fa)',
+			category: 'optional'
+		}
+	}
+}
