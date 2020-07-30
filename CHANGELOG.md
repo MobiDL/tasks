@@ -2,32 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.0.1] - 2020-07-29
+## [0.0.1] - dev
 
 ### Added
 
-- Tasks for bash command :
+#### Tasks
+
+- bash :
 	- findFiles
 	- bgzip (compress and decompress)
 	- convertBedToIntervals
-- Tasks for bcftools :
+- bcftools :
 	- index
 	- merge
 	- norm
-- Tasks for bedtools :
+- bedtools :
 	- intersect
 	- sort
 	- coverage
-- Task for bwa :
+- bwa :
 	- mem
 	- index
-- Tasks for FastQC :
+- FastQC :
 	- fastqc
 	- fastqcNano
 	- fastqcCasava
-- Tasks for GATK4 :
+- GATK4 :
 	- ReorderSam
 	- DepthOfCoverage (BETA)
-- Tasks for Sambamba :
+- Sambamba :
 	- index
 	- markdup
