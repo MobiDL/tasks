@@ -107,3 +107,77 @@ task markdup {
 		}
 	}
 }
+
+task index {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-07-30"
+	}
+
+	input {
+		String path_exe = "sambamba"
+
+		File in
+		String? outputPath
+		String? sample
+
+		Boolean checkBins = false
+
+		Int threads = 1
+	}
+
+	String sampleName = if defined(sample) then sample else sub(basename(in),"(\.bam|\.cram)","")
+	String ext = sub(basename(in),"^.*(bam|cram)","$1")
+	Boolean cram = if ext=="cram" then true else false
+	String extOut = if cram then ".crai" else "" # fix the fact that sambamba write automatically
+	String extFile = if cram then "" else ".bai" # extension for output crai but not for bai
+	String outputIdx = if defined(outputPath) then "~{outputPath}/~{sampleName}~{extFile}" else "~{sampleName}~{extFile}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputIdx}) ]]; then
+			mkdir -p $(dirname ~{outputIdx})
+		fi
+
+		~{path_exe} index \
+			--nthreads ~{threads} \
+			~{true="--check-bins" false="" checkBins} \
+			~{true="--cram-input" false="" cram} \
+			~{in} \
+			~{outputIdx}
+
+	>>>
+
+	output {
+		File outputIdx = outputIdx + extOut
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "sambamba"]',
+			category: 'optional'
+		}
+		outputPath: {
+			description: 'Output path where bam file was generated. [default: pwd()]',
+			category: 'optional'
+		}
+		sample: {
+			description: 'Sample name to use for output file name [default: sub(basename(in),"(\.bam|\.cram)","")]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Bam or cram file to index.',
+			category: 'Required'
+		}
+		checkBins: {
+			description: 'check that bins are set correctly',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}

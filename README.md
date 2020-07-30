@@ -10,4 +10,4 @@ MobiDL 2 is a collection of tools wrapped in WDL to be used in any WDL pipelines
 - BWA (0.7.17-r1188) : mem
 - FastQC (v0.11.9) : fastqc, fastqcNano, fastqcCasava
 - GATK4 (4.1.8.1) : ReorderSam and DepthOfCoverage (BETA)
-- Sambamba (0.6.6) : markdup
+- Sambamba (0.6.6) : index, markdup

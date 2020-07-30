@@ -12,4 +12,4 @@ All notable changes to this project will be documented in this file.
 - Task for bwa : mem
 - Tasks for FastQC : fastqc, fastqcNano, fastqcCasava
 - Tasks for GATK4 : ReorderSam and DepthOfCoverage (BETA)
-- Task for Sambamba : markdup
+- Tasks for Sambamba : index, markdup
