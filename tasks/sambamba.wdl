@@ -30,7 +30,7 @@ task markdup {
 
 	String sampleName = if defined(sample) then sample else sub(basename(in),"(\.bam|\.sam|\.cram)","")
 	String outputBam = if defined(outputPath) then "~{outputPath}/~{sampleName}~{suffix}.bam" else "~{sampleName}~{suffix}.bam"
-	String outputBai = if defined(outputPath) then "~{outputPath}/~{sampleName}~{suffix}.bai" else "~{sampleName}~{suffix}.bai"
+	String outputBai = if defined(outputPath) then "~{outputPath}/~{sampleName}~{suffix}.bam.bai" else "~{sampleName}~{suffix}.bam.bai"
 
 	command <<<
 
