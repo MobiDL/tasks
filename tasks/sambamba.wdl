@@ -199,7 +199,7 @@ task sort {
 		String suffix = ".sort"
 
 		String? filter
-		Boolean? sortByReadName = false
+		Boolean? sortByReadName
 
 		Int compressionLevel = 1
 		Boolean uncompressedChuncks = false
@@ -221,13 +221,13 @@ task sort {
 		~{path_exe} sort \
 			--nthreads ~{threads} \
 			~{default="" "--tmpdir " + tempDir} \
-			~{default="" "--memory-limit " + memory}
-			~{default="" "--filter " + checkBins} \
+			~{default="" "--memory-limit " + memory} \
+			~{default="" "--filter " + filter} \
 			~{default="" true="--sort-by-name" false="--natural-sort" sortByReadName} \
 			--compression-level ~{compressionLevel} \
 			~{true="--uncompressed-chunks" false="" uncompressedChuncks} \
 			--out ~{outputFile} \
-			~{in} \
+			~{in}
 
 	>>>
 
