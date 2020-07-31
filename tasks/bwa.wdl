@@ -18,7 +18,7 @@ task mem {
 		String path_exe_samtools = "samtools"
 
 		String? outputPath
-		String sample = sub(basename(fastqR1),"(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?","")
+		String? sample
 
 		File fastqR1
 		File? fastqR2
@@ -39,6 +39,9 @@ task mem {
 		Int threads = 1
 	}
 
+	String baseName = if defined(sample) then sample else sub(basename(fastqR1),"(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?","")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.bam" else "~{baseName}.bam"
+
 	command <<<
 
 		if [[ ! -f ~{outputPath + "/"}~{sample}.bam ]]; then
@@ -52,12 +55,12 @@ task mem {
 			-t ~{threads} \
 			~{refFasta} \
 			~{fastqR1} ~{default="" fastqR2} \
-			| ~{path_exe_samtools} sort -@ ~{threads-1} -m 768M -o ~{outputPath + "/"}~{sample}.bam
+			| ~{path_exe_samtools} sort -@ ~{threads-1} -m 768M -o ~{outputFile}
 
 	>>>
 
 	output {
-		File outputFile = '~{outputPath + "/"}~{sample}.bam'
+		File outputFile = outputFile
 	}
 
 	parameter_meta {
