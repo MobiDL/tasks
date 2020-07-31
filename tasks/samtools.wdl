@@ -185,3 +185,80 @@ task dict {
 		}
 	}
 }
+
+task index {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-07-30"
+	}
+
+	input {
+		String path_exe = "samtools"
+
+		File in
+		String? outputPath
+		String? name
+
+		Int? minIntervalSize
+		Boolean csi = false
+		Int threads = 1
+	}
+
+	Boolean csiOpt = if (defined(minIntervalSize) || csi) then true else false
+	String ext = if csiOpt then ".csi" else ".bai"
+
+	String baseName = if defined(name) then name else basename(in)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} index \
+			~{true="-c" false="-b" csiOpt} \
+			~{default="" "-m " + minIntervalSize} \
+			-@ ~{threads} \
+			~{in} \
+			~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "samtools"]',
+			category: 'optional'
+		}
+		outputPath: {
+			description: 'Output path where index was generated. [default: pwd()]',
+			category: 'optional'
+		}
+		name: {
+			description: 'Name to use for output file name [default: basename(in)]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Fasta file.',
+			category: 'Required'
+		}
+		minIntervalSize: {
+			description: 'Set minimum interval size for CSI indices to 2^INT.',
+			category: 'Required'
+		}
+		csi: {
+			description: 'Generate CSI-format index for BAM files [default: false]',
+			category: 'Required'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}
