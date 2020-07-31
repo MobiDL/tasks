@@ -50,3 +50,4 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 	- index
 	- sort
 	- dict
+	- view

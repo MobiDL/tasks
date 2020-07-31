@@ -266,3 +266,138 @@ task index {
 		}
 	}
 }
+
+task view {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-07-31"
+	}
+
+	input {
+		String path_exe = "samtools"
+
+		File in
+		String? outputPath
+		String? name
+		Boolean cram = false
+
+		File? faidx
+		File? bed
+		String? readGroup
+		File? readGroupFile
+		Int minQuality = 0
+		String? library
+		Int minCigarOp = 0
+
+		Boolean multiRegioOperator = false
+		Boolean collapseCigarOp =false
+
+		File? refFasta
+
+		Int threads = 1
+	}
+
+	String ext = if cram then "cram" else "bam"
+	String baseName = if defined(name) then name else sub(basename(in),"(\.bam|\.cram|\.sam)","")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.~{ext}" else "~{baseName}.~{ext}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		echo '''
+		~{path_exe} view \
+			~{true="-C" false="-b" cram} \
+			-o ~{outputFile} \
+			~{default="" "-t " + faidx} \
+			~{default="" "-L " + bed} \
+			~{default="" "-r " + readGroup} \
+			~{default="" "-R " + readGroupFile} \
+			-q ~{minQuality} \
+			~{default="" "-l " + library} \
+			-m ~{minCigarOp} \
+			~{true="-M" false="" multiRegioOperator} \
+			~{true="-B" false="" collapseCigarOp} \
+			--output-fmt ~{ext} \
+			~{default="" "--reference " + refFasta} \
+			--threads ~{threads - 1} \
+			~{in}
+		'''
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "samtools"]',
+			category: 'optional'
+		}
+		outputPath: {
+			description: 'Output path where index was generated. [default: pwd()]',
+			category: 'optional'
+		}
+		name: {
+			description: 'Name to use for output file name [default: basename(in)]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Fasta file.',
+			category: 'Required'
+		}
+		cram: {
+			description: 'Output to cram format. (bam otherwise) [default: false]',
+			category: 'optional'
+		}
+		faidx: {
+			description: 'Listing reference names and lengths (faidx)',
+			category: 'optional'
+		}
+		bed: {
+			description: 'Only include reads overlapping this BED FILE',
+			category: 'optional'
+		}
+		readGroup: {
+			description: 'Only include reads in read group.',
+			category: 'optional'
+		}
+		readGroupFile: {
+			description: 'Only include reads with read group listed in a file',
+			category: 'optional'
+		}
+		minQuality: {
+			description: 'Only include reads with mapping quality >= value [default: 0]',
+			category: 'optional'
+		}
+		library: {
+			description: 'Only include reads in library.',
+			category: 'optional'
+		}
+		minCigarOp: {
+			description: 'Only include reads with number of CIGAR operations consuming query sequence >= value [default: 0]',
+			category: 'optional'
+		}
+		multiRegioOperator: {
+			description: 'Use the multi-region iterator (increases the speed, removes duplicates and outputs the reads as they are ordered in the file) [default: false]',
+			category: 'optional'
+		}
+		collapseCigarOp: {
+			description: 'Collapse the backward CIGAR operation [default: false]',
+			category: 'optional'
+		}
+		refFasta: {
+			description: 'Reference sequence FASTA FILE [null]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}
