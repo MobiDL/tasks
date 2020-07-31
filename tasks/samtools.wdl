@@ -210,8 +210,9 @@ task index {
 		Int threads = 1
 	}
 
+	String extFile = sub(basename(in),"(.*)\.(bam|cram)$","$2")
 	Boolean csiOpt = if (defined(minIntervalSize) || csi) then true else false
-	String ext = if csiOpt then ".csi" else ".bai"
+	String ext = if extFile=="cram" then ".crai" else if csiOpt then ".csi" else ".bai"
 
 	String baseName = if defined(name) then name else basename(in)
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
@@ -257,7 +258,7 @@ task index {
 			category: 'Required'
 		}
 		csi: {
-			description: 'Generate CSI-format index for BAM files [default: false]',
+			description: 'Generate CSI-format index for BAM files (not functionnal with cram files) [default: false]',
 			category: 'Required'
 		}
 		threads: {
