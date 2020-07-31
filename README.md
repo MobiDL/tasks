@@ -35,6 +35,8 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 - BWA (0.7.17-r1188) :
 	- mem
 	- index
+- Crumble (0.8.3) :
+	- crumble
 - FastQC (v0.11.9) :
 	- fastqc
 	- fastqcNano
