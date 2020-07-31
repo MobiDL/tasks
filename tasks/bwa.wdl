@@ -44,8 +44,8 @@ task mem {
 
 	command <<<
 
-		if [[ ! -f ~{outputPath + "/"}~{sample}.bam ]]; then
-			mkdir -p $(dirname ~{outputPath + "/"}~{sample}.bam)
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
 		fi
 
 		~{path_exe_bwa} mem \
