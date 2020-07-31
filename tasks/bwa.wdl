@@ -129,6 +129,8 @@ task index {
 		String? name
 		Int? blockSize
 		Boolean sixtyFour = false
+
+		Int threads = 1
 	}
 
 	String baseName = if defined(name) then name else basename(in)
