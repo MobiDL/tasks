@@ -45,6 +45,7 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 - Sambamba (0.6.6) :
 	- index
 	- markdup
+	- sort
 - samtools (1.9) :
 	- sort
 	- dict

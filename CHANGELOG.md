@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Sambamba :
 	- index
 	- markdup
+	- sort
 - Samtools :
 	- sort
 	- dict

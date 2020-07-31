@@ -181,3 +181,108 @@ task index {
 		}
 	}
 }
+
+task sort {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-07-31"
+	}
+
+	input {
+		String path_exe = "sambamba"
+
+		File in
+		String? outputPath
+		String? sample
+		String suffix = ".sort"
+
+		String? filter
+		Boolean? sortByReadName = false
+
+		Int compressionLevel = 1
+		Boolean uncompressedChuncks = false
+
+		String? memory
+		Int threads = 1
+		String? tempDir
+	}
+
+	String sampleName = if defined(sample) then sample else sub(basename(in),"(\.bam|\.sam|\.cram)","")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{sampleName}~{suffix}.bam" else "~{sampleName}~{suffix}.bam"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} sort \
+			--nthreads ~{threads} \
+			~{default="" "--tmpdir " + tempDir} \
+			~{default="" "--memory-limit " + memory}
+			~{default="" "--filter " + checkBins} \
+			~{default="" true="--sort-by-name" false="--natural-sort" sortByReadName} \
+			--compression-level ~{compressionLevel} \
+			~{true="--uncompressed-chunks" false="" uncompressedChuncks} \
+			--out ~{outputFile} \
+			~{in} \
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "sambamba"]',
+			category: 'optional'
+		}
+		outputPath: {
+			description: 'Output path where bam file was generated. [default: pwd()]',
+			category: 'optional'
+		}
+		sample: {
+			description: 'Sample name to use for output file name [default: sub(basename(in),"(\.bam|\.sam|\.cram)","")]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Bam file to sort.',
+			category: 'Required'
+		}
+		suffix: {
+			description: 'Suffix to add on the output file (e.g. sample.suffix.bam) [default: ".sort"]',
+			category: 'optional'
+		}
+		compressionLevel: {
+			description: 'Specify compression level of the resulting file (from 0 to 9) [default: 1]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the max memory (e.g. "2G")',
+			category: 'optional'
+		}
+		tempDir: {
+			description: 'Directory for storing intermediate files; default is system directory for temporary files',
+			category: 'optional'
+		}
+		filter: {
+			description: 'Keep only reads that satisfy FILTER',
+			category: 'optional'
+		}
+		sortByReadName: {
+			description: 'Sort by read name instead of coordinate (true: lexicographical; false: natural) (default: null)',
+			category: 'optional'
+		}
+		uncompressedChuncks: {
+			description: 'Write sorted chunks as uncompressed BAM (default is writing with compression level 1), that might be faster in some cases but uses more disk space',
+			category: 'optional'
+		}
+	}
+}
