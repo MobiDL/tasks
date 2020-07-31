@@ -195,7 +195,7 @@ task index {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
 		version: "0.0.1"
-		date: "2020-07-30"
+		date: "2020-07-31"
 	}
 
 	input {
