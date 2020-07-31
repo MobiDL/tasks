@@ -142,7 +142,7 @@ task dict {
 
 		~{path_exe} dict \
 			~{default="" "--assembly " + assembly} \
-			~{true="" false="--no-header"} \
+			~{true="" false="--no-header" header} \
 			~{default="" "--species " + species} \
 			~{default="" "--uri " + uri} \
 			-o ~{outputFile} \
