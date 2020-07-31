@@ -250,16 +250,16 @@ task index {
 			category: 'optional'
 		}
 		in: {
-			description: 'Fasta file.',
+			description: 'Input bam or cram to index.',
 			category: 'Required'
 		}
 		minIntervalSize: {
 			description: 'Set minimum interval size for CSI indices to 2^INT.',
-			category: 'Required'
+			category: 'optional'
 		}
 		csi: {
 			description: 'Generate CSI-format index for BAM files (not functionnal with cram files) [default: false]',
-			category: 'Required'
+			category: 'optional'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
