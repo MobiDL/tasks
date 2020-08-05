@@ -58,3 +58,5 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 	- dict
 	- view
 	- faidx
+- Qualimap (v.2.2.2-dev) :
+	- bamqc
