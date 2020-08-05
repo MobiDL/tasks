@@ -48,6 +48,7 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 	- DepthOfCoverage (BETA)
 - Sambamba (0.6.6) :
 	- index
+	- flagstat
 	- markdup
 	- sort
 - samtools (1.9) :

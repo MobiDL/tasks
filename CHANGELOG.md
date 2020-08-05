@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 	- DepthOfCoverage (BETA)
 - Sambamba :
 	- index
+	- flagstat
 	- markdup
 	- sort
 - Samtools :
