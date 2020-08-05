@@ -55,3 +55,4 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 	- sort
 	- dict
 	- view
+	- faidx
