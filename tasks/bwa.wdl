@@ -19,6 +19,7 @@ task mem {
 
 		String? outputPath
 		String? sample
+		String subString = "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"
 
 		File fastqR1
 		File? fastqR2
@@ -39,7 +40,7 @@ task mem {
 		Int threads = 1
 	}
 
-	String baseName = if defined(sample) then sample else sub(basename(fastqR1),"(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?","")
+	String baseName = if defined(sample) then sample else sub(basename(fastqR1),subString,"")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.bam" else "~{baseName}.bam"
 
 	command <<<
@@ -77,7 +78,11 @@ task mem {
 			category: 'optional'
 		}
 		sample: {
-			description: 'Sample name to use for output file name [default: sub(basename(fastqR1),"(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?","")]',
+			description: 'Sample name to use for output file name [default: sub(basename(fastqR1),subString,"")]',
+			category: 'optional'
+		}
+		subString: {
+			description: 'Substring to remove to get sample name [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
 			category: 'optional'
 		}
 		fastqR1: {
