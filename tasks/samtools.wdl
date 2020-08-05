@@ -460,3 +460,70 @@ task faidx {
 		}
 	}
 }
+
+task flagstat {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-07-31"
+	}
+
+	input {
+		String path_exe = "samtools"
+
+		File in
+		String? outputPath
+		String? sample
+		String ext = ".flagstats"
+
+		Int threads = 1
+	}
+
+	String sampleName = if defined(sample) then sample else sub(basename(in),"(\.bam|\.sam|\.cram)","")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{sampleName}~{ext}" else "~{sampleName}~{ext}"
+
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} flagstat \
+			--threads ~{threads - 1} \
+			~{in} > ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "samtools"]',
+			category: 'optional'
+		}
+		outputPath: {
+			description: 'Output path where flagstat file was generated. [default: pwd()]',
+			category: 'optional'
+		}
+		sample: {
+			description: 'Sample name to use for output file name [default: sub(basename(in),"(\.bam|\.sam|\.cram)","")]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Bam file to sort.',
+			category: 'Required'
+		}
+		ext: {
+			description: 'Extension of the output file [default: ".flagstats"]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}
