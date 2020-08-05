@@ -310,7 +310,6 @@ task view {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		echo '''
 		~{path_exe} view \
 			~{true="-C" false="-b" cram} \
 			-o ~{outputFile} \
@@ -327,7 +326,6 @@ task view {
 			~{default="" "--reference " + refFasta} \
 			--threads ~{threads - 1} \
 			~{in}
-		'''
 
 	>>>
 
