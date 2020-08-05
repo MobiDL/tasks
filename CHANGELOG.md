@@ -23,7 +23,7 @@ All notable changes to this project will be documented in this file.
 - bwa :
 	- mem
 	- index
-- crumble (0.8.3) :
+- crumble :
 	- crumble
 - FastQC :
 	- fastqc
