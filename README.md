@@ -37,6 +37,8 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 	- index
 - Crumble (0.8.3) :
 	- crumble
+- dwgsim (0.1.11) :
+	- simulateReadsIllumina
 - FastQC (v0.11.9) :
 	- fastqc
 	- fastqcNano

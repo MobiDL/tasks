@@ -25,6 +25,8 @@ All notable changes to this project will be documented in this file.
 	- index
 - crumble :
 	- crumble
+- dwgsim :
+	- simulateReadsIllumina
 - FastQC :
 	- fastqc
 	- fastqcNano
