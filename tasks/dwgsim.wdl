@@ -18,6 +18,8 @@ task simulateReadsIllumina {
 		Int sizeR1 = 150
 		Int sizeR2 = sizeR1
 
+		Int insertSize = 500
+		Int stdInsert = 50
 		Float rateMut = 0.0010
 		Float freqMut = 0.5000
 		Float rateIndels = 0.1000
@@ -41,6 +43,8 @@ task simulateReadsIllumina {
 		~{path_exe} \
 			-1 ~{sizeR1} \
 			-2 ~{sizeR2} \
+			-d ~{insertSize} \
+			-s ~{stdInsert} \
 			-r ~{rateMut} \
 			-F ~{freqMut} \
 			-R ~{rateIndels} \
@@ -82,6 +86,14 @@ task simulateReadsIllumina {
 		}
 		sizeR2: {
 			description: 'Length of the second read [default: sizeR1]',
+			category: 'optional'
+		}
+		insertSize: {
+			description: 'Outer distance between the two ends for pairs [default: 500]',
+			category: 'optional'
+		}
+		stdInsert: {
+			description: 'Standard deviation of the distance for pairs [default: 50]',
 			category: 'optional'
 		}
 		rateMut: {
