@@ -527,3 +527,92 @@ task flagstat {
 		}
 	}
 }
+
+task bedcov {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-07-30"
+	}
+
+	input {
+		String path_exe = "samtools"
+
+		File inBam
+		File? inBamIdx
+		File inBed
+		String? outputPath
+		String? name
+		String suffix = ".bedcov"
+
+		Int qualityThreshold = 0
+		Boolean includeDel = true
+
+		Int threads = 1
+	}
+
+	String baseName = if defined(name) then name else basename(inBam)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.bed" else "~{baseName}~{suffix}.bed"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} bedcov \
+			-Q ~{qualityThreshold} \
+			~{true="" false="-j" includeDel} \
+			~{inBed} \
+			~{inBam} > ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "samtools"]',
+			category: 'optional'
+		}
+		outputPath: {
+			description: 'Output path where bedcov file will be generated. [default: pwd()]',
+			category: 'optional'
+		}
+		name: {
+			description: 'Name to use for output file name [default: basename(in)]',
+			category: 'optional'
+		}
+		inBed: {
+			description: 'Bed file.',
+			category: 'Required'
+		}
+		inBam: {
+			description: 'Bam file.',
+			category: 'Required'
+		}
+		inBamIdx: {
+			description: 'Index of the input bam file.',
+			category: 'optional'
+		}
+		suffix: {
+			description: 'Suffix to add on the output file (e.g. sample.bedcov.bed) [default: ".bedcov"]',
+			category: 'optional'
+		}
+		qualityThreshold: {
+			description: 'Mapping quality threshold [default: 0]',
+			category: 'optional'
+		}
+		includeDel: {
+			description: 'Include deletions (D) and ref skips (N) in bedcov computation [default: true]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}
