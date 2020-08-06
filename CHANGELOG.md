@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 	- fastqcNano
 	- fastqcCasava
 - GATK4 :
+	- BaseRecalibrator
 	- ReorderSam
 	- DepthOfCoverage (BETA)
 	- SplitIntervals

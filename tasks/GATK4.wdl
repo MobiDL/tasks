@@ -478,3 +478,164 @@ task splitIntervals {
 		}
 	}
 }
+
+task baseRecalibrator {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-06"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		File in
+		String? outputPath
+		String? name
+		File? intervals
+		String ext = ".recal"
+
+		Array[File]+ knownSites
+		Array[File]+ knownSitesIdx
+
+		File refFasta
+		File refFai
+		File refDict
+
+		Int gapPenality = 40
+		Int indelDefaultQual = 45
+		Int lowQualTail = 2
+		Int indelKmer = 3
+		Int mismatchKmer = 2
+		Int maxCycle = 500
+
+		Boolean overlappingRule = false
+		Int intervalsPadding = 0
+		Boolean intersectionRule = false
+
+		Int threads = 1
+	}
+
+	String baseNameIntervals = if defined(intervals) then intervals else ""
+	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","\.$1") else ""
+
+	String baseName = if defined(name) then name else sub(basename(in),"\.(sam|bam|cram)$","")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{baseIntervals}~{ext}" else "~{baseName}~{baseIntervals}~{ext}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} BaseRecalibrator \
+			--input ~{in} \
+			--known-sites ~{sep="--known-sites " knownSites} \
+			--reference ~{refFasta} \
+			--intervals ~{intervals} \
+			--bqsr-baq-gap-open-penalty ~{gapPenality} \
+			--deletions-default-quality ~{indelDefaultQual} \
+			--insertions-default-quality ~{indelDefaultQual} \
+			--low-quality-tail ~{lowQualTail} \
+			--indels-context-size ~{indelKmer} \
+			--mismatches-context-size ~{mismatchKmer} \
+			--maximum-cycle-value ~{maxCycle} \
+			--interval-padding ~{intervalsPadding} \
+			--interval-merging-rule ~{true="OVERLAPPING_ONLY" false="ALL" overlappingRule} \
+			--interval-set-rule ~{true="INTERSECTION" false="UNION" intersectionRule} \
+			--output ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Alignement file to recalibrate (SAM/BAM/CRAM)',
+			category: 'Required'
+		}
+		intervals: {
+			description: 'Path to a file containing genomic intervals over which to operate. (format intervals list: chr1:1000-2000)',
+			category: 'optional'
+		}
+		outputPath: {
+			description: 'Output path where bqsr report will be generated.',
+			category: 'Required'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(in),"\.(sam|bam|cram)$","")].',
+			category: 'optional'
+		}
+		ext: {
+			description: 'Extension for the output file [default: ".recal"]',
+			category: 'optional'
+		}
+		knownSites: {
+			description: 'One or more databases of known polymorphic sites used to exclude regions around known polymorphisms from analysis.',
+			category: 'optional'
+		}
+		knownSitesIdx: {
+			description: 'Indexes of the inputs known sites.',
+			category: 'optional'
+		}
+		refFasta: {
+			description: 'Path to the reference file (format: fasta)',
+			category: 'required'
+		}
+		refFai: {
+			description: 'Path to the reference file index (format: fai)',
+			category: 'required'
+		}
+		refDict: {
+			description: 'Path to the reference file dict (format: dict)',
+			category: 'required'
+		}
+		gapPenality: {
+			description: 'BQSR BAQ gap open penalty (Phred Scaled). Default value is 40. 30 is perhaps better for whole genome call sets [default: 40]',
+			category: 'optional'
+		}
+		indelDefaultQual: {
+			description: 'Default quality for the base insertions/deletions covariate [default: 45]',
+			category: 'optional'
+		}
+		lowQualTail: {
+			description: 'Minimum quality for the bases in the tail of the reads to be considered [default: 2]',
+			category: 'optional'
+		}
+		indelKmer: {
+			description: 'Size of the k-mer context to be used for base insertions and deletions [default: 3]',
+			category: 'optional'
+		}
+		mismatchKmer: {
+			description: 'Size of the k-mer context to be used for base mismatches [default: 2]',
+			category: 'optional'
+		}
+		maxCycle: {
+			description: 'The maximum cycle value permitted for the Cycle covariate [default: 500]',
+			category: 'optional'
+		}
+		intervalsPadding: {
+			description: 'Amount of padding (in bp) to add to each interval you are including. [default: 0]',
+			category: 'optional'
+		}
+		overlappingRule: {
+			description: 'Interval merging rule for abutting intervals set to OVERLAPPING_ONLY [default: false => ALL]',
+			category: 'optional'
+		}
+		intersectionRule: {
+			description: 'Set merging approach to use for combining interval inputs to INTERSECTION [default: false => UNION]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}

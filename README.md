@@ -44,6 +44,7 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 	- fastqcNano
 	- fastqcCasava
 - GATK4 (4.1.8.1) :
+	- BaseRecalibrator
 	- ReorderSam
 	- DepthOfCoverage (BETA)
 	- SplitIntervals
