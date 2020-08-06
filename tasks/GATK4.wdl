@@ -407,8 +407,8 @@ task splitIntervals {
 
 	command <<<
 
-		if [[ ! -d $(dirname ~{outputFile}) ]]; then
-			mkdir -p $(dirname ~{outputFile})
+		if [[ ! -d $(dirname ~{outputRep}) ]]; then
+			mkdir -p $(dirname ~{outputRep})
 		fi
 
 		~{path_exe} SplitIntervals \
@@ -444,15 +444,15 @@ task splitIntervals {
 			description: 'Output repertory name [default: sub(basename(in),"\.([a-zA-Z]*)$","")].',
 			category: 'optional'
 		}
-		referenceFasta: {
+		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
 			category: 'required'
 		}
-		referenceFai: {
+		refFai: {
 			description: 'Path to the reference file index (format: fai)',
 			category: 'required'
 		}
-		referenceDict: {
+		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
 			category: 'required'
 		}
