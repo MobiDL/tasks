@@ -124,6 +124,7 @@ task dict {
 		String? outputPath
 		String? name
 		String suffix = ".dict"
+		String subString = "\.fa(sta)?(\.gz)?"
 
 		String? assembly
 		Boolean header = true
@@ -131,7 +132,7 @@ task dict {
 		String? uri
 	}
 
-	String baseName = if defined(name) then name else basename(in)
+	String baseName = if defined(name) then name else sub(basename(in),subString,"")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}" else "~{baseName}~{suffix}"
 
 	command <<<
@@ -164,7 +165,7 @@ task dict {
 			category: 'optional'
 		}
 		name: {
-			description: 'Name to use for output file name [default: basename(in)]',
+			description: 'Name to use for output file name [default: sub(basename(in),subString,"")]',
 			category: 'optional'
 		}
 		in: {
@@ -172,7 +173,11 @@ task dict {
 			category: 'Required'
 		}
 		suffix: {
-			description: 'Suffix to add on the output file (e.g. mygenome.fasta.dict) [default: ".dict"]',
+			description: 'Suffix to add on the output file (e.g. mygenome.dict) [default: ".dict"]',
+			category: 'optional'
+		}
+		subString: {
+			description: 'Substring to remove to get file basename [default: "\.fa(sta)?(\.gz)?"]',
 			category: 'optional'
 		}
 		assembly: {
