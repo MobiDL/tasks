@@ -45,6 +45,7 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 	- fastqcCasava
 - GATK4 (4.1.8.1) :
 	- BaseRecalibrator
+	- GatherBQSRReports
 	- ReorderSam
 	- DepthOfCoverage (BETA)
 	- SplitIntervals

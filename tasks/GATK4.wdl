@@ -639,3 +639,75 @@ task baseRecalibrator {
 		}
 	}
 }
+
+task gatherBQSRReports {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-06"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		Array[File?] in
+		String? outputPath
+		String? name
+		String subString = "\.[0-9]\.recal$"
+		String ext = ".bqsr.report"
+
+		Int threads = 1
+	}
+
+	String firstFile = basename(select_first(in))
+	String baseName = if defined(name) then name else sub(basename(firstFile),subString,"")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} GatherBQSRReports \
+			--input ~{sep="--input " in}
+			--output ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'optional'
+		}
+		in: {
+			description: 'List of scattered BQSR report files',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where bqsr report will be generated.',
+			category: 'optional'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
+			category: 'optional'
+		}
+		ext: {
+			description: 'Extension for the output file [default: ".bqsr.report"]',
+			category: 'optional'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "\.[0-9]\.recal$"]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}

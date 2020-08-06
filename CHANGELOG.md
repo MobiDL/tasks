@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 	- fastqcCasava
 - GATK4 :
 	- BaseRecalibrator
+	- GatherBQSRReports
 	- ReorderSam
 	- DepthOfCoverage (BETA)
 	- SplitIntervals
