@@ -46,6 +46,7 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 - GATK4 (4.1.8.1) :
 	- ReorderSam
 	- DepthOfCoverage (BETA)
+	- SplitIntervals
 - Sambamba (0.6.6) :
 	- index
 	- flagstat

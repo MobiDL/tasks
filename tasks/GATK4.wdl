@@ -373,3 +373,108 @@ task depthOfCoverage {
 		}
 	}
 }
+
+task splitIntervals {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-06"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		File in
+		String? outputPath
+		String? name
+
+		File refFasta
+		File refFai
+		File refDict
+
+		Int scatterCount = 1
+		String subdivisionMode = "INTERVAL_SUBDIVISION"
+		Int intervalsPadding = 0
+		Boolean overlappingRule = false
+		Boolean intersectionRule = false
+
+		Int threads = 1
+	}
+
+	String baseName = if defined(name) then name else sub(basename(in),"\.([a-zA-Z]*)$","")
+	String outputRep = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} SplitIntervals \
+			--intervals ~{in} \
+			--reference ~{refFasta} \
+			--scatter-count ~{scatterCount} \
+			--subdivision-mode ~{subdivisionMode} \
+			--interval-padding ~{intervalsPadding} \
+			--interval-merging-rule ~{true="OVERLAPPING_ONLY" false="ALL" overlappingRule} \
+			--interval-set-rule ~{true="INTERSECTION" false="UNION" intersectionRule} \
+			--output ~{outputRep}
+
+	>>>
+
+	output {
+		Array[File] splittedIntervals = glob("~{outputRep}/*-scattered.interval_list")
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Path to a file containing genomic intervals over which to operate. (format intervals list: chr1:1000-2000)',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where files were generated.',
+			category: 'Required'
+		}
+		name: {
+			description: 'Output repertory name [default: sub(basename(in),"\.([a-zA-Z]*)$","")].',
+			category: 'optional'
+		}
+		referenceFasta: {
+			description: 'Path to the reference file (format: fasta)',
+			category: 'required'
+		}
+		referenceFai: {
+			description: 'Path to the reference file index (format: fai)',
+			category: 'required'
+		}
+		referenceDict: {
+			description: 'Path to the reference file dict (format: dict)',
+			category: 'required'
+		}
+		scatterCount: {
+			description: 'Scatter count: number of output interval files to split into [default: 1]',
+			category: 'optional'
+		}
+		subdivisionMode: {
+			description: 'How to divide intervals {INTERVAL_SUBDIVISION, BALANCING_WITHOUT_INTERVAL_SUBDIVISION, BALANCING_WITHOUT_INTERVAL_SUBDIVISION_WITH_OVERFLOW, INTERVAL_COUNT}. [default: INTERVAL_SUBDIVISION]',
+			category: 'optional'
+		}
+		intervalsPadding: {
+			description: 'Amount of padding (in bp) to add to each interval you are including. [default: 0]',
+			category: 'optional'
+		}
+		overlappingRule: {
+			description: 'Interval merging rule for abutting intervals set to OVERLAPPING_ONLY [default: false => ALL]',
+			category: 'optional'
+		}
+		intersectionRule: {
+			description: 'Set merging approach to use for combining interval inputs to INTERSECTION [default: false => UNION]',
+			category: 'optional'
+		}
+	}
+}
