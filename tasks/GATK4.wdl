@@ -491,6 +491,7 @@ task baseRecalibrator {
 		String path_exe = "gatk"
 
 		File in
+		File bamIdx
 		String? outputPath
 		String? name
 		File? intervals
@@ -559,6 +560,10 @@ task baseRecalibrator {
 		}
 		in: {
 			description: 'Alignement file to recalibrate (SAM/BAM/CRAM)',
+			category: 'Required'
+		}
+		bamIdx: {
+			description: 'Index for the alignement input file to recalibrate.',
 			category: 'Required'
 		}
 		intervals: {
@@ -724,6 +729,7 @@ task applyBQSR {
 		String path_exe = "gatk"
 
 		File in
+		File bamIdx
 		File bqsrReport
 		File? intervals
 		String? outputPath
@@ -788,6 +794,10 @@ task applyBQSR {
 		}
 		in: {
 			description: 'Bam file top apply BQSR.',
+			category: 'Required'
+		}
+		bamIdx: {
+			description: 'Index for the alignement input file to recalibrate.',
 			category: 'Required'
 		}
 		outputPath: {
