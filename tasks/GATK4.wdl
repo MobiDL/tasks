@@ -880,7 +880,7 @@ task applyBQSR {
 	}
 }
 
-task GatherBamFiles {
+task gatherBamFiles {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
@@ -922,7 +922,7 @@ task GatherBamFiles {
 		~{path_exe} GatherBamFiles \
 			--input ~{sep="--input " in} \
 			--COMPRESSION_LEVEL ~{compressionLevel} \
-			--MAX_RECORDS_IN_RAM ~{maxRecordsInRam}
+			--MAX_RECORDS_IN_RAM ~{maxRecordsInRam} \
 			~{true="--CREATE_INDEX" false="" bamIndex} \
 			~{true="--CREATE_MD5_FILE" false="" bamMD5} \
 			--output ~{outputBamFile}
