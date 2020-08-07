@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - GATK4 :
 	- applyBQSR
 	- BaseRecalibrator
+	- GatherBamFiles
 	- GatherBQSRReports
 	- ReorderSam
 	- DepthOfCoverage (BETA)

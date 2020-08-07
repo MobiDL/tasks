@@ -17,7 +17,6 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 	- [ ] Change in all task to use this structures
 - [ ] Implement options for cluster
 
-
 ## Tools implemented
 
 - bash :
@@ -46,6 +45,7 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 - GATK4 (4.1.8.1) :
 	- applyBQSR
 	- BaseRecalibrator
+	- GatherBamFiles
 	- GatherBQSRReports
 	- ReorderSam
 	- DepthOfCoverage (BETA)

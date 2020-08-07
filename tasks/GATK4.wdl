@@ -879,3 +879,105 @@ task applyBQSR {
 		}
 	}
 }
+
+task GatherBamFiles {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-07"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		Array[File?] in
+		Array[File?] bamIdx
+		String? outputPath
+		String? name
+		String suffix = ".merge"
+
+		Int compressionLevel = 5
+		Boolean bamIndex = true
+		Boolean bamMD5 = true
+
+		Int maxRecordsInRam = 500000
+
+		Int threads = 1
+	}
+
+	String firstFile = basename(select_first(in))
+	String baseName = if defined(name) then name else sub(basename(firstFile),"(.*)(\.[0-9]+)?\.(sam|bam|cram)$","$1")
+	String ext = sub(basename(firstFile),"(.*)\.(sam|bam|cram)$","$2")
+	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}\.~{ext}" else "~{baseName}~{suffix}\.~{ext}"
+	String outputBaiFile = sub(outputBamFile,"(m)$","i")
+
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputBamFile}) ]]; then
+			mkdir -p $(dirname ~{outputBamFile})
+		fi
+
+		~{path_exe} GatherBamFiles \
+			--input ~{sep="--input " in} \
+			--COMPRESSION_LEVEL ~{compressionLevel} \
+			--MAX_RECORDS_IN_RAM ~{maxRecordsInRam}
+			~{true="--CREATE_INDEX" false="" bamIndex} \
+			~{true="--CREATE_MD5_FILE" false="" bamMD5} \
+			--output ~{outputBamFile}
+
+	>>>
+
+	output {
+		File outputBam = outputBamFile
+		File outputBai = outputBaiFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Array of BAMs to merge.',
+			category: 'Required'
+		}
+		bamIdx: {
+			description: 'Array of Index of alignements inputs files.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where bam will be generated.',
+			category: 'optional'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
+			category: 'optional'
+		}
+		suffix: {
+			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".bqsr"]',
+			category: 'optional'
+		}
+		compressionLevel: {
+			description: 'Compression level for all compressed files created (e.g. BAM and VCF). [default: 2]',
+			category: 'optional'
+		}
+		maxRecordsInRam: {
+			description: 'When writing files that need to be sorted, this will specify the number of records stored in RAM before spilling to disk. Increasing this number reduces the number of file handles needed to sort the file, and increases the amount of RAM needed. [Default: 500000]',
+			category: 'optional'
+		}
+		bamIndex: {
+			description: 'Create a BAM/CRAM index when writing a coordinate-sorted BAM/CRAM file [default: true]',
+			category: 'optional'
+		}
+		bamMD5: {
+			description: 'Create a MD5 digest for any BAM/SAM/CRAM file created [default: true]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}
