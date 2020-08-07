@@ -755,9 +755,12 @@ task applyBQSR {
 		Int threads = 1
 	}
 
+	String baseNameIntervals = if defined(intervals) then intervals else ""
+	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","\.$1") else ""
+
 	String baseName = if defined(name) then name else sub(basename(in),"\.(sam|bam|cram)$","")
 	String ext = sub(basename(in),"\.(sam|bam|cram)$","$2")
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{ext}" else "~{baseName}~{suffix}~{ext}"
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{baseIntervals}~{suffix}~{ext}" else "~{baseName}~{baseIntervals}~{suffix}~{ext}"
 
 	command <<<
 
