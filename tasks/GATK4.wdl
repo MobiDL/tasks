@@ -671,7 +671,7 @@ task gatherBQSRReports {
 		fi
 
 		~{path_exe} GatherBQSRReports \
-			--input ~{sep="--input " in}
+			--input ~{sep="--input " in} \
 			--output ~{outputFile}
 
 	>>>
