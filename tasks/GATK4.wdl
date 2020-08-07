@@ -711,3 +711,156 @@ task gatherBQSRReports {
 		}
 	}
 }
+
+task applyBQSR {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-07"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		File in
+		File bqsrReport
+		File? intervals
+		String? outputPath
+		String? name
+		String suffix = ".bqsr"
+
+		File refFasta
+		File refFai
+		File refDict
+
+		Boolean originalQScore = false
+		Int globalQScorePrior = -1
+		Int preserveQScoreLT = 6
+		Int quantizeQual = 0
+
+		Boolean overlappingRule = false
+		Int intervalsPadding = 0
+		Boolean intersectionRule = false
+
+		Boolean bamIndex = true
+		Boolean bamMD5 = true
+
+		Int threads = 1
+	}
+
+	String baseName = if defined(name) then name else sub(basename(in),"\.(sam|bam|cram)$","")
+	String ext = sub(basename(in),"\.(sam|bam|cram)$","$2")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{ext}" else "~{baseName}~{suffix}~{ext}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} ApplyBQSR \
+			--input ~{in} \
+			--bqsr-recal-file ~{bqsrReport} \
+			--reference ~{refFasta} \
+			~{default="" "--intervals " + intervals} \
+			~{true="--emit-original-quals" false="" originalQScore} \
+			--global-qscore-prior ~{globalQScorePrior} \
+			--preserve-qscores-less-than ~{preserveQScoreLT} \
+			--quantize-quals ~{quantizeQual} \
+			--interval-padding ~{intervalsPadding} \
+			--interval-merging-rule ~{true="OVERLAPPING_ONLY" false="ALL" overlappingRule} \
+			--interval-set-rule ~{true="INTERSECTION" false="UNION" intersectionRule} \
+			~{true="--create-output-bam-index" false="" bamIndex} \
+			~{true="--create-output-bam-md5" false="" bamMD5} \
+			--output ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Bam file top apply BQSR.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where bam will be generated.',
+			category: 'optional'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
+			category: 'optional'
+		}
+		suffix: {
+			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".bqsr"]',
+			category: 'optional'
+		}
+		bqsrReport: {
+			description: 'Path to a file containing bqsr report',
+			category: 'Required'
+		}
+		intervals: {
+			description: 'Path to a file containing genomic intervals over which to operate. (format intervals list: chr1:1000-2000)',
+			category: 'optional'
+		}
+		refFasta: {
+			description: 'Path to the reference file (format: fasta)',
+			category: 'required'
+		}
+		refFai: {
+			description: 'Path to the reference file index (format: fai)',
+			category: 'required'
+		}
+		refDict: {
+			description: 'Path to the reference file dict (format: dict)',
+			category: 'required'
+		}
+		originalQScore: {
+			description: 'Emit original base qualities under the OQ tag [default: false]',
+			category: 'optional'
+		}
+		globalQScorePrior: {
+			description: 'Global Qscore Bayesian prior to use for BQSR [default: -1]',
+			category: 'optional'
+		}
+		preserveQScoreLT: {
+			description: "Don't recalibrate bases with quality scores less than this threshold [default: 6]",
+			category: 'optional'
+		}
+		quantizeQual: {
+			description: 'Quantize quality scores to a given number of levels [default: 0]',
+			category: 'optional'
+		}
+		intervalsPadding: {
+			description: 'Amount of padding (in bp) to add to each interval you are including. [default: 0]',
+			category: 'optional'
+		}
+		overlappingRule: {
+			description: 'Interval merging rule for abutting intervals set to OVERLAPPING_ONLY [default: false => ALL]',
+			category: 'optional'
+		}
+		intersectionRule: {
+			description: 'Set merging approach to use for combining interval inputs to INTERSECTION [default: false => UNION]',
+			category: 'optional'
+		}
+		bamIndex: {
+			description: 'Create a BAM/CRAM index when writing a coordinate-sorted BAM/CRAM file [default: true]',
+			category: 'optional'
+		}
+		bamMD5: {
+			description: 'Create a MD5 digest for any BAM/SAM/CRAM file created [default: true]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}
