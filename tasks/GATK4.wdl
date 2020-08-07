@@ -760,7 +760,7 @@ task applyBQSR {
 
 	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")
 	String ext = sub(basename(in),"(.*)\.(sam|bam|cram)$","$2")
-	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{baseIntervals}~{suffix}\.~{ext}" else "~{baseName}~{baseIntervals}~{suffix}\.~{ext}"
+	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{baseIntervals}\.~{ext}" else "~{baseName}~{suffix}~{baseIntervals}\.~{ext}"
 	String outputBaiFile = sub(outputBamFile,"(m)$","i")
 
 	command <<<
