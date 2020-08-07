@@ -466,6 +466,66 @@ task faidx {
 	}
 }
 
+task fqidx {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-07"
+	}
+
+	input {
+		String path_exe = "samtools"
+
+		File in
+		String? outputPath
+		String? name
+
+		Int threads = 1
+	}
+
+	String baseName = if defined(name) then name else basename(in)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.fai" else "~{baseName}.fai"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} faidx ~{in}
+		mv ~{in + ".fai"} ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "samtools"]',
+			category: 'optional'
+		}
+		outputPath: {
+			description: 'Output path where index was generated. [default: pwd()]',
+			category: 'optional'
+		}
+		name: {
+			description: 'Name to use for output file name [default: basename(in)]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Fastq file.',
+			category: 'Required'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}
+
 task flagstat {
 	meta {
 		author: "Charles VAN GOETHEM"
