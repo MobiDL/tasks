@@ -1012,8 +1012,6 @@ task leftAlignIndels {
 		Boolean bamIndex = true
 		Boolean bamMD5 = true
 
-		Int maxRecordsInRam = 500000
-
 		Int threads = 1
 	}
 
