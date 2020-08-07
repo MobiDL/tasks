@@ -981,3 +981,135 @@ task gatherBamFiles {
 		}
 	}
 }
+
+task leftAlignIndels {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-07"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		File in
+		File bamIdx
+		String? outputPath
+		String? name
+		String suffix = ".leftAlign"
+
+		File? intervals
+
+		File refFasta
+		File refFai
+		File refDict
+
+		Boolean overlappingRule = false
+		Int intervalsPadding = 0
+		Boolean intersectionRule = false
+
+		Boolean bamIndex = true
+		Boolean bamMD5 = true
+
+		Int maxRecordsInRam = 500000
+
+		Int threads = 1
+	}
+
+	String baseNameIntervals = if defined(intervals) then intervals else ""
+	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","\.$1") else ""
+
+	String baseName = if defined(name) then name else sub(basename(in),"(.*)(\.[0-9]+)?\.(sam|bam|cram)$","$1")
+	String ext = sub(basename(in),"(.*)\.(sam|bam|cram)$","$2")
+	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}\.~{ext}" else "~{baseName}~{suffix}\.~{ext}"
+	String outputBaiFile = sub(outputBamFile,"(m)$","i")
+
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputBamFile}) ]]; then
+			mkdir -p $(dirname ~{outputBamFile})
+		fi
+
+		~{path_exe} GatherBamFiles \
+			--input ~{in} \
+			--reference ~{refFasta} \
+			--sequence-dictionary ~{refDict} \
+			--interval-padding ~{intervalsPadding} \
+			--interval-merging-rule ~{true="OVERLAPPING_ONLY" false="ALL" overlappingRule} \
+			--interval-set-rule ~{true="INTERSECTION" false="UNION" intersectionRule} \
+			~{true="--CREATE_INDEX" false="" bamIndex} \
+			~{true="--CREATE_MD5_FILE" false="" bamMD5} \
+			--output ~{outputBamFile}
+
+	>>>
+
+	output {
+		File outputBam = outputBamFile
+		File outputBai = outputBaiFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Array of BAMs to merge.',
+			category: 'Required'
+		}
+		bamIdx: {
+			description: 'Array of Index of alignements inputs files.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where bam will be generated.',
+			category: 'optional'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
+			category: 'optional'
+		}
+		suffix: {
+			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".bqsr"]',
+			category: 'optional'
+		}
+		refFasta: {
+			description: 'Path to the reference file (format: fasta)',
+			category: 'required'
+		}
+		refFai: {
+			description: 'Path to the reference file index (format: fai)',
+			category: 'required'
+		}
+		refDict: {
+			description: 'Path to the reference file dict (format: dict)',
+			category: 'required'
+		}
+		intervalsPadding: {
+			description: 'Amount of padding (in bp) to add to each interval you are including. [default: 0]',
+			category: 'optional'
+		}
+		overlappingRule: {
+			description: 'Interval merging rule for abutting intervals set to OVERLAPPING_ONLY [default: false => ALL]',
+			category: 'optional'
+		}
+		intersectionRule: {
+			description: 'Set merging approach to use for combining interval inputs to INTERSECTION [default: false => UNION]',
+			category: 'optional'
+		}
+		bamIndex: {
+			description: 'Create a BAM/CRAM index when writing a coordinate-sorted BAM/CRAM file [default: true]',
+			category: 'optional'
+		}
+		bamMD5: {
+			description: 'Create a MD5 digest for any BAM/SAM/CRAM file created [default: true]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}

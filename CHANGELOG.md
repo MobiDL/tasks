@@ -32,10 +32,11 @@ All notable changes to this project will be documented in this file.
 	- fastqcNano
 	- fastqcCasava
 - GATK4 :
-	- applyBQSR
+	- ApplyBQSR
 	- BaseRecalibrator
 	- GatherBamFiles
 	- GatherBQSRReports
+	- LeftAlignIndels
 	- ReorderSam
 	- DepthOfCoverage (BETA)
 	- SplitIntervals
