@@ -1020,7 +1020,7 @@ task leftAlignIndels {
 
 	String baseName = if defined(name) then name else sub(basename(in),"(.*)(\.[0-9]+)?\.(sam|bam|cram)$","$1")
 	String ext = sub(basename(in),"(.*)\.(sam|bam|cram)$","$2")
-	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}\.~{ext}" else "~{baseName}~{suffix}\.~{ext}"
+	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{baseIntervals}\.~{ext}" else "~{baseName}~{suffix}~{baseIntervals}\.~{ext}"
 	String outputBaiFile = sub(outputBamFile,"(m)$","i")
 
 
@@ -1103,6 +1103,142 @@ task leftAlignIndels {
 		}
 		bamMD5: {
 			description: 'Create a MD5 digest for any BAM/SAM/CRAM file created [default: true]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}
+
+task collectMultipleMetrics {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-07"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		File in
+		File bamIdx
+		String? outputPath
+		String? name
+		String suffix = ".collectMultipleMetrics"
+
+		File? intervals
+
+		File refFasta
+		File refFai
+		File refDict
+
+		Boolean collectAlignmentSummaryMetrics = true
+		Boolean collectBaseDistributionByCycle = true
+		Boolean collectInsertSizeMetrics = true
+		Boolean meanQualityByCycle = true
+		Boolean qualityScoreDistribution = true
+
+		Int threads = 1
+	}
+
+	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")
+	String outputBase = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}" else "~{baseName}~{suffix}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputPath}) ]]; then
+			mkdir -p $(dirname ~{outputPath})
+		fi
+
+		~{path_exe} GatherBamFiles \
+			--input ~{in} \
+			--reference ~{refFasta} \
+			~{true="--PROGRAM CollectAlignmentSummaryMetrics" false="" collectAlignmentSummaryMetrics} \
+			~{true="--PROGRAM CollectBaseDistributionByCycle" false="" collectBaseDistributionByCycle} \
+			~{true="--PROGRAM CollectInsertSizeMetrics" false="" collectInsertSizeMetrics} \
+			~{true="--PROGRAM MeanQualityByCycle" false="" meanQualityByCycle} \
+			~{true="--PROGRAM QualityScoreDistribution" false="" qualityScoreDistribution} \
+			--output ~{outputBase}
+
+	>>>
+
+	output {
+		File? outCollectAlignmentSummaryMetricsTxt = outputBase + ".alignment_summary_metrics"
+		File? outCollectBaseDistributionByCycleTxt = outputBase + ".base_distribution_by_cycle_metrics"
+		File? outCollectBaseDistributionByCyclePdf = outputBase + ".base_distribution_by_cycle.pdf"
+		File? outCollectInsertSizeMetricsTxt = outputBase + ".insert_size_metrics"
+		File? outCollectInsertSizeMetricsPdf = outputBase + ".insert_size_histogram.pdf"
+		File? outMeanQualityByCycleTxt = outputBase + ".quality_by_cycle_metrics"
+		File? outMeanQualityByCyclePdf = outputBase + ".quality_by_cycle.pdf"
+		File? outQualityScoreDistributionTxt = outputBase + ".quality_distribution_metrics"
+		File? outQualityScoreDistributionPdf = outputBase + ".quality_distribution.pdf"
+		Array[File] collectMultipleMetrics = select_all([
+			outCollectAlignmentSummaryMetricsTxt,
+			outCollectBaseDistributionByCycleTxt,
+			outCollectBaseDistributionByCyclePdf,
+			outCollectInsertSizeMetricsTxt,
+			outCollectInsertSizeMetricsPdf,
+			outMeanQualityByCycleTxt,
+			outMeanQualityByCyclePdf,
+			outQualityScoreDistributionTxt,
+			outQualityScoreDistributionPdf
+		])
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'optional'
+		}
+		in: {
+			description: 'BAM to process.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where bam will be generated.',
+			category: 'optional'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
+			category: 'optional'
+		}
+		suffix: {
+			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".bqsr"]',
+			category: 'optional'
+		}
+		refFasta: {
+			description: 'Path to the reference file (format: fasta)',
+			category: 'required'
+		}
+		refFai: {
+			description: 'Path to the reference file index (format: fai)',
+			category: 'required'
+		}
+		refDict: {
+			description: 'Path to the reference file dict (format: dict)',
+			category: 'required'
+		}
+		collectAlignmentSummaryMetrics: {
+			description: 'Use programm : CollectAlignmentSummaryMetrics [default: true]',
+			category: 'optional'
+		}
+		collectBaseDistributionByCycle: {
+			description: 'Use programm : CollectBaseDistributionByCycle [default: true]',
+			category: 'optional'
+		}
+		collectInsertSizeMetrics: {
+			description: 'Use programm : CollectInsertSizeMetrics [default: true]',
+			category: 'optional'
+		}
+		meanQualityByCycle: {
+			description: 'Use programm : MeanQualityByCycle [default: true]',
+			category: 'optional'
+		}
+		qualityScoreDistribution: {
+			description: 'Use programm : QualityScoreDistribution [default: true]',
 			category: 'optional'
 		}
 		threads: {
