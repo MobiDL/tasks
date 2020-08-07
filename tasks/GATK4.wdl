@@ -758,14 +758,15 @@ task applyBQSR {
 	String baseNameIntervals = if defined(intervals) then intervals else ""
 	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","\.$1") else ""
 
-	String baseName = if defined(name) then name else sub(basename(in),"\.(sam|bam|cram)$","")
-	String ext = sub(basename(in),"\.(sam|bam|cram)$","$2")
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{baseIntervals}~{suffix}~{ext}" else "~{baseName}~{baseIntervals}~{suffix}~{ext}"
+	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")
+	String ext = sub(basename(in),"(.*)\.(sam|bam|cram)$","$2")
+	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{baseIntervals}~{suffix}\.~{ext}" else "~{baseName}~{baseIntervals}~{suffix}\.~{ext}"
+	String outputBaiFile = sub(outputBamFile,"(m)$","i")
 
 	command <<<
 
-		if [[ ! -d $(dirname ~{outputFile}) ]]; then
-			mkdir -p $(dirname ~{outputFile})
+		if [[ ! -d $(dirname ~{outputBamFile}) ]]; then
+			mkdir -p $(dirname ~{outputBamFile})
 		fi
 
 		~{path_exe} ApplyBQSR \
@@ -782,12 +783,13 @@ task applyBQSR {
 			--interval-set-rule ~{true="INTERSECTION" false="UNION" intersectionRule} \
 			~{true="--create-output-bam-index" false="" bamIndex} \
 			~{true="--create-output-bam-md5" false="" bamMD5} \
-			--output ~{outputFile}
+			--output ~{outputBamFile}
 
 	>>>
 
 	output {
-		File outputFile = outputFile
+		File outputBam = outputBamFile
+		File outputBai = outputBaiFile
 	}
 
 	parameter_meta {
