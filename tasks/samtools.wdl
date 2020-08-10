@@ -493,7 +493,7 @@ task fqidx {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		~{path_exe} faidx ~{in}
+		~{path_exe} fqidx ~{in}
 		mv ~{in + ".fai"} ~{outputFile}
 
 	>>>
