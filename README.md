@@ -23,6 +23,7 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 	- findFiles
 	- bgzip (compress, decompress)
 	- convertBedToIntervals
+	- makeLink
 - bcftools (v1.9) :
 	- index
 	- merge

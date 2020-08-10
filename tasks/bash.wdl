@@ -180,12 +180,12 @@ task convertBedToIntervals {
 		fi
 
 		grep -E -v "^track|^browser|^#" ~{in} | \
-		awk -F "\t" '{ 
-			if($2 == $3){ 
-				$3++ 
-			} 
-			$2++; 
-			print $1":"$2"-"$3; 
+		awk -F "\t" '{
+			if($2 == $3){
+				$3++
+			}
+			$2++;
+			print $1":"$2"-"$3;
 		}' > ~{outputFile}
 
 	>>>
@@ -209,6 +209,63 @@ task convertBedToIntervals {
 		}
 		ext: {
 			description: 'Extension of the output file. [default: ".intervals"]',
+			category: 'optional'
+		}
+	}
+}
+
+task makeLink {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-10"
+	}
+
+	input {
+		File in
+
+		String outputPath
+		String? name
+
+		Boolean softLink = false
+	}
+
+	String outputName = if defined(name) then name else basename(in)
+	String outputFile = outputPath + "/" + outputName
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		ln \
+			~{true="-s" false="" softLink} \
+			~{in} \
+			~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		in: {
+			description: 'Input bed to convert.',
+			category: 'required'
+		}
+		outputPath: {
+			description: 'Path where was generated output.',
+			category: "required"
+		}
+		name: {
+			description: 'Basename of the output file. [default: basename(in)]',
+			category: 'optional'
+		}
+		softLink: {
+			description: 'Make soft link (-s). [default: false]',
 			category: 'optional'
 		}
 	}

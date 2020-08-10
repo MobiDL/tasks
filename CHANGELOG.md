@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 	- findFiles
 	- bgzip (compress and decompress)
 	- convertBedToIntervals
+	- makeLink
 - bcftools :
 	- index
 	- merge
