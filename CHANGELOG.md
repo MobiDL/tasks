@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - GATK4 :
 	- ApplyBQSR
 	- BaseRecalibrator
+	- BedToIntervalList
 	- CollectMultipleMetrics
 	- GatherBamFiles
 	- GatherBQSRReports

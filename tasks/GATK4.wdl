@@ -1247,3 +1247,90 @@ task collectMultipleMetrics {
 		}
 	}
 }
+
+task bedToIntervalList {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-10"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		File in
+		File refDict
+		String? outputPath
+		String? name
+		String ext = ".intervals"
+
+		Boolean sort = true
+		Boolean unique = false
+
+		Int threads = 1
+	}
+
+
+
+	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(bed)$","$1")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputPath}) ]]; then
+			mkdir -p $(dirname ~{outputPath})
+		fi
+
+		~{path_exe} BedToIntervalList \
+			--INPUT ~{in} \
+			--SEQUENCE_DICTIONARY ~{refDict} \
+			~{true="--SORT" false="" sort} \
+			~{true="--UNIQUE" false="" unique} \
+			--OUTPUT ~{outputFile} \
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'optional'
+		}
+		in: {
+			description: 'BED to convert into intervals list.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where intervals list will be generated.',
+			category: 'optional'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(in),"(.*)\.(bed)$","$1")].',
+			category: 'optional'
+		}
+		ext: {
+			description: 'Extension of the output file [default: ".intervals"]',
+			category: 'optional'
+		}
+		refDict: {
+			description: 'Path to the reference file dict (format: dict)',
+			category: 'required'
+		}
+		sort: {
+			description: 'If true, sort the output interval list before writing it. [default: true]',
+			category: 'optional'
+		}
+		unique: {
+			description: 'If true, unique the output interval list by merging overlapping regions, before writing it (implies sort=true). [default: false]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}

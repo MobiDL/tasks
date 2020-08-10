@@ -45,6 +45,7 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 - GATK4 (4.1.8.1) :
 	- ApplyBQSR
 	- BaseRecalibrator
+	- BedToIntervalList
 	- CollectMultipleMetrics
 	- GatherBamFiles
 	- GatherBQSRReports
