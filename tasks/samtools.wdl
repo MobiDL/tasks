@@ -123,7 +123,7 @@ task dict {
 		File in
 		String? outputPath
 		String? name
-		String suffix = ".dict"
+		String ext = ".dict"
 		String subString = "\.fa(sta)?(\.gz)?"
 
 		String? assembly
@@ -133,7 +133,7 @@ task dict {
 	}
 
 	String baseName = if defined(name) then name else sub(basename(in),subString,"")
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}" else "~{baseName}~{suffix}"
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
 
 	command <<<
 
@@ -172,8 +172,8 @@ task dict {
 			description: 'Fasta file.',
 			category: 'Required'
 		}
-		suffix: {
-			description: 'Suffix to add on the output file (e.g. mygenome.dict) [default: ".dict"]',
+		ext: {
+			description: 'Extension of the output file (e.g. mygenome.dict) [default: ".dict"]',
 			category: 'optional'
 		}
 		subString: {
