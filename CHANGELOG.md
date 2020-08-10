@@ -35,6 +35,7 @@ All notable changes to this project will be documented in this file.
 	- ApplyBQSR
 	- BaseRecalibrator
 	- BedToIntervalList
+	- HaplotypeCaller
 	- CollectMultipleMetrics
 	- GatherBamFiles
 	- GatherBQSRReports

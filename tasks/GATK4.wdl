@@ -1330,3 +1330,195 @@ task bedToIntervalList {
 		}
 	}
 }
+
+task haplotypeCaller {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-10"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		File in
+		String? outputPath
+		String? name
+		String suffix = ".haplotypeCaller"
+		String ext = ".vcf"
+
+		File refFasta
+		File refFai
+		File refDict
+
+		## Annotation
+		# File? alleles
+		# Boolean annotateNumAlleleDiscovered = false
+		# Array[String]? annotations
+		# Array[String]? annotationGroup
+		# Array[String]? annotationExclude
+		File? dbsnp
+		File? dbsnpIdx
+
+		## filters
+		# Float conta = 0.0
+		# Int baseQuality = 18
+		# Int minBaseQuality = 10
+		# Int standCallConf = 30
+		# Int maxAltAlleles = 6
+		# Int maxGenotypeCount = 1024
+
+		## intervals
+		File? intervals
+		Int intervalsPadding = 0
+		Boolean overlappingRule = false
+		Boolean intersectionRule = false
+
+		## assembly
+		# Boolean graph = false
+		# Boolean assembly = false
+		# Int maxAssemblyRegionSize = 300
+		# Int maxReadsPerStart = 50
+		# Int minAssemblyRegionSize = 50
+
+		## algo
+		### heterozygosity
+		# Float heterozygosity  = 0.001
+		# Float heterozygosityStd  = 0.01
+		# Float heterozygosityIndel = 0.000125
+		### HMM
+		# Int nativePairHMM = 4
+		# Boolean useDoubleHMM = false
+		# String implementationHMM = "FASTEST_AVAILABLE"
+		### Other
+		# Float activeProbThreshold = 0.002
+		# Int alleleInfoReadsOverlapMergin = 2
+		String smithAndWaterman = "FASTEST_AVAILABLE"
+		String emitRefConfidence = "NONE"
+
+		## output
+		Boolean createVCFIdx = true
+		Boolean createVCFMD5 = true
+
+		Int threads = 1
+	}
+
+	String baseNameIntervals = if defined(intervals) then intervals else ""
+	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","\.$1") else ""
+
+	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{baseIntervals}~{ext}" else "~{baseName}~{suffix}~{baseIntervals}~{ext}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} HaplotypeCaller \
+			--input ~{in} \
+			--reference ~{refFasta} \
+			--sequence-dictionary ~{refDict} \
+			~{default="" "--dbsnp " + dbsnp} \
+			~{default="" "--intervals " + intervals} \
+			--interval-padding ~{intervalsPadding} \
+			--interval-merging-rule ~{true="OVERLAPPING_ONLY" false="ALL" overlappingRule} \
+			--interval-set-rule ~{true="INTERSECTION" false="UNION" intersectionRule} \
+			--smith-waterman ~{smithAndWaterman} \
+			--emit-ref-confidence ~{emitRefConfidence} \
+			~{true="--create-output-variant-index" false="" createVCFIdx} \
+			~{true="--create-output-variant-md5" false="" createVCFMD5} \
+			--output ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+		File? outputFileIdx = outputFile + ".tbi"
+		File? outputFileMD5 = outputFile + ".md5"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'optional'
+		}
+		in: {
+			description: 'BED to convert into intervals list.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where intervals list will be generated.',
+			category: 'optional'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(in),"(.*)\.(bed)$","$1")].',
+			category: 'optional'
+		}
+		suffix: {
+			description: 'Suffix to add to the output file [default: ".haplotypeCaller"]',
+			category: 'optional'
+		}
+		ext: {
+			description: 'Extension of the output file [default: ".vcf"]',
+			category: 'optional'
+		}
+		refFasta: {
+			description: 'Path to the reference file (format: fasta)',
+			category: 'required'
+		}
+		refFai: {
+			description: 'Path to the reference file index (format: fai)',
+			category: 'required'
+		}
+		refDict: {
+			description: 'Path to the reference file dict (format: dict)',
+			category: 'required'
+		}
+		dbsnp: {
+			description: 'Path to the file containing dbsnp (format: vcf)',
+			category: 'required'
+		}
+		dbsnpIdx: {
+			description: 'Path to the index of dbsnp file (format: tbi)',
+			category: 'required'
+		}
+		intervals: {
+			description: 'Path to a file containing genomic intervals over which to operate. (format intervals list: chr1:1000-2000)',
+			category: 'optional'
+		}
+		intervalsPadding: {
+			description: 'Amount of padding (in bp) to add to each interval you are including. [default: 0]',
+			category: 'optional'
+		}
+		overlappingRule: {
+			description: 'Interval merging rule for abutting intervals set to OVERLAPPING_ONLY [default: false => ALL]',
+			category: 'optional'
+		}
+		intersectionRule: {
+			description: 'Set merging approach to use for combining interval inputs to INTERSECTION [default: false => UNION]',
+			category: 'optional'
+		}
+		smithAndWaterman: {
+			description: 'Which Smith-Waterman implementation to use, generally FASTEST_AVAILABLE is the right choice (possible values: FASTEST_AVAILABLE, AVX_ENABLED, JAVA) [default: FASTEST_AVAILABLE]',
+			category: 'optional'
+		}
+		emitRefConfidence: {
+			description: 'Mode for emitting reference confidence scores (possible values: NONE, BP_RESOLUTION, GVCF) [default: None]',
+			category: 'optional'
+		}
+		createVCFIdx: {
+			description: 'If true, create a VCF index when writing a coordinate-sorted VCF file. [Default: true]',
+			category: 'optional'
+		}
+		createVCFMD5: {
+			description: 'If true, create a a MD5 digest any VCF file created. [Default: true]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}

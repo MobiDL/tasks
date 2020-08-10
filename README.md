@@ -46,6 +46,7 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 	- ApplyBQSR
 	- BaseRecalibrator
 	- BedToIntervalList
+	- HaplotypeCaller
 	- CollectMultipleMetrics
 	- GatherBamFiles
 	- GatherBQSRReports
