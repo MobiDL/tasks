@@ -36,10 +36,6 @@ task bamqc {
 	String baseName = if defined(name) then name else sub(basename(in),"(\.sam|\.bam|\.cram)","")
 	String outputRep = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
-	String pdfReport = outputRep + "/report.pdf"
-	String htmlReport = outputRep + "/qualimapReport.html"
-	String htmlFullReport = outputRep + "/qualimapReportOutsideRegions.html"
-
 	command <<<
 
 		if [[ ! -d ~{outputRep} ]]; then
@@ -63,9 +59,9 @@ task bamqc {
 	>>>
 
 	output {
-		File htmlReport = htmlReport
-		File? pdfReport = pdfReport
-		File? htmlFullReport = htmlFullReport
+		File htmlReport = outputRep + "/report.pdf"
+		File? pdfReport = outputRep + "/qualimapReport.html"
+		File? htmlFullReport = outputRep + "/qualimapReportOutsideRegions.html"
 	}
 
 	parameter_meta {
