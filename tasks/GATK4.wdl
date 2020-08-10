@@ -912,7 +912,6 @@ task gatherBamFiles {
 	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}\.~{ext}" else "~{baseName}~{suffix}\.~{ext}"
 	String outputBaiFile = sub(outputBamFile,"(m)$","i")
 
-
 	command <<<
 
 		if [[ ! -d $(dirname ~{outputBamFile}) ]]; then
@@ -1022,7 +1021,6 @@ task leftAlignIndels {
 	String ext = sub(basename(in),"(.*)\.(sam|bam|cram)$","$2")
 	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{baseIntervals}\.~{ext}" else "~{baseName}~{suffix}~{baseIntervals}\.~{ext}"
 	String outputBaiFile = sub(outputBamFile,"(m)$","i")
-
 
 	command <<<
 
@@ -1149,8 +1147,8 @@ task collectMultipleMetrics {
 
 	command <<<
 
-		if [[ ! -d $(dirname ~{outputPath}) ]]; then
-			mkdir -p $(dirname ~{outputPath})
+		if [[ ! -d $(dirname ~{outputBase}) ]]; then
+			mkdir -p $(dirname ~{outputBase})
 		fi
 
 		~{path_exe} GatherBamFiles \
@@ -1271,15 +1269,13 @@ task bedToIntervalList {
 		Int threads = 1
 	}
 
-
-
 	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(bed)$","$1")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
 
 	command <<<
 
-		if [[ ! -d $(dirname ~{outputPath}) ]]; then
-			mkdir -p $(dirname ~{outputPath})
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
 		fi
 
 		~{path_exe} BedToIntervalList \
