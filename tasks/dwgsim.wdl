@@ -18,8 +18,10 @@ task simulateReadsIllumina {
 		Int sizeR1 = 150
 		Int sizeR2 = sizeR1
 
-		Int insertSize = 500
-		Int stdInsert = 50
+		Boolean useInnerDistance = false
+
+		Int insertSize = 250
+		Int stdInsert = 10
 		Float rateMut = 0.0010
 		Float freqMut = 0.5000
 		Float rateIndels = 0.1000
@@ -43,6 +45,7 @@ task simulateReadsIllumina {
 		~{path_exe} \
 			-1 ~{sizeR1} \
 			-2 ~{sizeR2} \
+			~{true="-i" false="" useInnerDistance} \
 			-d ~{insertSize} \
 			-s ~{stdInsert} \
 			-r ~{rateMut} \
@@ -86,6 +89,10 @@ task simulateReadsIllumina {
 		}
 		sizeR2: {
 			description: 'Length of the second read [default: sizeR1]',
+			category: 'optional'
+		}
+		useInnerDistance: {
+			description: 'Use the inner distance instead of the outer distance for pairs [default: false]',
 			category: 'optional'
 		}
 		insertSize: {
