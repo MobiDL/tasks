@@ -58,7 +58,7 @@ task mem {
 		fi
 
 		~{path_exe_bwa} mem \
-			-R "@RG\tID:~{sample}\tSM:~{sample}\tPL:~{platformReads}" \
+			-R "@RG\tID:~{baseName}\tSM:~{baseName}\tPL:~{platformReads}" \
 			-T ~{minScore} \
 			~{true="-M" false="" markShorter} \
 			-t ~{threads} \
