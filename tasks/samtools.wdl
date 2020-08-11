@@ -18,18 +18,20 @@ task sort {
 		String format = "bam"
 
 		Int compressionLevel = 1
-		String? memory
 		Boolean sortByReadName = false
 		String? tag
 		File? refFasta
+
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
 
-	Int memTemp = 768*threads
+	Int memTemp = memoryByThreads*threads
 	String totalMem = if defined(memory) then memory else "~{memTemp}M"
 	Int mem = sub(totalMem,"([0-9]+)(M|G)", "$1")
 	Boolean giga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
-	Int memoryByThreads = if giga then floor((mem*1024)/threads) else floor((mem)/threads)
+	Int memByThreads = if giga then floor((mem*1024)/threads) else floor((mem)/threads)
 
 	String baseName = if defined(name) then name else sub(basename(in),"(\.sam|\.bam|\.cram)","")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.~{format}" else "~{baseName}~{suffix}.~{format}"
@@ -42,12 +44,12 @@ task sort {
 
 		~{path_exe} sort \
 			-l ~{compressionLevel} \
-			-m ~{memoryByThreads}M \
 			~{true="-n" false="" sortByReadName} \
 			~{default="" "-t " + tag} \
 			--output-fmt ~{format} \
 			~{default="" "--reference " + refFasta} \
 			--threads ~{threads - 1} \
+			-m ~{memByThreads}M \
 			-o ~{outputFile} \
 			~{in}
 
@@ -98,12 +100,16 @@ task sort {
 			description: 'Reference sequence FASTA FILE',
 			category: 'optional'
 		}
-		memory: {
-			description: 'Sets the total memory to use ; with suffix M/G [default: (768M*threads)]',
-			category: 'optional'
-		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'optional'
 		}
 	}

@@ -38,7 +38,15 @@ task mem {
 		Int minScore = 30
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	Int memTemp = memoryByThreads*threads
+	String totalMem = if defined(memory) then memory else "~{memTemp}M"
+	Int mem = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Boolean giga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryByThreadsCalc = if giga then floor((mem*1024)/threads) else floor((mem)/threads)
 
 	String baseName = if defined(sample) then sample else sub(basename(fastqR1),subString,"")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.bam" else "~{baseName}.bam"
@@ -56,7 +64,7 @@ task mem {
 			-t ~{threads} \
 			~{refFasta} \
 			~{fastqR1} ~{default="" fastqR2} \
-			| ~{path_exe_samtools} sort -@ ~{threads-1} -m 768M -o ~{outputFile}
+			| ~{path_exe_samtools} sort -@ ~{threads-1} -m ~{memoryByThreadsCalc}M -o ~{outputFile}
 
 	>>>
 
@@ -112,6 +120,14 @@ task mem {
 		threads: {
 			description: "Sets the number of threads [default: 1]",
 			category: "optional"
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
 		}
 	}
 }
