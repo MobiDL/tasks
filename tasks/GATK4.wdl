@@ -1343,6 +1343,7 @@ task haplotypeCaller {
 		String path_exe = "gatk"
 
 		File in
+		File idx
 		String? outputPath
 		String? name
 		String suffix = ".haplotypeCaller"
@@ -1445,15 +1446,19 @@ task haplotypeCaller {
 			category: 'optional'
 		}
 		in: {
-			description: 'BED to convert into intervals list.',
+			description: 'BAM file.',
+			category: 'Required'
+		}
+		idx: {
+			description: 'Index of the BAM file.',
 			category: 'Required'
 		}
 		outputPath: {
-			description: 'Output path where intervals list will be generated.',
+			description: 'Output path where files will be generated.',
 			category: 'optional'
 		}
 		name: {
-			description: 'Output file base name [default: sub(basename(in),"(.*)\.(bed)$","$1")].',
+			description: 'Output file base name [default: sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")].',
 			category: 'optional'
 		}
 		suffix: {
