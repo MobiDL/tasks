@@ -623,7 +623,7 @@ task bedcov {
 		Int threads = 1
 	}
 
-	String baseName = if defined(name) then name else basename(inBam)
+	String baseName = if defined(name) then name else sub(basename(inBam),"\.(sam|bam|cram)","")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.bed" else "~{baseName}~{suffix}.bed"
 
 	command <<<
