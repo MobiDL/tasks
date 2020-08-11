@@ -70,5 +70,6 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 	- faidx
 	- fqidx
 	- markdup
+	- fixmate
 - Qualimap (v.2.2.2-dev) :
 	- bamqc

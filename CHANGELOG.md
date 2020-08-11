@@ -59,5 +59,6 @@ All notable changes to this project will be documented in this file.
 	- faidx
 	- fqidx
 	- markdup
+	- fixmate
 - Qualimap :
 	- bamqc

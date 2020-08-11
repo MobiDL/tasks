@@ -797,3 +797,107 @@ task markdup {
 		}
 	}
 }
+
+task fixmate {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-11"
+	}
+
+	input {
+		String path_exe = "samtools"
+
+		File in
+		String? outputPath
+		String? name
+		String? outExt
+		String? outputOpt
+		String suffix = ".fixmate"
+
+		Boolean remove = false
+		Boolean disableFR = false
+		Boolean addTemplateCigar = false
+		Boolean addMateScoreTag = false
+
+		Int threads = 1
+	}
+
+	String ext = if defined(outExt) then outExt else sub(basename(in),"(.*)\.(sam|bam|cram)$","$2")
+	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.~{ext}" else "~{baseName}~{suffix}.~{ext}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} fixmate \
+			~{true="-r" false="" remove} \
+			~{true="-p" false="" disableFR} \
+			~{true="-c" false="" addTemplateCigar} \
+			~{true="-m" false="" addMateScoreTag} \
+			--output-fmt ~{ext}~{default="" "," + outputOpt} \
+			--threads ~{threads - 1} \
+			~{in} \
+			~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "samtools"]',
+			category: 'optional'
+		}
+		outputPath: {
+			description: 'Output path where bedcov file will be generated. [default: pwd()]',
+			category: 'optional'
+		}
+		name: {
+			description: 'Name to use for output file name [default: basename(in)]',
+			category: 'optional'
+		}
+		outExt: {
+			description: 'Specify output format (SAM, BAM, CRAM) [default: same as input]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Bam file.',
+			category: 'Required'
+		}
+		suffix: {
+			description: 'Suffix to add on the output file (e.g. sample.markdup.bam) [default: ".fixmate"]',
+			category: 'optional'
+		}
+		outputOpt: {
+			description: 'Specify output file format option in the form',
+			category: 'optional'
+		}
+		remove: {
+			description: 'Remove unmapped reads and secondary alignments [default: false]',
+			category: 'optional'
+		}
+		disableFR: {
+			description: 'Disable FR proper pair check [default: false]',
+			category: 'optional'
+		}
+		addTemplateCigar: {
+			description: 'Add template cigar ct tag [default: false]',
+			category: 'optional'
+		}
+		addMateScoreTag: {
+			description: 'Add mate score tag [default: false]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}
