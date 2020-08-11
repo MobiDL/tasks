@@ -240,10 +240,14 @@ task makeLink {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		ln \
-			~{true="-s" false="" softLink} \
-			~{in} \
-			~{outputFile}
+		if [[ ! -f ~{outputFile} ]]; then
+			ln \
+				~{true="-s" false="" softLink} \
+				~{in} \
+				~{outputFile}
+		else
+			echo "Output file already exist !"
+		fi
 
 	>>>
 
