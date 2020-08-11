@@ -687,3 +687,113 @@ task bedcov {
 		}
 	}
 }
+
+task markdup {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-11"
+	}
+
+	input {
+		String path_exe = "samtools"
+
+		File in
+		String? outputPath
+		String? name
+		String? outExt
+		String? outputOpt
+		String suffix = ".markdup"
+
+		Boolean remove = false
+		Int maxReadsLength = 300
+		Boolean markSupAl = false
+		Boolean reportStat = false
+		Boolean markPrimDup = false
+
+		Int threads = 1
+	}
+
+	String ext = if defined(outExt) then outExt else sub(basename(in),"(.*)\.(sam|bam|cram)$","$2")
+	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.~{ext}" else "~{baseName}~{suffix}.~{ext}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} markdup \
+			~{true="-r" false="" remove} \
+			-l ~{maxReadsLength} \
+			~{true="-S" false="" markSupAl} \
+			~{true="-s" false="" reportStat} \
+			~{true="-t" false="" markPrimDup} \
+			--output-fmt ~{ext}~{default="" "," + outputOpt} \
+			--threads ~{threads - 1} \
+			~{in} \
+			~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "samtools"]',
+			category: 'optional'
+		}
+		outputPath: {
+			description: 'Output path where bedcov file will be generated. [default: pwd()]',
+			category: 'optional'
+		}
+		name: {
+			description: 'Name to use for output file name [default: basename(in)]',
+			category: 'optional'
+		}
+		outExt: {
+			description: 'Specify output format (SAM, BAM, CRAM) [default: same as input]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Bam file.',
+			category: 'Required'
+		}
+		suffix: {
+			description: 'Suffix to add on the output file (e.g. sample.markdup.bam) [default: ".markdup"]',
+			category: 'optional'
+		}
+		outputOpt: {
+			description: 'Specify output file format option in the form',
+			category: 'optional'
+		}
+		remove: {
+			description: 'Remove duplicates instead of just marking them [default: false]',
+			category: 'optional'
+		}
+		maxReadsLength: {
+			description: 'Max read length [default: 300]',
+			category: 'optional'
+		}
+		markSupAl: {
+			description: 'Mark supplemenary alignments of duplicates as duplicates (slower) [default: false]',
+			category: 'optional'
+		}
+		reportStat: {
+			description: 'Report stats. [default: false]',
+			category: 'optional'
+		}
+		markPrimDup: {
+			description: 'Mark primary duplicates with the name of the original in a "do" tag. [default: false]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}
