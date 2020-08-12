@@ -10,9 +10,10 @@ All notable changes to this project will be documented in this file.
 
 - bash :
 	- findFiles
-	- bgzip (compress and decompress)
 	- convertBedToIntervals
 	- makeLink
+- bgzip :
+	- bgzip (compress and decompress)
 - bcftools :
 	- index
 	- merge

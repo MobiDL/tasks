@@ -21,9 +21,10 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 
 - bash :
 	- findFiles
-	- bgzip (compress, decompress)
 	- convertBedToIntervals
 	- makeLink
+- bgzip (v1.9)
+	- bgzip (compress, decompress)
 - bcftools (v1.9) :
 	- index
 	- merge
