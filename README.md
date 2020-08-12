@@ -74,3 +74,5 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 	- fixmate
 - Qualimap (v.2.2.2-dev) :
 	- bamqc
+- tabix (1.9):
+	- index
