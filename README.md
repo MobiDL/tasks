@@ -17,6 +17,15 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 	- [ ] Change in all task to use this structures
 - [ ] Implement options for cluster
 
+## Workflow implemented
+
+### PrepareGenome
+
+This workflow is developped to prepare a fasta file to be used into other
+pipelines.
+
+It will process the fasta input files to create indexes and dictionary.
+
 ## Tools implemented
 
 - bash :
