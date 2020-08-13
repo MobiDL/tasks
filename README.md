@@ -72,6 +72,8 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 	- fqidx
 	- markdup
 	- fixmate
+- Star :
+	- genomeGenerate
 - Qualimap (v.2.2.2-dev) :
 	- bamqc
 - tabix (1.9):

@@ -61,6 +61,8 @@ All notable changes to this project will be documented in this file.
 	- fqidx
 	- markdup
 	- fixmate
+- Star :
+	- genomeGenerate
 - Qualimap :
 	- bamqc
 - tabix :
