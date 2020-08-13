@@ -199,7 +199,7 @@ task makeLink {
 				~{in} \
 				~{outputFile}
 		else
-			echo "Output file already exist !"
+			1>&2 echo "[WARN][$(date +'%Y-%m-%d')] Link of ~{outputFile} failed : file already exist !"
 		fi
 
 	>>>
