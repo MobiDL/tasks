@@ -136,6 +136,8 @@ task dict {
 		Boolean header = true
 		String? species
 		String? uri
+		
+		Int threads = 1
 	}
 
 	String baseName = if defined(name) then name else sub(basename(in),subString,"")
@@ -196,6 +198,10 @@ task dict {
 		}
 		uri: {
 			description: 'URI (e.g. file:///abs/path/to/file.fa)',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
 	}
