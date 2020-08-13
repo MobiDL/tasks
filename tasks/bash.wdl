@@ -23,6 +23,8 @@ task findFiles {
 		Boolean? readable
 		Boolean? writable
 		Boolean? executable
+
+		Int threads = 1
 	}
 
 	String regexpNameOpt = if defined(regexpName) then "-name \"~{regexpName}\" " else ""
@@ -89,6 +91,10 @@ task findFiles {
 			description: "Matches files which are executable and directories which are searchable (in a file name resolution sense).",
 			category: "tests"
 		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -107,6 +113,8 @@ task convertBedToIntervals {
 		String? name
 
 		String ext =".intervals"
+
+		Int threads = 1
 	}
 
 	String outputName = if defined(name) then name else sub(basename(in),".bed", "")
@@ -150,6 +158,10 @@ task convertBedToIntervals {
 			description: 'Extension of the output file. [default: ".intervals"]',
 			category: 'optional'
 		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -168,6 +180,8 @@ task makeLink {
 		String? name
 
 		Boolean softLink = false
+
+		Int threads = 1
 	}
 
 	String outputName = if defined(name) then name else basename(in)
@@ -209,6 +223,10 @@ task makeLink {
 		}
 		softLink: {
 			description: 'Make soft link (-s). [default: false]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
 	}
