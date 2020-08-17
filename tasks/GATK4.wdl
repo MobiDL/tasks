@@ -656,16 +656,16 @@ task gatherBQSRReports {
 	input {
 		String path_exe = "gatk"
 
-		Array[File?] in
+		Array[File]+ in
 		String? outputPath
 		String? name
-		String subString = "\.[0-9]\.recal$"
+		String subString = "\.[0-9]+\.recal$"
 		String ext = ".bqsr.report"
 
 		Int threads = 1
 	}
 
-	String firstFile = basename(select_first(in))
+	String firstFile = basename(in[0])
 	String baseName = if defined(name) then name else sub(basename(firstFile),subString,"")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
 
@@ -891,8 +891,8 @@ task gatherBamFiles {
 	input {
 		String path_exe = "gatk"
 
-		Array[File?] in
-		Array[File?] bamIdx
+		Array[File]+ in
+		Array[File]+ bamIdx
 		String? outputPath
 		String? name
 		String suffix = ".merge"
@@ -906,7 +906,7 @@ task gatherBamFiles {
 		Int threads = 1
 	}
 
-	String firstFile = basename(select_first(in))
+	String firstFile = basename(in[0])
 	String baseName = if defined(name) then name else sub(basename(firstFile),"(.*)(\.[0-9]+)?\.(sam|bam|cram)$","$1")
 	String ext = sub(basename(firstFile),"(.*)\.(sam|bam|cram)$","$2")
 	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}\.~{ext}" else "~{baseName}~{suffix}\.~{ext}"
