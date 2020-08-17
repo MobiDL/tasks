@@ -1035,8 +1035,8 @@ task leftAlignIndels {
 			--interval-padding ~{intervalsPadding} \
 			--interval-merging-rule ~{true="OVERLAPPING_ONLY" false="ALL" overlappingRule} \
 			--interval-set-rule ~{true="INTERSECTION" false="UNION" intersectionRule} \
-			~{true="--CREATE_INDEX" false="" bamIndex} \
-			~{true="--CREATE_MD5_FILE" false="" bamMD5} \
+			~{true="--create-output-bam-index" false="" bamIndex} \
+			~{true="--create-output-bam-md5" false="" bamMD5} \
 			--output ~{outputBamFile}
 
 	>>>
