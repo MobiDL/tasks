@@ -138,7 +138,7 @@ task convertBedToIntervals {
 	>>>
 
 	output {
-		File intervals = outputFile
+		File outputFile = outputFile
 	}
 
 	parameter_meta {
