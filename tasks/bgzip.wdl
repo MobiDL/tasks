@@ -15,16 +15,23 @@ task bgzip {
 		Boolean decompress = false
 		Boolean force = false
 		Boolean index = false
+		Boolean keepFile = false
 		Int threads = 1
 	}
 
 	String outputFile = if ! decompress then "~{outputPath}/" + basename(in) + ".gz" else "~{outputPath}/" + basename(in,".gz")
 	String outputIndex = if (index && ! decompress) then "~{outputFile}.gzi" else "~{outputFile}"
-	String indexOpt = if (index && ! decompress) then "--index --index-name ~{outputIndex} " else ""
+	String indexOpt = if (index && ! decompress) then "--index --index-name ~{outputIndex}" else ""
 
 	command <<<
 
-		bgzip -c ~{in} ~{true="--decompress " false="" decompress}~{true="--force " false="" force}~{indexOpt} --threads ~{threads} > ~{outputFile}
+		bgzip \
+			~{true="--stdout" false="" keepFile} \
+			~{true="--decompress" false="" decompress} \
+			~{true="--force" false="" force}\
+			~{indexOpt} \
+			~{in} \
+			--threads ~{threads} > ~{outputFile}
 
 	>>>
 
