@@ -532,7 +532,7 @@ task baseRecalibrator {
 
 		~{path_exe} BaseRecalibrator \
 			--input ~{in} \
-			--known-sites ~{sep="--known-sites " knownSites} \
+			--known-sites ~{sep=" --known-sites " knownSites} \
 			--reference ~{refFasta} \
 			--intervals ~{intervals} \
 			--bqsr-baq-gap-open-penalty ~{gapPenality} \
@@ -676,7 +676,7 @@ task gatherBQSRReports {
 		fi
 
 		~{path_exe} GatherBQSRReports \
-			--input ~{sep="--input " in} \
+			--input ~{sep=" --input " in} \
 			--output ~{outputFile}
 
 	>>>
@@ -919,7 +919,7 @@ task gatherBamFiles {
 		fi
 
 		~{path_exe} GatherBamFiles \
-			--input ~{sep="--input " in} \
+			--input ~{sep=" --input " in} \
 			--COMPRESSION_LEVEL ~{compressionLevel} \
 			--MAX_RECORDS_IN_RAM ~{maxRecordsInRam} \
 			~{true="--CREATE_INDEX" false="" bamIndex} \
