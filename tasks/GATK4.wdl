@@ -1151,7 +1151,7 @@ task collectMultipleMetrics {
 			mkdir -p $(dirname ~{outputBase})
 		fi
 
-		~{path_exe} GatherBamFiles \
+		~{path_exe} CollectMultipleMetrics \
 			--input ~{in} \
 			--reference ~{refFasta} \
 			~{true="--PROGRAM CollectAlignmentSummaryMetrics" false="" collectAlignmentSummaryMetrics} \
