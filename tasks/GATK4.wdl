@@ -1028,7 +1028,7 @@ task leftAlignIndels {
 			mkdir -p $(dirname ~{outputBamFile})
 		fi
 
-		~{path_exe} GatherBamFiles \
+		~{path_exe} LeftAlignIndels \
 			--input ~{in} \
 			--reference ~{refFasta} \
 			--sequence-dictionary ~{refDict} \
