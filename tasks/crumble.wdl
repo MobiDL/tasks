@@ -44,6 +44,10 @@ task crumble {
 
 	>>>
 
+	output {
+		File outputFile = outputFile
+	}
+
 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "dwgsim"]',
