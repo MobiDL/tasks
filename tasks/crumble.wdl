@@ -20,7 +20,7 @@ task crumble {
 		String? outputFormat
 		Boolean addPGHeader = true
 
-		Int compressionLevel = 8
+		Int compressionLevel = 9
 
 		Int threads = 1
 	}
@@ -71,6 +71,10 @@ task crumble {
 		}
 		addPGHeader: {
 			description: 'Add an @PG SAM header line [default: true]',
+			category: 'optional'
+		}
+		compressionLevel: {
+			description: 'Specify compression level of the resulting file (1, 3, 5, 7, 8 or 9) [default: 9]',
 			category: 'optional'
 		}
 		threads: {

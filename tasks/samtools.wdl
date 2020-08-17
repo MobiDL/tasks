@@ -17,7 +17,7 @@ task sort {
 		String suffix = ".sort"
 		String format = "bam"
 
-		Int compressionLevel = 1
+		Int compressionLevel = 6
 		Boolean sortByReadName = false
 		String? tag
 		File? refFasta
@@ -85,7 +85,7 @@ task sort {
 			category: 'optional'
 		}
 		compressionLevel: {
-			description: 'Specify compression level of the resulting file (from 0 to 9) [default: 1]',
+			description: 'Specify compression level of the resulting file (from 0 to 9) [default: 6]',
 			category: 'optional'
 		}
 		sortByReadName: {
@@ -136,7 +136,7 @@ task dict {
 		Boolean header = true
 		String? species
 		String? uri
-		
+
 		Int threads = 1
 	}
 

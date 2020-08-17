@@ -21,7 +21,7 @@ task reorderSam {
 
 		Boolean allowIncompleteLengthDiscordance = false
 		Boolean allowIncompleteDictDiscordance = false
-		Int compressionLevel = 2
+		Int compressionLevel = 6
 		Boolean createIndex = false
 		Boolean createMD5 = false
 		File? GA4GHClientSecrets
@@ -112,7 +112,7 @@ task reorderSam {
 			category: 'optional'
 		}
 		compressionLevel: {
-			description: 'Compression level for all compressed files created (e.g. BAM and VCF). [default: 2]',
+			description: 'Compression level for all compressed files created (e.g. BAM and VCF). [default: 6]',
 			category: 'optional'
 		}
 		createIndex: {
@@ -897,7 +897,7 @@ task gatherBamFiles {
 		String? name
 		String suffix = ".merge"
 
-		Int compressionLevel = 5
+		Int compressionLevel = 6
 		Boolean bamIndex = true
 		Boolean bamMD5 = true
 
@@ -959,7 +959,7 @@ task gatherBamFiles {
 			category: 'optional'
 		}
 		compressionLevel: {
-			description: 'Compression level for all compressed files created (e.g. BAM and VCF). [default: 2]',
+			description: 'Compression level for all compressed files created (e.g. BAM and VCF). [default: 6]',
 			category: 'optional'
 		}
 		maxRecordsInRam: {

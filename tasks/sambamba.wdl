@@ -17,7 +17,7 @@ task markdup {
 		String suffix = ".markdup"
 
 		Boolean removeDuplicates = false
-		Int compressionLevel = 1
+		Int compressionLevel = 6
 
 		Int threads = 1
 		String? tempDir
@@ -82,7 +82,7 @@ task markdup {
 			category: 'optional'
 		}
 		compressionLevel: {
-			description: 'Specify compression level of the resulting file (from 0 to 9) [default: 1]',
+			description: 'Specify compression level of the resulting file (from 0 to 9) [default: 6]',
 			category: 'optional'
 		}
 		threads: {
@@ -201,7 +201,7 @@ task sort {
 		String? filter
 		Boolean? sortByReadName
 
-		Int compressionLevel = 1
+		Int compressionLevel = 6
 		Boolean uncompressedChuncks = false
 
 		String? memory
@@ -257,7 +257,7 @@ task sort {
 			category: 'optional'
 		}
 		compressionLevel: {
-			description: 'Specify compression level of the resulting file (from 0 to 9) [default: 1]',
+			description: 'Specify compression level of the resulting file (from 0 to 9) [default: 6]',
 			category: 'optional'
 		}
 		threads: {
