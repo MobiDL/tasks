@@ -534,7 +534,7 @@ task baseRecalibrator {
 			--input ~{in} \
 			--known-sites ~{sep=" --known-sites " knownSites} \
 			--reference ~{refFasta} \
-			--intervals ~{intervals} \
+			~{default="" "--intervals " + intervals} \
 			--bqsr-baq-gap-open-penalty ~{gapPenality} \
 			--deletions-default-quality ~{indelDefaultQual} \
 			--insertions-default-quality ~{indelDefaultQual} \
@@ -919,12 +919,12 @@ task gatherBamFiles {
 		fi
 
 		~{path_exe} GatherBamFiles \
-			--input ~{sep=" --input " in} \
+			--INPUT ~{sep=" --input " in} \
 			--COMPRESSION_LEVEL ~{compressionLevel} \
 			--MAX_RECORDS_IN_RAM ~{maxRecordsInRam} \
 			~{true="--CREATE_INDEX" false="" bamIndex} \
 			~{true="--CREATE_MD5_FILE" false="" bamMD5} \
-			--output ~{outputBamFile}
+			--OUTPUT ~{outputBamFile}
 
 	>>>
 
@@ -1032,6 +1032,7 @@ task leftAlignIndels {
 			--input ~{in} \
 			--reference ~{refFasta} \
 			--sequence-dictionary ~{refDict} \
+			~{default="" "--intervals " + intervals} \
 			--interval-padding ~{intervalsPadding} \
 			--interval-merging-rule ~{true="OVERLAPPING_ONLY" false="ALL" overlappingRule} \
 			--interval-set-rule ~{true="INTERSECTION" false="UNION" intersectionRule} \
@@ -1154,6 +1155,7 @@ task collectMultipleMetrics {
 		~{path_exe} CollectMultipleMetrics \
 			--input ~{in} \
 			--reference ~{refFasta} \
+			~{default="" "--intervals " + intervals} \
 			~{true="--PROGRAM CollectAlignmentSummaryMetrics" false="" collectAlignmentSummaryMetrics} \
 			~{true="--PROGRAM CollectBaseDistributionByCycle" false="" collectBaseDistributionByCycle} \
 			~{true="--PROGRAM CollectInsertSizeMetrics" false="" collectInsertSizeMetrics} \
