@@ -919,7 +919,7 @@ task gatherBamFiles {
 		fi
 
 		~{path_exe} GatherBamFiles \
-			--INPUT ~{sep=" --input " in} \
+			--INPUT ~{sep=" --INPUT " in} \
 			--COMPRESSION_LEVEL ~{compressionLevel} \
 			--MAX_RECORDS_IN_RAM ~{maxRecordsInRam} \
 			~{true="--CREATE_INDEX" false="" bamIndex} \
@@ -1130,10 +1130,6 @@ task collectMultipleMetrics {
 
 		File? intervals
 
-		File refFasta
-		File refFai
-		File refDict
-
 		Boolean collectAlignmentSummaryMetrics = true
 		Boolean collectBaseDistributionByCycle = true
 		Boolean collectInsertSizeMetrics = true
@@ -1153,15 +1149,14 @@ task collectMultipleMetrics {
 		fi
 
 		~{path_exe} CollectMultipleMetrics \
-			--input ~{in} \
-			--reference ~{refFasta} \
-			~{default="" "--intervals " + intervals} \
+			--INPUT ~{in} \
+			~{default="" "--INTERVALS " + intervals} \
 			~{true="--PROGRAM CollectAlignmentSummaryMetrics" false="" collectAlignmentSummaryMetrics} \
 			~{true="--PROGRAM CollectBaseDistributionByCycle" false="" collectBaseDistributionByCycle} \
 			~{true="--PROGRAM CollectInsertSizeMetrics" false="" collectInsertSizeMetrics} \
 			~{true="--PROGRAM MeanQualityByCycle" false="" meanQualityByCycle} \
 			~{true="--PROGRAM QualityScoreDistribution" false="" qualityScoreDistribution} \
-			--output ~{outputBase}
+			--OUTPUT ~{outputBase}
 
 	>>>
 
