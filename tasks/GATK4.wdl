@@ -1017,7 +1017,7 @@ task leftAlignIndels {
 	String baseNameIntervals = if defined(intervals) then intervals else ""
 	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","\.$1") else ""
 
-	String baseName = if defined(name) then name else sub(basename(in),"(.*)(\.[0-9]+)?\.(sam|bam|cram)$","$1")
+	String baseName = if defined(name) then name else sub(basename(in),"(\.[0-9]+)?\.(sam|bam|cram)$","")
 	String ext = sub(basename(in),"(.*)\.(sam|bam|cram)$","$2")
 	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{baseIntervals}\.~{ext}" else "~{baseName}~{suffix}~{baseIntervals}\.~{ext}"
 	String outputBaiFile = sub(outputBamFile,"(m)$","i")
