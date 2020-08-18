@@ -1204,18 +1204,6 @@ task collectMultipleMetrics {
 			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".bqsr"]',
 			category: 'optional'
 		}
-		refFasta: {
-			description: 'Path to the reference file (format: fasta)',
-			category: 'required'
-		}
-		refFai: {
-			description: 'Path to the reference file index (format: fai)',
-			category: 'required'
-		}
-		refDict: {
-			description: 'Path to the reference file dict (format: dict)',
-			category: 'required'
-		}
 		collectAlignmentSummaryMetrics: {
 			description: 'Use programm : CollectAlignmentSummaryMetrics [default: true]',
 			category: 'optional'
