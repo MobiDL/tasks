@@ -895,7 +895,7 @@ task gatherBamFiles {
 		Array[File]+ bamIdx
 		String? outputPath
 		String? name
-		String suffix = ".merge"
+		String suffix = ".gather"
 
 		Int compressionLevel = 6
 		Boolean bamIndex = true
@@ -907,7 +907,7 @@ task gatherBamFiles {
 	}
 
 	String firstFile = basename(in[0])
-	String baseName = if defined(name) then name else sub(basename(firstFile),"(.*)(\.[0-9]+)?\.(sam|bam|cram)$","$1")
+	String baseName = if defined(name) then name else sub(basename(firstFile),"(\.[0-9]+)?\.(sam|bam|cram)$","")
 	String ext = sub(basename(firstFile),"(.*)\.(sam|bam|cram)$","$2")
 	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}\.~{ext}" else "~{baseName}~{suffix}\.~{ext}"
 	String outputBaiFile = sub(outputBamFile,"(m)$","i")
