@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 	- findFiles
 	- convertBedToIntervals
 	- makeLink
+	- concatenateFiles
 - bgzip :
 	- bgzip (compress and decompress)
 - bcftools :

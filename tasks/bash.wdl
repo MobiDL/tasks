@@ -231,3 +231,62 @@ task makeLink {
 		}
 	}
 }
+
+task concatenateFiles {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-19"
+	}
+
+	input {
+		Array[File] in
+
+		String? outputPath
+		String? name
+		String subString = "^[0-9]+\-"
+
+		Int threads = 1
+	}
+
+	String baseName = if defined(name) then name else sub(basename(in[0]),subString,"")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		cat ~{sep=" " in} > ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		in: {
+			description: 'Array of files.',
+			category: 'required'
+		}
+		outputPath: {
+			description: 'Path where output will be generated.',
+			category: "required"
+		}
+		name: {
+			description: 'Name of the output file. [default: sub(basename(in[0]),subString,"")]',
+			category: 'optional'
+		}
+		subString: {
+			description: 'Substring to remove to create name file [default: "^[0-9]+\-"]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}

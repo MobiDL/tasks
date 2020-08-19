@@ -33,6 +33,7 @@ It will process the fasta input files to create indexes and dictionary.
 	- findFiles
 	- convertBedToIntervals
 	- makeLink
+	- concatenateFiles
 - bgzip (v1.9)
 	- bgzip (compress, decompress)
 - bcftools (v1.9) :
