@@ -58,6 +58,7 @@ It will process the fasta input files to create indexes and dictionary.
 	- ApplyBQSR
 	- BaseRecalibrator
 	- BedToIntervalList
+	- IntervalListToBed
 	- HaplotypeCaller
 	- CollectMultipleMetrics
 	- GatherBamFiles

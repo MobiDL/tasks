@@ -1285,7 +1285,7 @@ task bedToIntervalList {
 			--SEQUENCE_DICTIONARY ~{refDict} \
 			~{true="--SORT" false="" sort} \
 			~{true="--UNIQUE" false="" unique} \
-			--OUTPUT ~{outputFile} \
+			--OUTPUT ~{outputFile}
 
 	>>>
 
@@ -1324,6 +1324,80 @@ task bedToIntervalList {
 		}
 		unique: {
 			description: 'If true, unique the output interval list by merging overlapping regions, before writing it (implies sort=true). [default: false]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}
+
+task intervalListToBed {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-10"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		File in
+		String? outputPath
+		String? name
+
+		Boolean sort = true
+		Int score = 500
+
+		Int threads = 1
+	}
+
+	String baseName = if defined(name) then name else sub(basename(in),".interval_list","")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.bed" else "~{baseName}.bed"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} IntervalListToBed \
+			--INPUT ~{in} \
+			~{true="--SORT" false="" sort} \
+			--SCORE ~{score} \
+			--OUTPUT ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Intervals list to convert into BED.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where BED will be generated.',
+			category: 'optional'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(in),"(.*)\.(bed)$","$1")].',
+			category: 'optional'
+		}
+		sort: {
+			description: 'If true, sort the output interval list before writing it. [default: true]',
+			category: 'optional'
+		}
+		score: {
+			description: 'The score, between 0-1000, to output for each interval in the BED file. [default: 500]',
 			category: 'optional'
 		}
 		threads: {
