@@ -1338,7 +1338,7 @@ task intervalListToBed {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
 		version: "0.0.1"
-		date: "2020-08-10"
+		date: "2020-08-19"
 	}
 
 	input {
