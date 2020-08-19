@@ -6,7 +6,7 @@ MobiDL 2 is a collection of tools wrapped in WDL to be used in any WDL pipelines
 
 ## Introduction
 
-This repo provide a set of workflow in WDL (see [tools](#workflows-implemented))
+This repo provide a set of workflow in WDL (see [workflows](#workflows-implemented))
 and a set of tools wrapped in WDL tasks (see [tools](#tools-implemented)).
 
 The code follows WDL specifications as much as possible ([WDL-spec](https://github.com/openwdl/wdl/blob/main/versions/1.0/SPEC.md)).
