@@ -1128,6 +1128,10 @@ task collectMultipleMetrics {
 		String? name
 		String suffix = ".collectMultipleMetrics"
 
+		File refFasta
+		File refFai
+		File refDict
+
 		File? intervals
 
 		Boolean collectAlignmentSummaryMetrics = true
@@ -1156,6 +1160,7 @@ task collectMultipleMetrics {
 			~{true="--PROGRAM CollectInsertSizeMetrics" false="" collectInsertSizeMetrics} \
 			~{true="--PROGRAM MeanQualityByCycle" false="" meanQualityByCycle} \
 			~{true="--PROGRAM QualityScoreDistribution" false="" qualityScoreDistribution} \
+			--REFERENCE_SEQUENCE ~{refFasta} \
 			--OUTPUT ~{outputBase}
 
 	>>>
@@ -1203,6 +1208,18 @@ task collectMultipleMetrics {
 		suffix: {
 			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".bqsr"]',
 			category: 'optional'
+		}
+		refFasta: {
+			description: 'Path to the reference file (format: fasta)',
+			category: 'required'
+		}
+		refFai: {
+			description: 'Path to the reference file index (format: fai)',
+			category: 'required'
+		}
+		refDict: {
+			description: 'Path to the reference file dict (format: dict)',
+			category: 'required'
 		}
 		collectAlignmentSummaryMetrics: {
 			description: 'Use programm : CollectAlignmentSummaryMetrics [default: true]',
