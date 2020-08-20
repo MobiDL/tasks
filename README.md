@@ -73,6 +73,7 @@ It will process the fasta input files to create indexes and dictionary.
 	- flagstat
 	- markdup
 	- sort
+	- view
 - samtools (1.9) :
 	- bedcov
 	- index

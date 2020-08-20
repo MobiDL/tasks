@@ -353,3 +353,120 @@ task flagstat {
 		}
 	}
 }
+
+task view {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-20"
+	}
+
+	input {
+		String path_exe = "sambamba"
+
+		File in
+		String? outputPath
+		String? sample
+		Boolean cram = false
+
+		String? filters
+		String? numFilter
+
+		Boolean header = true
+		Boolean valid = false
+
+		File? refFasta
+
+		Int compressionLevel = 6
+		File? regions
+
+		Int threads = 1
+	}
+
+	String ext = if cram then ".cram" else ".bam"
+	String sampleName = if defined(sample) then sample else sub(basename(in),"(\.bam|\.sam|\.cram)","")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{sampleName}~{ext}" else "~{sampleName}~{ext}"
+
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} view \
+			--nthreads ~{threads} \
+			--compression-level ~{compressionLevel} \
+			~{default="" "--filter " + filters} \
+			--format ~{true="cram" false="bam" cram} \
+			~{default="" "--num-filter " + numFilter} \
+			~{true="--with-header" false="" header} \
+			~{true="--valid" false="" valid} \
+			~{default="" "--ref-filename " + refFasta} \
+			~{default="" "--regions " + regions} \
+			-o ~{outputFile} \
+			~{in}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "sambamba"]',
+			category: 'optional'
+		}
+		outputPath: {
+			description: 'Output path where flagstat file was generated. [default: pwd()]',
+			category: 'optional'
+		}
+		sample: {
+			description: 'Sample name to use for output file name [default: sub(basename(in),"(\.bam|\.sam|\.cram)","")]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Bam.',
+			category: 'Required'
+		}
+		cram: {
+			description: 'Output to cram. [default: false]',
+			category: 'optional'
+		}
+		filters: {
+			description: 'Set custom filter for alignments',
+			category: 'optional'
+		}
+		numFilter: {
+			description: 'Filter flag bits; "i1/i2" corresponds to -f i1 -F i2 samtools arguments; either of the numbers can be omitted',
+			category: 'optional'
+		}
+		header: {
+			description: 'Print header before reads (always done for BAM output) [default: true]',
+			category: 'optional'
+		}
+		valid: {
+			description: 'Output only valid alignments [default: false]',
+			category: 'optional'
+		}
+		refFasta: {
+			description: 'Path to the reference file (format: fasta)',
+			category: 'required'
+		}
+		regions:{
+			description: 'Output only reads overlapping one of regions from the BED file',
+			category: 'optional'
+
+		}
+		compressionLevel: {
+			description: 'Specify compression level of the resulting file (from 0 to 9) [default: 6]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}
