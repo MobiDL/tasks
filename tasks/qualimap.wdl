@@ -75,9 +75,14 @@ task bamqc {
 	>>>
 
 	output {
-		File htmlReport = outputRep + "/report.pdf"
-		File? pdfReport = outputRep + "/qualimapReport.html"
+		File? pdfReport = outputRep + "/report.pdf"
+		File? htmlReport = outputRep + "/qualimapReport.html"
 		File? htmlFullReport = outputRep + "/qualimapReportOutsideRegions.html"
+		Array[File] reports = select_all([
+			htmlReport,
+			pdfReport,
+			htmlFullReport
+		])
 	}
 
 	parameter_meta {
