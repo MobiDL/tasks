@@ -27,6 +27,12 @@ pipelines.
 
 It will process the fasta input files to create indexes and dictionary.
 
+### AlignDNAcapture
+
+This workflow align DNA capture sequence against the reference genome.
+
+It produce some quality metrics from different tools.
+
 ## Tools implemented
 
 - bash :
