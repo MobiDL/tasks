@@ -38,6 +38,7 @@ task bamqc {
 
 		Boolean outsideStats = true
 		Boolean pdf = true
+		Boolean skipDuplicates = true
 
 
 		Int nr = 1000
@@ -66,6 +67,7 @@ task bamqc {
 			~{true="--outside-stats" false="" outsideStats} \
 			-outdir ~{outputRep} \
 			-outformat ~{true="PDF:HTML" false="HTML" pdf} \
+			~{true="-sd" false="" skipDuplicates} \
 			-nr ~{nr} \
 			-nt ~{threads} \
 			-nw ~{nWindows} \
@@ -124,6 +126,10 @@ task bamqc {
 		}
 		pdf: {
 			description: 'Specify if a pdf report will be generated [default: true]',
+			category: 'optional'
+		}
+		skipDuplicates: {
+			description: 'Activate this option to skip duplicated alignments from the analysis. [default: true]',
 			category: 'optional'
 		}
 		nr: {
