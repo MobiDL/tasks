@@ -38,7 +38,7 @@ task bamqc {
 
 		Boolean outsideStats = true
 		Boolean pdf = true
-		Boolean skipDuplicates = true
+		Boolean skipDuplicates = false
 
 
 		Int nr = 1000
@@ -129,7 +129,7 @@ task bamqc {
 			category: 'optional'
 		}
 		skipDuplicates: {
-			description: 'Activate this option to skip duplicated alignments from the analysis. [default: true]',
+			description: 'Activate this option to skip duplicated alignments from the analysis. [default: false]',
 			category: 'optional'
 		}
 		nr: {
