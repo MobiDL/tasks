@@ -64,7 +64,7 @@ workflow alignDNAcapture {
 	}
 
 	String sampleName = sub(basename(fastqR1),subString,"")
-	String outputPath = if defined(name) then "~{outputRep}/~{name}" else"~{outputRep}/~{sampleName}"
+	String outputPath = if defined(name) then "~{outputRep}/~{name}/" else"~{outputRep}/~{sampleName}/"
 
 	## Preprocessing
 
