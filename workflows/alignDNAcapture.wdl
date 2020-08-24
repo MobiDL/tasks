@@ -286,7 +286,7 @@ workflow alignDNAcapture {
 		input :
 			in = SortBamProcessed.outputFile,
 			featureFile = intervalBedFile,
-			threads = 4,
+			threads = threads,
 			outsideStats = false,
 			outputPath = outputPath + "/quality/qualimap/"
 	}
