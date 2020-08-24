@@ -912,6 +912,7 @@ task gatherBamFiles {
 		String? outputPath
 		String? name
 		String suffix = ".gather"
+		String subString = "(\.[0-9]+)?\.(sam|bam|cram)$"
 
 		Int compressionLevel = 6
 		Boolean bamIndex = true
@@ -923,8 +924,8 @@ task gatherBamFiles {
 	}
 
 	String firstFile = basename(in[0])
-	String baseName = if defined(name) then name else sub(basename(firstFile),"(\.[0-9]+)?\.(sam|bam|cram)$","")
-	String ext = sub(basename(firstFile),"(.*)\.(sam|bam|cram)$","$2")
+	String baseName = if defined(name) then name else sub(basename(firstFile),subString,"")
+	String ext = sub(basename(firstFile),"\.(sam|bam|cram)$","$1")
 	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}\.~{ext}" else "~{baseName}~{suffix}\.~{ext}"
 	String outputBaiFile = sub(outputBamFile,"(m)$","i")
 
@@ -946,7 +947,8 @@ task gatherBamFiles {
 
 	output {
 		File outputBam = outputBamFile
-		File outputBai = outputBaiFile
+		File? outputBai = outputBaiFile
+		File? outputMD5 = outputBamFile + ".md5"
 	}
 
 	parameter_meta {
@@ -971,7 +973,11 @@ task gatherBamFiles {
 			category: 'optional'
 		}
 		suffix: {
-			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".bqsr"]',
+			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".gather"]',
+			category: 'optional'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "(\.[0-9]+)?\.(sam|bam|cram)$"]',
 			category: 'optional'
 		}
 		compressionLevel: {
