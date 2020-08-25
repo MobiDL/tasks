@@ -1534,7 +1534,7 @@ task haplotypeCaller {
 
 	output {
 		File outputFile = outputFile
-		File? outputFileIdx = outputFile + ".tbi"
+		File? outputFileIdx = outputFile + ".idx"
 		File? outputFileMD5 = outputFile + ".md5"
 	}
 
