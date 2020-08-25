@@ -1625,3 +1625,84 @@ task haplotypeCaller {
 		}
 	}
 }
+
+task gatherVcfFiles {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-25"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		Array[File]+ in
+		String? outputPath
+		String? name
+		String suffix = ".gather"
+		String subString = "(\.[0-9]+)?\.vcf$"
+
+		Boolean reorder = true
+
+		Int threads = 1
+	}
+
+	String firstFile = basename(in[0])
+	String baseName = if defined(name) then name else sub(basename(firstFile),subString,"")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.vcf" else "~{baseName}~{suffix}.vcf"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} GatherVcfs \
+			--INPUT ~{sep=" --INPUT " in} \
+			~{true="--REORDER_INPUT_BY_FIRST_VARIANT" false="" reorder} \
+			--OUTPUT ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+		File outputFileIdx = outputFile + ".idx"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Array of VCFs to merge.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where vcf will be generated.',
+			category: 'optional'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
+			category: 'optional'
+		}
+		suffix: {
+			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".gather"]',
+			category: 'optional'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "(\.[0-9]+)?\.vcf$"]',
+			category: 'optional'
+		}
+		reorder: {
+			description: 'If true the program will reorder INPUT according to the genomic location of the first variant in each file. [Default: true]',
+			category: 'optional'
+
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}

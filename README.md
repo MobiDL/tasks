@@ -70,6 +70,7 @@ It produce some quality metrics from different tools.
 	- CollectMultipleMetrics
 	- GatherBamFiles
 	- GatherBQSRReports
+	- GatherVcfFiles
 	- LeftAlignIndels
 	- ReorderSam
 	- DepthOfCoverage (BETA)

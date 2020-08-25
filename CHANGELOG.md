@@ -48,6 +48,7 @@ All notable changes to this project will be documented in this file.
 	- CollectMultipleMetrics
 	- GatherBamFiles
 	- GatherBQSRReports
+	- GatherVcfFiles
 	- LeftAlignIndels
 	- ReorderSam
 	- DepthOfCoverage (BETA)
