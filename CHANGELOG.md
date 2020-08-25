@@ -53,6 +53,7 @@ All notable changes to this project will be documented in this file.
 	- ReorderSam
 	- DepthOfCoverage (BETA)
 	- SplitIntervals
+	- SplitVcfs
 - Sambamba :
 	- index
 	- flagstat

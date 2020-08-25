@@ -1706,3 +1706,97 @@ task gatherVcfFiles {
 		}
 	}
 }
+
+task splitVcfs {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-25"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		File in
+		String? outputPath
+		String? name
+		String suffix = ".split"
+		String subString = "\.(vcf|bcf)$"
+		String? ext
+
+		File? refDict
+		Boolean strict = true
+
+		Int threads = 1
+	}
+
+	String extOut = if defined(ext) then ext else sub(basename(in),"(.*\.)(vcf|bcf)$","$2")
+	String baseName = if defined(name) then name else sub(basename(in),subString,"")
+	String outputFileBase = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}" else "~{baseName}~{suffix}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFileBase}) ]]; then
+			mkdir -p $(dirname ~{outputFileBase})
+		fi
+
+		~{path_exe} SplitVcfs \
+			~{true="--STRICT" false="" strict} \
+			~{default="" "--SEQUENCE_DICTIONARY " + refDict} \
+			--INPUT ~{in}  \
+			--INDEL_OUTPUT ~{outputFileBase + ".indels"}~{"." + extOut} \
+			--SNP_OUTPUT ~{outputFileBase + ".snps"}~{"." + extOut}
+
+	>>>
+
+	output {
+		File outputFileSnp = outputFileBase + ".snps." + extOut
+		File outputFileSnpIdx = outputFileBase + ".snps." + extOut + ".idx"
+		File outputFileIndel = outputFileBase + ".indels." + extOut
+		File outputFileIndelIdx = outputFileBase + ".indels." + extOut + ".idx"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Array of VCFs to merge.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where vcf will be generated.',
+			category: 'optional'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
+			category: 'optional'
+		}
+		suffix: {
+			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".gather"]',
+			category: 'optional'
+		}
+		ext: {
+			description: 'Extension of the output file (".vcf" or ".bcf") [default: same as input]',
+			category: 'optional'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "(\.[0-9]+)?\.vcf$"]',
+			category: 'optional'
+		}
+		refDict: {
+			description: 'Path to the reference file dict (format: dict)',
+			category: 'optional'
+		}
+		strict: {
+			description: 'If true an exception will be thrown if an event type other than SNP or indel is encountered  [default: true]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}

@@ -75,6 +75,7 @@ It produce some quality metrics from different tools.
 	- ReorderSam
 	- DepthOfCoverage (BETA)
 	- SplitIntervals
+	- SplitVcfs
 - Sambamba (0.6.6) :
 	- index
 	- flagstat
