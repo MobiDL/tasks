@@ -1844,6 +1844,15 @@ task variantFiltaration {
 		Int threads = 1
 	}
 
+	Boolean BoolLowQualByDepth = defined(LowQualByDepth)
+	Boolean BoolFSStrandBias = defined(FSStrandBias)
+	Boolean BoolLowMappingQuality = defined(LowMappingQuality)
+	Boolean BoolLowMappingQualityRankSum = defined(LowMappingQualityRankSum)
+	Boolean BoolLowReadPosRankSum = defined(LowReadPosRankSum)
+	Boolean BoolSORStrandBias = defined(SORStrandBias)
+	Boolean BoolHomopolymerRegion = defined(HomopolymerRegion)
+	Boolean BoolLowCoverage = defined(LowCoverage)
+
 	Boolean filters = if (defined(filtersExpression) && defined(filtersName)) then true else false
 
 	String extOut = if defined(ext) then ext else sub(basename(in),"(.*\.)(vcf|bcf)$","$2")
@@ -1858,14 +1867,14 @@ task variantFiltaration {
 
 		~{path_exe} VariantFiltration \
 			~{default="" "--sequence-dictionary " + refDict} \
-			~{default="" "--filter-expression \"QD < " + LowQualByDepth + "\" --filter-name \"LowQualByDepth\""} \
-			~{default="" "--filter-expression \"FS > " + FSStrandBias + "\" --filter-name \"FSStrandBias\""} \
-			~{default="" "--filter-expression \"MQ < " + LowMappingQuality + "\" --filter-name \"LowMappingQuality\""} \
-			~{default="" "--filter-expression \"MQRankSum < " + LowMappingQualityRankSum + "\" --filter-name \"LowMappingQualityRankSum\""} \
-			~{default="" "--filter-expression \"ReadPosRankSum < " + LowReadPosRankSum + "\" --filter-name \"LowReadPosRankSum\""} \
-			~{default="" "--filter-expression \"SOR > " + SORStrandBias + "\" --filter-name \"SORStrandBias\""} \
-			~{default="" "--filter-expression \"POLYX > " + HomopolymerRegion + "\" --filter-name \"HomopolymerRegion\""} \
-			~{default="" "--filter-expression \"DP < " + LowCoverage + "\" --filter-name \"LowCoverage\""} \
+			~{true="--filter-expression \"QD < " false="" BoolLowQualByDepth}~{LowQualByDepth}~{true="\" --filter-name \"LowQualByDepth\"" false="" BoolLowQualByDepth} \
+			~{true="--filter-expression \"FS > " false="" BoolFSStrandBias}~{FSStrandBias}~{true="\" --filter-name \"FSStrandBias\"" false="" BoolFSStrandBias} \
+			~{true="--filter-expression \"MQ < " false="" BoolLowMappingQuality}~{LowMappingQuality}~{true="\" --filter-name \"LowMappingQuality\"" false="" BoolLowMappingQuality} \
+			~{true="--filter-expression \"MQRankSum < " false="" BoolLowMappingQualityRankSum}~{LowMappingQualityRankSum}~{true="\" --filter-name \"LowMappingQualityRankSum\"" false="" BoolLowMappingQualityRankSum} \
+			~{true="--filter-expression \"ReadPosRankSum < " false="" BoolLowReadPosRankSum}~{LowReadPosRankSum}~{true="\" --filter-name \"LowReadPosRankSum\"" false="" BoolLowReadPosRankSum} \
+			~{true="--filter-expression \"SOR > " false="" BoolSORStrandBias}~{SORStrandBias}~{true="\" --filter-name \"SORStrandBias\"" false="" BoolSORStrandBias} \
+			~{true="--filter-expression \"POLYX > " false="" BoolHomopolymerRegion}~{HomopolymerRegion}~{true="\" --filter-name \"HomopolymerRegion\"" false="" BoolHomopolymerRegion} \
+			~{true="--filter-expression \"DP < " false="" BoolLowCoverage}~{LowCoverage}~{true="\" --filter-name \"LowCoverage\"" false="" BoolLowCoverage} \
 			~{true="--filter-expression \"" false="" filters}~{default="" sep="\" --filter-expression \""  filtersExpression}~{true="\"" false="" filters} \
 			~{true="--filter-name " false="" filters}~{default="" sep=" --filter-name "  filtersName} \
 			~{true="--create-output-variant-index" false="" createVCFIdx} \
