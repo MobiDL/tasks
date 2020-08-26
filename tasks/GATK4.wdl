@@ -1800,3 +1800,176 @@ task splitVcfs {
 		}
 	}
 }
+
+task variantFiltaration {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-25"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		File in
+		String? outputPath
+		String? name
+		String suffix = ".filter"
+		String subString = "\.(vcf|bcf)$"
+		String? ext
+
+		File refFasta
+		File refFai
+		File refDict
+
+		Boolean SNP = false
+		Boolean Indels = false
+
+		Int? LowQualByDepth
+		Int? FSStrandBias
+		Int? LowReadPosRankSum
+		Int? SORStrandBias
+		Int? HomopolymerRegion
+		Int? LowCoverage
+		Int? LowMappingQuality
+		Int? LowMappingQualityRankSum
+
+		Array[String]? filtersExpression
+		Array[String]? filtersName
+
+		Boolean createVCFIdx = true
+		Boolean createVCFMD5 = true
+
+		Int threads = 1
+	}
+
+	Boolean filters = if (defined(filtersExpression) && defined(filtersName)) then true else false
+
+	String extOut = if defined(ext) then ext else sub(basename(in),"(.*\.)(vcf|bcf)$","$2")
+	String baseName = if defined(name) then name else sub(basename(in),subString,"")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.~{extOut}" else "~{baseName}~{suffix}.~{extOut}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} VariantFiltration \
+			~{default="" "--sequence-dictionary " + refDict} \
+			~{default="" "--filter-expression \"QD < " + LowQualByDepth + "\" --filter-name \"LowQualByDepth\""} \
+			~{default="" "--filter-expression \"FS > " + FSStrandBias + "\" --filter-name \"FSStrandBias\""} \
+			~{default="" "--filter-expression \"MQ < " + LowMappingQuality + "\" --filter-name \"LowMappingQuality\""} \
+			~{default="" "--filter-expression \"MQRankSum < " + LowMappingQualityRankSum + "\" --filter-name \"LowMappingQualityRankSum\""} \
+			~{default="" "--filter-expression \"ReadPosRankSum < " + LowReadPosRankSum + "\" --filter-name \"LowReadPosRankSum\""} \
+			~{default="" "--filter-expression \"SOR > " + SORStrandBias + "\" --filter-name \"SORStrandBias\""} \
+			~{default="" "--filter-expression \"POLYX > " + HomopolymerRegion + "\" --filter-name \"HomopolymerRegion\""} \
+			~{default="" "--filter-expression \"DP < " + LowCoverage + "\" --filter-name \"LowCoverage\""} \
+			~{true="--filter-expression \"" false="" filters}~{default="" sep="\" --filter-expression \""  filtersExpression}~{true="\"" false="" filters} \
+			~{true="--filter-name " false="" filters}~{default="" sep=" --filter-name "  filtersName} \
+			~{true="--create-output-variant-index" false="" createVCFIdx} \
+			~{true="--create-output-variant-md5" false="" createVCFMD5} \
+			--variant ~{in}  \
+			--output ~{outputFile}
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Array of VCFs to merge.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where vcf will be generated.',
+			category: 'optional'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
+			category: 'optional'
+		}
+		suffix: {
+			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".gather"]',
+			category: 'optional'
+		}
+		ext: {
+			description: 'Extension of the output file (".vcf" or ".bcf") [default: same as input]',
+			category: 'optional'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "(\.[0-9]+)?\.vcf$"]',
+			category: 'optional'
+		}
+		refFasta: {
+			description: 'Path to the reference file (format: fasta)',
+			category: 'required'
+		}
+		refFai: {
+			description: 'Path to the reference file index (format: fai)',
+			category: 'required'
+		}
+		refDict: {
+			description: 'Path to the reference file dict (format: dict)',
+			category: 'required'
+		}
+		LowQualByDepth: {
+			description: 'Threshold below which QD the variant will be tagged as LowQualByDepth',
+			category: 'optional'
+		}
+		FSStrandBias: {
+			description: 'Threshold above which FS the variant will be tagged as FSStrandBias',
+			category: 'optional'
+		}
+		LowMappingQuality: {
+			description: 'Threshold below which MQ the variant will be tagged as LowMappingQuality',
+			category: 'optional'
+		}
+		LowMappingQualityRankSum: {
+			description: 'Threshold below which MQRankSum the variant will be tagged as LowMappingQualityRankSum',
+			category: 'optional'
+		}
+		LowReadPosRankSum: {
+			description: 'Threshold below which ReadPosRankSum the variant will be tagged as LowReadPosRankSum',
+			category: 'optional'
+		}
+		SORStrandBias: {
+			description: 'Threshold above which SOR the variant will be tagged as SORStrandBias',
+			category: 'optional'
+		}
+		HomopolymerRegion: {
+			description: 'Threshold above which POLYX the variant will be tagged as HomopolymerRegion',
+			category: 'optional'
+		}
+		LowCoverage: {
+			description: 'Threshold below which DP the variant will be tagged as LowCoverage',
+			category: 'optional'
+		}
+		filtersExpression: {
+			description: 'Other custom filters',
+			category: 'optional'
+		}
+		filtersName: {
+			description: 'Other custom filters',
+			category: 'optional'
+		}
+		createVCFIdx: {
+			description: 'If true, create a VCF index when writing a coordinate-sorted VCF file. [Default: true]',
+			category: 'optional'
+		}
+		createVCFMD5: {
+			description: 'If true, create a a MD5 digest any VCF file created. [Default: true]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}
