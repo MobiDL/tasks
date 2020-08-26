@@ -55,6 +55,7 @@ All notable changes to this project will be documented in this file.
 	- SplitIntervals
 	- SplitVcfs
 	- VariantFiltaration
+	- MergeVcfs
 - Sambamba :
 	- index
 	- flagstat

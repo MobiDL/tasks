@@ -77,6 +77,7 @@ It produce some quality metrics from different tools.
 	- SplitIntervals
 	- SplitVcfs
 	- VariantFiltaration
+	- MergeVcfs
 - Sambamba (0.6.6) :
 	- index
 	- flagstat
