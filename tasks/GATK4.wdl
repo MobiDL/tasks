@@ -957,7 +957,7 @@ task gatherBamFiles {
 			category: 'optional'
 		}
 		in: {
-			description: 'Array of BAMs to merge.',
+			description: 'Array of BAMs to gather.',
 			category: 'Required'
 		}
 		bamIdx: {
@@ -1075,7 +1075,7 @@ task leftAlignIndels {
 			category: 'optional'
 		}
 		in: {
-			description: 'Array of BAMs to merge.',
+			description: 'BAM to leftAlign.',
 			category: 'Required'
 		}
 		bamIdx: {
@@ -1676,7 +1676,7 @@ task gatherVcfFiles {
 			category: 'optional'
 		}
 		in: {
-			description: 'Array of VCFs to merge.',
+			description: 'Array of VCFs to gather.',
 			category: 'Required'
 		}
 		outputPath: {
@@ -1763,7 +1763,7 @@ task splitVcfs {
 			category: 'optional'
 		}
 		in: {
-			description: 'Array of VCFs to merge.',
+			description: 'VCF to split.',
 			category: 'Required'
 		}
 		outputPath: {
@@ -1884,7 +1884,7 @@ task variantFiltaration {
 			category: 'optional'
 		}
 		in: {
-			description: 'Array of VCFs to merge.',
+			description: 'VCF to filter.',
 			category: 'Required'
 		}
 		outputPath: {
