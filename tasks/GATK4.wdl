@@ -2001,7 +2001,7 @@ task mergeVcfs {
 		String suffix = ".merge"
 		String ext = ".vcf"
 
-		File refDict
+		File? refDict
 
 		Int threads = 1
 	}
@@ -2019,7 +2019,8 @@ task mergeVcfs {
 		fi
 
 		~{path_exe} MergeVcfs \
-			--INPUT ~{sep=" --input " in} \
+			~{default="" "--SEQUENCE_DICTIONARY " + refDict} \
+			--INPUT ~{sep=" --INPUT " in} \
 			--OUTPUT ~{outputFile}
 
 	>>>
