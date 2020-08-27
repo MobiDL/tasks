@@ -34,8 +34,6 @@ task index {
 		Boolean csi = false
 		String? preset
 		Int? minShift
-		Boolean tes =true
-		Boolean tes2 =true
 
 		Int threads = 1
 	}
