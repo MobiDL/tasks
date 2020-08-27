@@ -1826,14 +1826,14 @@ task variantFiltaration {
 		Boolean SNP = false
 		Boolean Indels = false
 
-		Int? LowQualByDepth
-		Int? FSStrandBias
-		Int? LowReadPosRankSum
-		Int? SORStrandBias
-		Int? HomopolymerRegion
-		Int? LowCoverage
-		Int? LowMappingQuality
-		Int? LowMappingQualityRankSum
+		Float? LowQualByDepth
+		Float? FSStrandBias
+		Float? LowReadPosRankSum
+		Float? SORStrandBias
+		Float? HomopolymerRegion
+		Float? LowCoverage
+		Float? LowMappingQuality
+		Float? LowMappingQualityRankSum
 
 		Array[String]? filtersExpression
 		Array[String]? filtersName
