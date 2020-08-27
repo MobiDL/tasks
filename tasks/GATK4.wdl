@@ -2080,7 +2080,7 @@ task sortVcf {
 	input {
 		String path_exe = "gatk"
 
-		Array[File]+ in
+		File in
 		String? outputPath
 		String? name
 		String subString = "\.(vcf|bcf)$"
@@ -2092,11 +2092,9 @@ task sortVcf {
 		Int threads = 1
 	}
 
-	String firstFile = basename(in[0])
-
-	String extOut = if defined(ext) then ext else sub(basename(firstFile),"(.*\.)(vcf|bcf)$","$2")
-	String baseName = if defined(name) then name else sub(basename(firstFile),subString,"")
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{ext}" else "~{baseName}~{suffix}~{ext}"
+	String extOut = if defined(ext) then ext else sub(basename(in),"(.*)(\.vcf|\.bcf)$","$2")
+	String baseName = if defined(name) then name else sub(basename(in),subString,"")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{extOut}" else "~{baseName}~{suffix}~{extOut}"
 
 	command <<<
 
