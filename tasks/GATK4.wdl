@@ -1998,6 +1998,7 @@ task mergeVcfs {
 		String? outputPath
 		String? name
 		String subString = "\.(vcf|bcf)$"
+		String subStringReplace = ""
 		String suffix = ".merge"
 		String ext = ".vcf"
 
@@ -2008,9 +2009,9 @@ task mergeVcfs {
 
 	String firstFile = basename(in[0])
 
-	String extOut = if defined(ext) then ext else sub(basename(firstFile),"(.*\.)(vcf|bcf)$","$2")
-	String baseName = if defined(name) then name else sub(basename(firstFile),subString,"")
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{ext}" else "~{baseName}~{suffix}~{ext}"
+	String extOut = if defined(ext) then ext else sub(basename(firstFile),"(.*)(\.vcf|\.bcf)$","$2")
+	String baseName = if defined(name) then name else sub(basename(firstFile),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{extOut}" else "~{baseName}~{suffix}~{extOut}"
 
 	command <<<
 
@@ -2048,6 +2049,10 @@ task mergeVcfs {
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "\.(vcf|bcf)$"]',
+			category: 'optional'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ""]',
 			category: 'optional'
 		}
 		suffix: {
