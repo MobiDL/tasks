@@ -77,7 +77,7 @@ It produce some quality metrics from different tools.
 	- DepthOfCoverage (BETA)
 	- SplitIntervals
 	- SplitVcfs
-	- VariantFiltaration
+	- VariantFiltration
 	- MergeVcfs
 	- SortVcf
 - Sambamba (0.6.6) :

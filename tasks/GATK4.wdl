@@ -1801,7 +1801,7 @@ task splitVcfs {
 	}
 }
 
-task variantFiltaration {
+task variantFiltration {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"

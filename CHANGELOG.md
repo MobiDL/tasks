@@ -55,7 +55,7 @@ All notable changes to this project will be documented in this file.
 	- DepthOfCoverage (BETA)
 	- SplitIntervals
 	- SplitVcfs
-	- VariantFiltaration
+	- VariantFiltration
 	- MergeVcfs
 	- SortVcf
 - Sambamba :
