@@ -78,6 +78,7 @@ It produce some quality metrics from different tools.
 	- SplitVcfs
 	- VariantFiltaration
 	- MergeVcfs
+	- SortVcf
 - Sambamba (0.6.6) :
 	- index
 	- flagstat

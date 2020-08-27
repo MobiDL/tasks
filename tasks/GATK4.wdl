@@ -2043,7 +2043,7 @@ task mergeVcfs {
 			category: 'optional'
 		}
 		name: {
-			description: 'Output file base name [default: sub(basename(in),subString,"")].',
+			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
 			category: 'optional'
 		}
 		subString: {
@@ -2052,6 +2052,92 @@ task mergeVcfs {
 		}
 		suffix: {
 			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".merge"]',
+			category: 'optional'
+		}
+		ext: {
+			description: 'Extension for the output file [default: ".recal"]',
+			category: 'optional'
+		}
+		refDict: {
+			description: 'Path to the reference file dict (format: dict)',
+			category: 'required'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}
+
+task sortVcf {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-08-27"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		Array[File]+ in
+		String? outputPath
+		String? name
+		String subString = "\.(vcf|bcf)$"
+		String suffix = ".sort"
+		String ext = ".vcf"
+
+		File? refDict
+
+		Int threads = 1
+	}
+
+	String firstFile = basename(in[0])
+
+	String extOut = if defined(ext) then ext else sub(basename(firstFile),"(.*\.)(vcf|bcf)$","$2")
+	String baseName = if defined(name) then name else sub(basename(firstFile),subString,"")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{ext}" else "~{baseName}~{suffix}~{ext}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} SortVcf \
+			~{default="" "--SEQUENCE_DICTIONARY " + refDict} \
+			--INPUT ~{sep=" --INPUT " in} \
+			--OUTPUT ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'optional'
+		}
+		in: {
+			description: 'List of VCFs files',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where sorted vcf will be written.',
+			category: 'optional'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(in),subString,"")].',
+			category: 'optional'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "\.(vcf|bcf)$"]',
+			category: 'optional'
+		}
+		suffix: {
+			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".sort"]',
 			category: 'optional'
 		}
 		ext: {
