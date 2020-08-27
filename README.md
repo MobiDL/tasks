@@ -46,6 +46,7 @@ It produce some quality metrics from different tools.
 	- index
 	- merge
 	- norm
+	- stats
 - bedtools (v2.29.2) :
 	- intersect
 	- sort

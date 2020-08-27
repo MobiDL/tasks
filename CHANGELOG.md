@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 	- index
 	- merge
 	- norm
+	- stats
 - bedtools :
 	- intersect
 	- sort
@@ -56,6 +57,7 @@ All notable changes to this project will be documented in this file.
 	- SplitVcfs
 	- VariantFiltaration
 	- MergeVcfs
+	- SortVcf
 - Sambamba :
 	- index
 	- flagstat

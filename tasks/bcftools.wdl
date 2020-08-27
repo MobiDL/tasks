@@ -438,3 +438,213 @@ task norm {
 		}
 	}
 }
+
+task stats {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.2"
+		date: "2020-08-27"
+	}
+
+	input {
+		String path_exe = "bcftools"
+
+		File in
+		String outputPath
+		String? name
+		String subString = "\.(vcf|bcf)(\.gz)?$"
+		String subStringReplace = ""
+		String ext = ".stats"
+
+		File refFasta
+		File refFai
+
+		Array[Float]? afBins
+		String? afTag
+
+		Boolean firstAllele = false
+
+		String collapse = "none"
+
+		Int depthMin = 0
+		Int depthMax = 500
+		Int depthBin = 1
+
+		File? exons
+
+		Array[String]? applyFilters
+
+		String? exclude
+		String? include
+
+		Boolean splitByID = false
+
+		Array[String] samples = ["\"-\""]
+
+		Array[String]? userTsTv
+
+		String? regions
+		File? regionsFile
+
+		String? targets
+		File? targetsFile
+
+		Int threads = 1
+	}
+
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
+
+	Boolean BoolAFBins = if defined(afBins) then true else false
+	Boolean BoolApplyFilters = if defined(applyFilters) then true else false
+	Boolean BoolUserTsTv = if defined(userTsTv) then true else false
+
+	command <<<
+
+		if [[ ! -f ~{outputFile} ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} stats \
+			~{true="--af-bins " false="" BoolAFBins}~{default="" sep="," afBins} \
+			~{default="" "--af-tag " + afTag} \
+			~{true="--1st-allele-only" false ="" firstAllele} \
+			--collapse ~{collapse} \
+			--depth ~{depthMin},~{depthMax},~{depthBin} \
+			~{default="" "--exons " + exons} \
+			~{true="--apply-filters " false="" BoolApplyFilters}~{default="" sep="," applyFilters} \
+			~{default="" "--exclude " + exclude} \
+			~{default="" "--include " + include} \
+			~{true="--split-by-ID" false = "" splitByID} \
+			--samples ~{sep="," samples} \
+			~{true="--user-tstv " false="" BoolUserTsTv}~{default="" sep="," userTsTv} \
+			--fasta-ref ~{refFasta} \
+			~{default="" "--regions " + regions} \
+			~{default="" "--regions-file " + regionsFile} \
+			~{default="" "--targets " + targets} \
+			~{default="" "--targets-file " + targetsFile} \
+			--threads ~{threads - 1} \
+			~{in} > ~{outputFile}
+
+	>>>
+
+	output {
+		File vcf = "~{outputFile}"
+  	}
+
+    parameter_meta {
+        path_exe: {
+			description: "Path used as executable [default: 'bcftools']",
+			category: "optional"
+		}
+		in: {
+			description: "VCF/BCF file to left-align and normalize indels (extension: '.vcf.gz|.bcf')",
+			category: "required"
+		}
+		outputPath: {
+			description: 'Path where was generated output',
+			category: "required"
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(in),subString,"")].',
+			category: 'optional'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "\.(vcf|bcf)(\.gz)?$"]',
+			category: 'optional'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ""]',
+			category: 'optional'
+		}
+		ext: {
+			description: 'Extension use for the output file [default: ".stats"]',
+			category: 'optional'
+		}
+		refFasta: {
+			description: 'Reference in fasta format',
+			category: "required"
+		}
+		refFai: {
+			description: 'Path to the reference file index (format: fai)',
+			category: 'required'
+		}
+		afBins: {
+			description: 'Allele frequency bins',
+			category: 'optional'
+		}
+		afTag: {
+			description: 'Allele frequency tag to use',
+			category: 'optional'
+		}
+		firstAllele: {
+			description: 'Include only 1st allele at multiallelic sites',
+			category: 'optional'
+		}
+		collapse: {
+			description: 'Treat as identical records with <snps|indels|both|all|some|none> [default: none]',
+			category: 'optional'
+		}
+		depthMin: {
+			description: 'Minimum depth [default: 0]',
+			category: 'optional'
+		}
+		depthMax: {
+			description: 'Maximum depth [default: 500]',
+			category: 'optional'
+		}
+		depthBin: {
+			description: 'Bin size depth [default: 1]',
+			category: 'optional'
+		}
+		exons: {
+			description: 'Tab-delimited file with exons for indel frameshifts (chr,from,to; 1-based, inclusive, bgzip compressed)',
+			category: 'optional'
+		}
+		applyFilters: {
+			description: 'Require at least one of the listed FILTER strings',
+			category: 'optional'
+		}
+		exclude: {
+			description: 'Exclude sites for which the expression is true',
+			category: 'optional'
+		}
+		include: {
+			description: 'Select sites for which the expression is true',
+			category: 'optional'
+		}
+		splitByID: {
+			description: 'Collect stats for sites with ID separately (known vs novel)',
+			category: 'optional'
+		}
+		samples: {
+			description: 'List of samples for sample stats ("-" -> all samples)[default: ["-"]]',
+			category: 'optional'
+		}
+		userTsTv: {
+			description: 'Collect Ts/Tv stats for any tag using the given binning',
+			category: 'optional'
+		}
+		regions: {
+			description: "Restrict to comma-separated list of regions",
+			category: "optional"
+		}
+		regionsFile: {
+			description: "Restrict to regions listed in a file",
+			category: "optional"
+		}
+		targets: {
+			description: "Similar to 'regions' but streams rather than index-jumps",
+			category: "optional"
+		}
+		targetsFile: {
+			description: "Similar to 'regionsFile' but streams rather than index-jumps",
+			category: "optional"
+		}
+		threads: {
+			description: "Sets the number of threads [default: 0]",
+			category: "optional"
+		}
+	}
+}
