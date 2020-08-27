@@ -263,8 +263,8 @@ task norm {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-07-24"
+		version: "0.0.2"
+		date: "2020-08-27"
 	}
 
 	input {
@@ -272,37 +272,46 @@ task norm {
 
 		File in
 		String outputPath
-		String? sample
-		String addSuffix = ".norm"
-		String suffix = ".vcf.gz"
+		String? name
+		String subString = "\.(vcf|bcf)(\.gz)?$"
+		String subStringReplace = ""
+		String suffix = ".norm"
 
-		File referenceFasta
+		File refFasta
 
-		String checkRef = "e"
+		String? checkRef
+
 		Boolean removeDuplicates = false
-		String rmDup = "none"
-		String multiallelics = "+both"
-		Boolean noVersion = false
-		Boolean doNotNormalize = false
-		String outputType = "z"
+		String? rmDupType
+
+		Boolean splitMA = false
+		String multiallelicType = "both"
+
+		Boolean version = true
+
+		Boolean normalize = true
+
 		String? regions
 		File? regionsFile
-		Boolean strictFilter = false
+
 		String? targets
 		File? targetsFile
+
+		Boolean strictFilter = false
+		String outputType = "v"
+
 		Int siteWin = 1000
 		Int threads = 1
 	}
 
-	String ext = if outputType == "v" then ".vcf" else if outputType == "b" then ".bcf.gz" else if outputType == "u" then ".bcf" else ".vcf.gz"
-	String outputFile = "~{outputPath}/" + basename(in,suffix) + "~{addSuffix}~{ext}"
+	Map[String,String] extType = {"v" : ".vcf","u" : ".bcf","z" : ".vcf.gz","b" : ".bcf.gz"}
 
-	String regionsOpt = if defined(regions) then "--regions ~{regions} " else ""
-	String regionsFileOpt = if defined(regionsFile) then "--regions-file ~{regionsFile} " else ""
-	String targetsOpt = if defined(targets) then "--targets ~{targets} " else ""
-	String targetsFileOpt = if defined(targetsFile) then "--targets-file ~{targetsFile} " else ""
+	String ext = extType[outputType]
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{ext}" else "~{baseName}~{suffix}~{ext}"
 
-	String rmDupOpt = if removeDuplicates then "--remove-duplicates --rm-dup ~{rmDup} " else ""
+	String multiallelics = if splitMA then "-~{multiallelicType}" else "+~{multiallelicType}"
+
 	command <<<
 
 		if [[ ! -f ~{outputFile} ]]; then
@@ -310,19 +319,20 @@ task norm {
 		fi
 
 		~{path_exe} norm \
-			~{rmDupOpt} \
-			~{true="--no-version " false="" noVersion}\
-			~{true="--do-not-normalize " false="" doNotNormalize} \
-			~{regionsOpt} \
-			~{regionsFileOpt} \
-			~{targetsOpt} \
-			~{targetsFileOpt} \
-			~{true="--strict-filter" false="" strictFilter} \
-			--check-ref ~{checkRef} \
-			--fasta-ref ~{referenceFasta} \
+			~{default="" "--check-ref " + checkRef} \
+			~{true="--remove-duplicates" false="" removeDuplicates} \
+			~{default="" "--rm-dup " + rmDupType} \
+			--fasta-ref ~{refFasta} \
 			--multiallelics ~{multiallelics} \
-			--output ~{outputFile} \
+			~{true="" false="--no-version" version} \
+			~{true="" false="--do-not-normalize" normalize} \
+			~{default="" "--regions " + regions} \
+			~{default="" "--regions-file " + regionsFile} \
+			~{default="" "--targets " + targets} \
+			~{default="" "--targets-file " + targetsFile} \
+			~{true="--strict-filter" false="" strictFilter} \
 			--output-type ~{outputType} \
+			--output ~{outputFile} \
 			--threads ~{threads - 1} \
 			--site-win ~{siteWin} \
 			~{in}
@@ -346,19 +356,23 @@ task norm {
 			description: 'Path where was generated output',
 			category: "required"
 		}
-		sample: {
-			description: 'The sample name wich is used as basename for output file. [default: basename(in) without suffix]',
-			category: "optional"
+		name: {
+			description: 'Output file base name [default: sub(basename(in),subString,"")].',
+			category: 'optional'
 		}
-		addSuffix: {
-			description: 'Add a suffix to the basename file or sample [default: .norm]',
-			category: "optional"
+		subString: {
+			description: 'Extension to remove from the input file [default: "\.(vcf|bcf)(\.gz)?$"]',
+			category: 'optional'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ""]',
+			category: 'optional'
 		}
 		suffix: {
-			description: 'The suffix of the input file [default: .vcf.gz]',
-			category: "optional"
+			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".merge"]',
+			category: 'optional'
 		}
-		referenceFasta: {
+		refFasta: {
 			description: 'Reference used to merge in gvcf mode',
 			category: "required"
 		}
@@ -370,20 +384,24 @@ task norm {
 			description: 'Remove duplicate lines of the same type.',
 			category: "optional"
 		}
-		rmDup: {
-			description: 'Remove duplicate snps|indels|both|all|none [default: none]',
+		rmDupType: {
+			description: 'Remove duplicate snps|indels|both|all|none (implies removeDuplicates)',
 			category: "optional"
 		}
-		multiallelics: {
-			description: "Split multiallelics (-) or join biallelics (+), type: snps|indels|both|any [default: +both]",
+		splitMA: {
+			description: "Split (true) or join (false) multiallelics sites [default= false]",
 			category: "optional"
 		}
-		noVersion: {
-			description: 'Do not append version and command line to the header [default: false]',
+		multiallelicType: {
+			description: "Type of Multiallelics to treat for split/join (type: snps|indels|both|any) [default: both]",
 			category: "optional"
 		}
-		doNotNormalize: {
-			description: 'Do not normalize indels (with -m or -c s) [default: false]',
+		version: {
+			description: 'Append version and command line to the header [default: true]',
+			category: "optional"
+		}
+		normalize: {
+			description: 'Normalize indels (with -m or -c s) [default: true]',
 			category: "optional"
 		}
 		outputType: {
@@ -398,10 +416,6 @@ task norm {
 			description: "Restrict to regions listed in a file",
 			category: "optional"
 		}
-		strictFilter: {
-			description: "When merging (-m+), merged site is PASS only if all sites being merged PASS [default: false]",
-			category: "optional"
-		}
 		targets: {
 			description: "Similar to 'regions' but streams rather than index-jumps",
 			category: "optional"
@@ -410,12 +424,16 @@ task norm {
 			description: "Similar to 'regionsFile' but streams rather than index-jumps",
 			category: "optional"
 		}
-		threads: {
-			description: "Sets the number of threads [default: 0]",
+		strictFilter: {
+			description: "When merging (-m+), merged site is PASS only if all sites being merged PASS [default: false]",
 			category: "optional"
 		}
 		siteWin: {
 			description: "Buffer for sorting lines which changed position during realignment [default: 1000]",
+			category: "optional"
+		}
+		threads: {
+			description: "Sets the number of threads [default: 0]",
 			category: "optional"
 		}
 	}
