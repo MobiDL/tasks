@@ -316,15 +316,15 @@ workflow alignDNAcapture {
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
-			category: 'required'
+			category: 'Required'
 		}
 		refFai: {
 			description: 'Path to the reference file index (format: fai)',
-			category: 'required'
+			category: 'Required'
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
-			category: 'required'
+			category: 'Required'
 		}
 		refAmb : {
 			description: 'Path to the reference Amb file (generate by BWA index)',
