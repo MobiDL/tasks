@@ -530,7 +530,7 @@ task stats {
 	>>>
 
 	output {
-		File vcf = "~{outputFile}"
+		File outputFile = outputFile
   	}
 
     parameter_meta {
