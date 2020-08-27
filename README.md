@@ -33,6 +33,12 @@ This workflow align DNA capture sequence against the reference genome.
 
 It produce some quality metrics from different tools.
 
+### VariantCallingCaptureHC
+
+This workflow apply variant calling by HaplotypeCaller on a capture sequencing.
+
+It produce some quality metrics from different tools.
+
 ## Tools implemented
 
 - bash :
