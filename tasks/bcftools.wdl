@@ -340,7 +340,7 @@ task norm {
 	>>>
 
 	output {
-		File vcf = "~{outputFile}"
+		File outputFile = outputFile
   	}
 
     parameter_meta {
