@@ -1988,7 +1988,7 @@ task mergeVcfs {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
 		version: "0.0.1"
-		date: "2020-08-06"
+		date: "2020-08-26"
 	}
 
 	input {
@@ -2039,15 +2039,15 @@ task mergeVcfs {
 			category: 'Required'
 		}
 		outputPath: {
-			description: 'Output path where bqsr report will be generated.',
+			description: 'Output path where merged vcf will be written.',
 			category: 'optional'
 		}
 		name: {
-			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
+			description: 'Output file base name [default: sub(basename(in),subString,"")].',
 			category: 'optional'
 		}
 		subString: {
-			description: 'Extension to remove from the input file [default: "\.[0-9]\.recal$"]',
+			description: 'Extension to remove from the input file [default: "\.(vcf|bcf)$"]',
 			category: 'optional'
 		}
 		suffix: {
