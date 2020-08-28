@@ -21,7 +21,7 @@ import "../tasks/bcftools.wdl" as bcftools
 import "../tasks/GATK4.wdl" as GATK4
 import "../tasks/tabix.wdl" as tabix
 
-workflow vcCaptureHC {
+workflow VCCaptureHC {
 	meta {
 		author: "MoBiDiC"
 		email: "c-vangoethem(at)chu-montpellier.fr"
@@ -41,7 +41,7 @@ workflow vcCaptureHC {
 		File? dbsnp
 		File? dbsnpIdx
 
-		String outputRep = "./"
+		String outputPath = "./"
 		String subString = "\.(sam|bam|cram)"
 		String? name
 
@@ -65,12 +65,11 @@ workflow vcCaptureHC {
 	}
 
 	String sampleName = if defined(name) then "~{name}" else sub(basename(bam),subString,"")
-	String outputPath = if defined(name) then "~{outputRep}/~{name}/" else"~{outputRep}/~{sampleName}/"
 
 	call bash.convertBedToIntervals as BB2I {
 		input :
 			in = intervalBedFile,
-			outputPath = outputPath + "/regionOfInterest/"
+			outputPath = outputPath + "regionOfInterest/"
 	}
 
 	call GATK4.splitIntervals as GSI {
@@ -83,7 +82,7 @@ workflow vcCaptureHC {
 
 			subdivisionMode = "BALANCING_WITHOUT_INTERVAL_SUBDIVISION",
 
-			outputPath = outputPath + "/regionOfInterest/",
+			outputPath = outputPath + "regionOfInterest/",
 
 			scatterCount = maxThreads,
 			threads = minThreads
@@ -230,7 +229,7 @@ workflow vcCaptureHC {
 			description: 'Path to the dbsnp vcf index file (format: vcf.gz.tbi)',
 			category: 'Required'
 		}
-		outputRep : {
+		outputPath : {
 			description: 'Path where the output repository will be created [default: ./]',
 			category: 'Option'
 		}
