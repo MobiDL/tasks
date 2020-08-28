@@ -54,7 +54,7 @@ workflow alignDNAcapture {
 		File IndelsMillsIdx
 		File dbsnpIdx
 
-		String outputRep = "./"
+		String outputPath = "./"
 		String subString = "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"
 		String? name
 
@@ -63,8 +63,7 @@ workflow alignDNAcapture {
 		Int minThreads = threads
 	}
 
-	String sampleName = sub(basename(fastqR1),subString,"")
-	String outputPath = if defined(name) then "~{outputRep}/~{name}/" else"~{outputRep}/~{sampleName}/"
+	String sampleName = if defined(name) then name else sub(basename(fastqR1),subString,"")
 
 	## Preprocessing
 
@@ -370,7 +369,7 @@ workflow alignDNAcapture {
 			description: 'Path to the dbsnp vcf index file (format: vcf.gz.tbi)',
 			category: 'Required'
 		}
-		outputRep : {
+		outputPath : {
 			description: 'Path where the output repository will be created [default: ./]',
 			category: 'Option'
 		}
