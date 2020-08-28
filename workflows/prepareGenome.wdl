@@ -30,35 +30,38 @@ workflow prepareGenome {
 	input {
 		File fasta
 		String outputPath
+
 		Int threads = 1
+		Int maxThreads = threads
+		Int minThreads = threads
 	}
 
 	call bash.makeLink as GenomeLn {
 		input :
 			in = fasta,
 			outputPath = outputPath,
-			threads = threads
+			threads = minThreads
 	}
 
 	call bwa.index as BwaIndexGenome {
 		input :
 			in = fasta,
 			outputPath = outputPath,
-			threads = threads
+			threads = maxThreads
 	}
 
 	call samtools.faidx as SamtoolsIndexGenome {
 		input :
 			in = fasta,
 			outputPath = outputPath,
-			threads = threads
+			threads = maxThreads
 	}
 
 	call samtools.dict as SamtoolsDictGenome {
 		input :
 			in = fasta,
 			outputPath = outputPath,
-			threads = threads
+			threads = maxThreads
 	}
 
 	output {
@@ -81,9 +84,17 @@ workflow prepareGenome {
 			description : 'Output path where bam file was generated.',
 			category : 'Required'
 		}
-		threads: {
-			description : 'Sets the number of threads [default: 1]',
-			category : 'System'
+		threads : {
+			description: 'Sets the number of threads to use by default [default: 1]',
+			category: 'System'
+		}
+		maxThreads : {
+			description: 'Sets the number of threads to use for high computing jobs [default: threads]',
+			category: 'System'
+		}
+		minThreads : {
+			description: 'Sets the number of threads to use for low computing jobs [default: threads]',
+			category: 'System'
 		}
 	}
 }
