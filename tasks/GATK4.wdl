@@ -404,6 +404,8 @@ task splitIntervals {
 		File in
 		String? outputPath
 		String? name
+		String subString = "\.([a-zA-Z]*)$"
+		String subStringReplace = "-split"
 
 		File refFasta
 		File refFai
@@ -418,7 +420,7 @@ task splitIntervals {
 		Int threads = 1
 	}
 
-	String baseName = if defined(name) then name else sub(basename(in),"\.([a-zA-Z]*)$","")
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
 	String outputRep = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
 	command <<<
@@ -458,6 +460,14 @@ task splitIntervals {
 		}
 		name: {
 			description: 'Output repertory name [default: sub(basename(in),"\.([a-zA-Z]*)$","")].',
+			category: 'optional'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "\.([a-zA-Z]*)$"]',
+			category: 'optional'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: "-split"]',
 			category: 'optional'
 		}
 		refFasta: {
