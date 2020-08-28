@@ -20,20 +20,24 @@ The code follows WDL specifications as much as possible ([WDL-spec](https://gith
 
 ## Workflows implemented
 
-### PrepareGenome
+### General
+
+#### PrepareGenome
 
 This workflow is developped to prepare a fasta file to be used into other
 pipelines.
 
 It will process the fasta input files to create indexes and dictionary.
 
-### AlignDNAcapture
+### Panel capture
+
+#### AlignDNAcapture
 
 This workflow align DNA capture sequence against the reference genome.
 
 It produce some quality metrics from different tools.
 
-### VariantCallingCaptureHC
+#### VariantCallingCaptureHC
 
 This workflow apply variant calling by HaplotypeCaller on a capture sequencing.
 
