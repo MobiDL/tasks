@@ -43,6 +43,13 @@ This workflow apply variant calling by HaplotypeCaller on a capture sequencing.
 
 It produce some quality metrics from different tools.
 
+#### PanelCapture
+
+This workflow call ***PrepareGenome*** if necessary then it calls the following
+subworkflow:
+	- ***AlignDNAcapture***
+	- ***VariantCallingCaptureHC***
+
 ## Tools implemented
 
 - bash :
