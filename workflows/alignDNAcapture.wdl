@@ -63,7 +63,7 @@ workflow alignDNAcapture {
 		Int minThreads = threads
 	}
 
-	String sampleName = if defined(name) then name else sub(basename(fastqR1),subString,"")
+	String sampleName = if defined(name) then "~{name}" else sub(basename(fastqR1),subString,"")
 
 	## Preprocessing
 
