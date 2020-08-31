@@ -45,10 +45,12 @@ It produce some quality metrics from different tools.
 
 #### PanelCapture
 
-This workflow call ***PrepareGenome*** if necessary then it calls the following
-subworkflow:
-	- ***AlignDNAcapture***
-	- ***VariantCallingCaptureHC***
+This workflow performed an analysis for capture constitutionnal sample.
+It calls the following subworkflow :
+
+- ***PrepareGenome*** (if necessary, i.e. fasta provided without indexes) 
+- ***AlignDNAcapture***
+- ***VariantCallingCaptureHC***
 
 ## Tools implemented
 
