@@ -32,6 +32,8 @@ task crumble {
 		String? outputPath
 		String? name
 		String suffix = ".crumble"
+		String subString = "\.(bam|cram|sam)"
+		String subStringReplace = ""
 
 		String? outputFormat
 		Boolean addPGHeader = true
@@ -42,7 +44,7 @@ task crumble {
 	}
 
 	String ext = if defined(outputFormat) then outputFormat else sub(basename(in),"(.*)\.(bam|cram|sam)","$2")
-	String baseName = if defined(name) then name else sub(basename(in),"(\.bam|\.cram|\.sam)","")
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.~{ext}" else "~{baseName}~{suffix}.~{ext}"
 
 	command <<<
@@ -66,7 +68,7 @@ task crumble {
 
 	parameter_meta {
 		path_exe: {
-			description: 'Path used as executable [default: "dwgsim"]',
+			description: 'Path used as executable [default: "crumble"]',
 			category: 'optional'
 		}
 		outputPath: {
@@ -74,15 +76,23 @@ task crumble {
 			category: 'optional'
 		}
 		name: {
-			description: 'Name to use for output file name [default: dwgsim-illumina]',
+			description: 'Name to use for output file name [default: sub(basename(in),subString,subStringReplace)]',
 			category: 'optional'
 		}
 		in: {
-			description: 'Fasta file used to create fastq.',
+			description: 'Alignement file used as input (sam, bam or cram).',
 			category: 'Required'
 		}
 		suffix: {
 			description: 'Suffix to add to the output [default: .crumble]',
+			category: 'optional'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "\.(bam|cram|sam)"]',
+			category: 'optional'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ""]',
 			category: 'optional'
 		}
 		outputFormat: {
