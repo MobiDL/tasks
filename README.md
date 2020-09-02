@@ -1,5 +1,7 @@
 # MobiDL 2
 
+![plateforms:Linux-64|osx-64](https://img.shields.io/badge/plateform-Linux--64|osx--64-green?&style=for-the-badge)
+
 MobiDL 2 is a collection of tools wrapped in WDL to be used in any WDL pipelines.
 
 ## __WARNING : BETA VERSION DO NOT USE IN PRODUCTION__
@@ -11,12 +13,21 @@ and a set of tools wrapped in WDL tasks (see [tools](#tools-implemented)).
 
 The code follows WDL specifications as much as possible ([WDL-spec](https://github.com/openwdl/wdl/blob/main/versions/1.0/SPEC.md)).
 
-## Todo list
+## Installation
 
-- [ ] Make a test workflow
-- [ ] Define structures for referenceGenome
-	- [ ] Change in all task to use this structures
-- [ ] Implement options for cluster
+This repo include an easy install by conda ([check the installation guide for conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)).
+
+1. Clone the repo:
+
+`$ git clone https://github.com/mobidic/MobiDL2.0.git`
+
+2. Install the dependencies:
+
+`$ conda create -n MobiDL2 --channel conda-forge  --channel bioconda --file requirements.txt`
+
+3. Load the environnement:
+
+`$ conda activate MobiDL2`
 
 ## Workflows implemented
 
@@ -48,7 +59,7 @@ It produce some quality metrics from different tools.
 This workflow performed an analysis for capture constitutionnal sample.
 It calls the following subworkflow :
 
-- ***PrepareGenome*** (if necessary, i.e. fasta provided without indexes) 
+- ***PrepareGenome*** (if necessary, i.e. fasta provided without indexes)
 - ***AlignDNAcapture***
 - ***VariantCallingCaptureHC***
 
