@@ -3,21 +3,24 @@ name: Installation issue with conda
 about: A bug happened during installation with conda
 title: 'Installation with conda : [details]'
 labels: ":snake: Installation bug"
-assignees: ''
+assignees: Char-Al
 
 ---
 
-### Environment
+# Installation bug with conda
 
-- OS (distribution and version)
-- Conda version
-- MobiDL version
+## Environment
 
-### Command line
+- OS : [your OS and version]
+- Conda : [version]
+- MobiDL : [version/date]
 
-*Change if different*
+## Command line
+
 `$ conda env create environment.yml`
 
-### Describe the issue
+## Describe the bug
 
-Describe here you're error (package or others usefull elements as output).
+Please describe as well as possible the error you get.
+
+- Package : [package and version]
