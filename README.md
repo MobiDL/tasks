@@ -23,11 +23,13 @@ This repo include an easy install by conda ([check the installation guide for co
 
 2. Install the dependencies:
 
-`$ conda create -n MobiDL2 --channel conda-forge  --channel bioconda --file requirements.txt`
+`$ conda env create environment.yml`
 
 3. Load the environnement:
 
 `$ conda activate MobiDL2`
+
+> If you have any issue with the installation please report the issue [here](https://github.com/mobidic/MobiDL2.0/issues/new?assignees=&labels=%3Asnake%3A+Installation+bug&template=installation-issue-with-conda.md&title=Installation+with+conda+%3A+%5Bdetails%5D).
 
 ## Workflows implemented
 
