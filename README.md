@@ -72,9 +72,9 @@ It calls the following subworkflow :
 	- convertBedToIntervals
 	- makeLink
 	- concatenateFiles
-- bgzip (v1.9)
+- bgzip (v1.10)
 	- bgzip (compress, decompress)
-- bcftools (v1.9) :
+- bcftools (v1.10) :
 	- index
 	- merge
 	- norm
@@ -118,7 +118,7 @@ It calls the following subworkflow :
 	- markdup
 	- sort
 	- view
-- samtools (1.9) :
+- samtools (1.10) :
 	- bedcov
 	- index
 	- flagstat
@@ -134,5 +134,5 @@ It calls the following subworkflow :
 	- genomeGenerate
 - Qualimap (v.2.2.2-dev) :
 	- bamqc
-- tabix (1.9):
+- tabix (1.10):
 	- index
