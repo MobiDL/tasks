@@ -928,25 +928,23 @@ task merge {
 	meta {
 		author: "Olivier ardouin"
 		email: "o-ardouin(at)chu-montpellier.fr"
-		version: "0.0.1"
+		version: "0.0.2"
 		date: "2020-09-18"
 	}
 
 	input {
+		String path_exe = "samtools"
 
 		Array[File] inputPaths
-		String out
-		String path_exe = "samtools"
 		Boolean outIndex = false
-		Int threads = 1
 		String? outputPath
 		String? name
-		String? outExt
+		String ext = "cram"
+
+		Int threads = 1
 	}
 
-	String ext = if defined(outExt) then outExt else "cram"
-	## add a way to use sub(basename(out),"(.*)\.(sam|bam|cram)$","$2") and if empty then "cram"
-	String baseName = if defined(name) then name else sub(basename(out),"(.*)\.(sam|bam|cram)$","$1")
+	String baseName = if defined(name) then name else "samtools.merged"
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.~{ext}" else "~{baseName}.~{ext}"
 
 	command <<<
@@ -969,24 +967,16 @@ task merge {
 	}
 
 	parameter_meta {
-		inputPaths: {
-			description: 'Path array of input alignement files to merge',
-			category: 'Required'
-		}
-		out: {
-			description: 'Output file for merged alignement.',
-			category: 'Required'
-		}
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'optional'
 		}
+		inputPaths: {
+			description: 'Path array of input alignement files to merge',
+			category: 'Required'
+		}
 		outIndex: {
 			description: 'Automatically index the outputFile. [default: false]',
-			category: 'optional'
-		}
-		threads: {
-			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
 		outputPath: {
@@ -997,8 +987,12 @@ task merge {
 			description: 'Name to use for output file name [default: basename(out)]',
 			category: 'optional'
 		}
-		outExt: {
+		ext: {
 			description: 'Specify output format (SAM, BAM, CRAM) [default: cram]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
 	}

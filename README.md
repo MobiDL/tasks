@@ -129,6 +129,7 @@ It calls the following subworkflow :
 	- fqidx
 	- markdup
 	- fixmate
+	- merge
 - Star :
 	- genomeGenerate
 - Qualimap (v.2.2.2-dev) :
