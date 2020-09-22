@@ -199,7 +199,148 @@ workflow panelCapture {
 		File vcf = VCHC.vcf
 		File vcfIdx = VCHC.vcfIdx
 		File vcfStats = VCHC.vcfStats
-
 	}
 
+	parameter_meta {
+		fastqR1 : {
+			description: 'Input file with reads 1 (fastq, fastq.gz, fq, fq.gz).',
+			category: 'Required'
+		}
+		fastqR2 : {
+			description: 'Input file with reads 2 (fastq, fastq.gz, fq, fq.gz).',
+			category: 'Required'
+		}
+		fastqSubString : {
+			description: 'The regexp substring to remove from fastq R1 file to create sampleName, and used by bwa-mem [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
+			category: 'Option'
+		}
+		fastqSubStringReplace : {
+			description: 'A string to replace regex catch by fastqSubString to create sampleName [default: ""]',
+			category: 'Option'
+		}
+		name : {
+			description: 'The name used as sampleName',
+			category: 'Option'
+		}
+		outputRep: {
+			description: 'Output path of the repertory where files will be generated. [default: pwd()]',
+			category: 'Option'
+		}
+		intervalBedFile : {
+			description: 'Input bed to convert to intervals (chr:start-end).',
+			category: 'Required'
+		}
+		refFasta: {
+			description: 'Path to the reference file (format: fasta)',
+			category: 'Required'
+		}
+		refFai: {
+			description: 'Path to the reference file index (format: fai)',
+			category: 'Option'
+		}
+		refDict: {
+			description: 'Path to the reference file dict (format: dict)',
+			category: 'Option'
+		}
+		refAmb : {
+			description: 'Path to the reference Amb file (generate by BWA index)',
+			category: 'Option'
+		}
+		refAnn : {
+			description: 'Path to the reference Ann file (generate by BWA index)',
+			category: 'Option'
+		}
+		refBwt : {
+			description: 'Path to the reference Bwt file (generate by BWA index)',
+			category: 'Option'
+		}
+		refPac : {
+			description: 'Path to the reference Pac file (generate by BWA index)',
+			category: 'Option'
+		}
+		refSa : {
+			description: 'Path to the reference Sa file (generate by BWA index)',
+			category: 'Option'
+		}
+		Indels1000G : {
+			description: 'Path to the Indels1000G vcf file (format: vcf.gz)',
+			category: 'Required'
+		}
+		IndelsMills : {
+			description: 'Path to the IndelsMills vcf file (format: vcf.gz)',
+			category: 'Required'
+		}
+		dbsnp : {
+			description: 'Path to the dbsnp vcf file (format: vcf.gz)',
+			category: 'Required'
+		}
+		Indels1000GIdx : {
+			description: 'Path to the Indels1000G vcf index file (format: vcf.gz.tbi)',
+			category: 'Option'
+		}
+		IndelsMillsIdx : {
+			description: 'Path to the IndelsMills vcf index file (format: vcf.gz.tbi)',
+			category: 'Option'
+		}
+		dbsnpIdx : {
+			description: 'Path to the dbsnp vcf index file (format: vcf.gz.tbi)',
+			category: 'Option'
+		}
+		LowQualByDepth: {
+			description : 'Threshold below which QD the variant will be tagged as LowQualByDepth',
+			category: 'Option'
+		}
+		HomopolymerRegion: {
+			description : 'Threshold above which POLYX the variant will be tagged as HomopolymerRegion',
+			category: 'Option'
+		}
+		LowCoverage: {
+			description : 'Threshold below which DP the variant will be tagged as LowCoverage',
+			category: 'Option'
+		}
+		FSStrandBiasSNP: {
+			description : 'Threshold above which FS the variant will be tagged as FSStrandBias for SNPs',
+			category: 'Option'
+		}
+		LowReadPosRankSumSNP: {
+			description : 'Threshold below which ReadPosRankSum the variant will be tagged as LowReadPosRankSum for SNPs',
+			category: 'Option'
+		}
+		SORStrandBiasSNP: {
+			description : 'Threshold above which SOR the variant will be tagged as SORStrandBias for SNPs',
+			category: 'Option'
+		}
+		LowMappingQualitySNP: {
+			description : 'Threshold below which MQ the variant will be tagged as LowMappingQuality for SNPs',
+			category: 'Option'
+		}
+		LowMappingQualityRankSumSNP: {
+			description : 'Threshold below which MQRankSum the variant will be tagged as LowMappingQualityRankSum for SNPs',
+			category: 'Option'
+		}
+		FSStrandBiasIndels: {
+			description : 'Threshold above which FS the variant will be tagged as FSStrandBias for INDELs',
+			category: 'Option'
+		}
+		LowReadPosRankSumIndels: {
+			description : 'Threshold below which ReadPosRankSum the variant will be tagged as LowReadPosRankSum for INDELs',
+			category: 'Option'
+		}
+		SORStrandBiasIndels: {
+			description : 'Threshold above which SOR the variant will be tagged as SORStrandBias for INDELs',
+			category: 'Option'
+		}
+		threads : {
+			description: 'Sets the number of threads to use by default [default: 1]',
+			category: 'System'
+		}
+		maxThreads : {
+			description: 'Sets the number of threads to use for high computing jobs [default: threads]',
+			category: 'System'
+		}
+		minThreads : {
+			description: 'Sets the number of threads to use for low computing jobs [default: threads]',
+			category: 'System'
+		}
+	}
 }
