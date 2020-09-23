@@ -65,7 +65,7 @@ task genomeGenerate {
 		 File SA = outputPath + "SA"
 		 File SAindex = outputPath + "SAindex"
 		 File sjdbInfo = outputPath + "sjdbInfo.txt"
-		 File sjdbList = outputPath + "sjdbList.fromGTF.out.tab"
+		 File sjdbListGTF = outputPath + "sjdbList.fromGTF.out.tab"
 		 File sjdbList = outputPath + "sjdbList.out.tab"
 		 File transcriptInfo = outputPath + "transcriptInfo.tab"
 	}
