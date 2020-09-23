@@ -4,6 +4,7 @@ channels:
   - bioconda
   - defaults
 dependencies:
+  - cromwell==53.1
   - samtools==1.10
   - bedtools==2.29.2
   - bcftools==1.10.2
