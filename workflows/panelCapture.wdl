@@ -170,7 +170,7 @@ workflow panelCapture {
 			refDict = refDictUsed,
 			dbsnp = dbsnp,
 			dbsnpIdx = dbsnpIdxUsed,
-			outputRep =  outputPath + "VariantCallingHC/",
+			outputPath =  outputPath + "VariantCallingHC/",
 			name = sampleName,
 			LowQualByDepth = LowQualByDepth,
 			HomopolymerRegion = HomopolymerRegion,
