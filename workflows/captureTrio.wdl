@@ -26,7 +26,7 @@ workflow captureTrio {
   meta {
     author: "Mobidic"
     email: "o-ardouin<arobase>chu-montpellier.fr"
-    version: "beta:0.0.1"
+    version: "0.0.1"
   }
 
   input {
