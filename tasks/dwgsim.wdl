@@ -76,7 +76,7 @@ task simulateReadsIllumina {
 			-F ~{freqMut} \
 			-R ~{rateIndels} \
 			-X ~{probExt} \
-			-I ~{minSizeIndels} \
+			-I ~{minSizeIndels} \
 			-y ~{probRandomDNA} \
 			-n ~{maxN} \
 			~{default="" "-x " + target} \
