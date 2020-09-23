@@ -20,7 +20,7 @@ task simulateReadsIllumina {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
+		version: "0.0.2"
 		date: "2020-08-05"
 	}
 
@@ -37,11 +37,18 @@ task simulateReadsIllumina {
 		Boolean useInnerDistance = false
 
 		Int insertSize = 250
+		Int meanCov = 100
 		Int stdInsert = 10
+
 		Float rateMut = 0.0010
 		Float freqMut = 0.5000
+
 		Float rateIndels = 0.1000
 		Float probExt = 0.3000
+		Int minSizeIndels = 1
+
+		Float probRandomDNA = 0.05
+		Int maxN = 0
 
 		File? target
 		String? readPrefix
@@ -61,6 +68,7 @@ task simulateReadsIllumina {
 		~{path_exe} \
 			-1 ~{sizeR1} \
 			-2 ~{sizeR2} \
+			-C ~{meanCov} \
 			~{true="-i" false="" useInnerDistance} \
 			-d ~{insertSize} \
 			-s ~{stdInsert} \
@@ -68,6 +76,9 @@ task simulateReadsIllumina {
 			-F ~{freqMut} \
 			-R ~{rateIndels} \
 			-X ~{probExt} \
+			-I ~{minSizeIndels} \
+			-y ~{probRandomDNA} \
+			-n ~{maxN} \
 			~{default="" "-x " + target} \
 			~{default="" "-P " + readPrefix} \
 			~{in} \
@@ -107,6 +118,10 @@ task simulateReadsIllumina {
 			description: 'Length of the second read [default: sizeR1]',
 			category: 'optional'
 		}
+		meanCov: {
+			description: 'mean coverage across available positions [default: 100]',
+			category: 'optional'
+		}
 		useInnerDistance: {
 			description: 'Use the inner distance instead of the outer distance for pairs [default: false]',
 			category: 'optional'
@@ -133,6 +148,18 @@ task simulateReadsIllumina {
 		}
 		probExt: {
 			description: 'Probability an indel is extended [default: 0.3000]',
+			category: 'optional'
+		}
+		minSizeIndels: {
+			description: 'The minimum length indel [default: 1]',
+			category: 'optional'
+		}
+		probRandomDNA: {
+			description: 'Probability of a random DNA read [default: 0.05]',
+			category: 'optional'
+		}
+		maxN: {
+			description: 'Maximum number of Ns allowed in a given read [default: 0]',
 			category: 'optional'
 		}
 		target: {
