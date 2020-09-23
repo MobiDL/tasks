@@ -151,7 +151,7 @@ workflow panelCapture {
 			IndelsMillsIdx = IndelsMillsIdxUsed,
 			dbsnpIdx = dbsnpIdxUsed,
 
-			outputRep = outputPath + "Alignement/",
+			outputPath = outputPath + "Alignement/",
 			subString = fastqSubString,
 			name = sampleName,
 
