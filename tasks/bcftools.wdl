@@ -1,7 +1,7 @@
 version 1.0
 
 # MobiDL 2.0 - MobiDL 2 is a collection of tools wrapped in WDL to be used in any WDL pipelines.
-# Copyright (C) 2020  MoBiDiC
+# Copyright (C) 2020 MoBiDiC
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -10,11 +10,11 @@ version 1.0
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 task index {
 	meta {
@@ -32,9 +32,9 @@ task index {
 
 		Boolean tabix = false
 		Boolean force = false
-		Int minShift  = 14
+		Int minShift = 14
 
-		Int threads   = 1
+		Int threads = 1
 	}
 
 	String ext = if tabix then ".tbi" else ".csi"
@@ -64,10 +64,10 @@ task index {
 	output {
 		File vcf = "~{outputRaw}"
 		File index = "~{outputIndex}"
-  	}
+	}
 
-    parameter_meta {
-        path_exe: {
+	parameter_meta {
+		path_exe: {
 			description: "Path used as executable [default: 'bcftools']",
 			category: "optional"
 		}
@@ -95,14 +95,14 @@ task index {
 			description: "Sets the number of threads [default: 1]",
 			category: "optional"
 		}
-    }
+	}
 }
 
 # TODO:
 # 	- simplify options :
 #		- remove opt : file-list (in worklow read file to convert into file list or reverse)
 #		- correction for options -i default value
-#       - need to test gvcf option more accuratly
+#		- need to test gvcf option more accuratly
 task merge {
 	meta {
 		author: "Charles VAN GOETHEM"
@@ -177,10 +177,10 @@ task merge {
 
 	output {
 		File outputMerge = "~{outputFile}"
-  	}
+	}
 
-    parameter_meta {
-        path_exe: {
+	parameter_meta {
+		path_exe: {
 			description: 'Path used as executable [default: "bcftools"]',
 			category: "optional"
 		}
@@ -213,7 +213,7 @@ task merge {
 			category: "optional"
 		}
 		filterLogic: {
-			description: 'Remove filters if some input is PASS ("x"), or apply all filters ("+")  [default: "+"]',
+			description: 'Remove filters if some input is PASS ("x"), or apply all filters ("+") [default: "+"]',
 			category: "optional"
 		}
 		gvcf: {
@@ -256,7 +256,7 @@ task merge {
 			description: "Sets the number of threads [default: 1]",
 			category: "optional"
 		}
-    }
+	}
 }
 
 task norm {
@@ -341,10 +341,10 @@ task norm {
 
 	output {
 		File outputFile = outputFile
-  	}
+	}
 
-    parameter_meta {
-        path_exe: {
+	parameter_meta {
+		path_exe: {
 			description: "Path used as executable [default: 'bcftools']",
 			category: "optional"
 		}
@@ -531,10 +531,10 @@ task stats {
 
 	output {
 		File outputFile = outputFile
-  	}
+	}
 
-    parameter_meta {
-        path_exe: {
+	parameter_meta {
+		path_exe: {
 			description: "Path used as executable [default: 'bcftools']",
 			category: "optional"
 		}

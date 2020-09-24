@@ -1,7 +1,7 @@
 version 1.0
 
 # MobiDL 2.0 - MobiDL 2 is a collection of tools wrapped in WDL to be used in any WDL pipelines.
-# Copyright (C) 2020  MoBiDiC
+# Copyright (C) 2020 MoBiDiC
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -10,11 +10,11 @@ version 1.0
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 task reorderSam {
 	meta {
@@ -120,11 +120,11 @@ task reorderSam {
 			category: 'Required'
 		}
 		allowIncompleteLengthDiscordance: {
-			description: 'If true, then permits mapping from a read contig to a new reference contig with the same name but a different length.  Highly dangerous, only use if you know what you are doing. [Default: false]',
+			description: 'If true, then permits mapping from a read contig to a new reference contig with the same name but a different length. Highly dangerous, only use if you know what you are doing. [Default: false]',
 			category: 'optional'
 		}
 		allowIncompleteDictDiscordance: {
-			description: 'If true, allows only a partial overlap of the original contigs with the new reference sequence contigs.  By default, this tool requires a corresponding contig in the new reference for each read contig. [Default: false]',
+			description: 'If true, allows only a partial overlap of the original contigs with the new reference sequence contigs. By default, this tool requires a corresponding contig in the new reference for each read contig. [Default: false]',
 			category: 'optional'
 		}
 		compressionLevel: {
@@ -168,7 +168,7 @@ task reorderSam {
 			category: 'Common options'
 		}
 		validationStringency: {
-			description: ' Validation stringency for all SAM files read by this program.  Setting stringency to SILENT can improve performance when processing a BAM file in which variable-length data (read, qualities, tags) do not otherwise need to be decoded. [Default: "STRIC"]',
+			description: ' Validation stringency for all SAM files read by this program. Setting stringency to SILENT can improve performance when processing a BAM file in which variable-length data (read, qualities, tags) do not otherwise need to be decoded. [Default: "STRIC"]',
 			category: 'Common options'
 		}
 		verbosity: {
@@ -376,7 +376,7 @@ task depthOfCoverage {
 			category: 'Common options'
 		}
 		validationStringency: {
-			description: ' Validation stringency for all SAM files read by this program.  Setting stringency to SILENT can improve performance when processing a BAM file in which variable-length data (read, qualities, tags) do not otherwise need to be decoded. [Default: "STRIC"]',
+			description: ' Validation stringency for all SAM files read by this program. Setting stringency to SILENT can improve performance when processing a BAM file in which variable-length data (read, qualities, tags) do not otherwise need to be decoded. [Default: "STRIC"]',
 			category: 'Common options'
 		}
 		verbosity: {
@@ -1493,8 +1493,8 @@ task haplotypeCaller {
 
 		## algo
 		### heterozygosity
-		# Float heterozygosity  = 0.001
-		# Float heterozygosityStd  = 0.01
+		# Float heterozygosity = 0.001
+		# Float heterozygosityStd = 0.01
 		# Float heterozygosityIndel = 0.000125
 		### HMM
 		# Int nativePairHMM = 4
@@ -1754,7 +1754,7 @@ task splitVcfs {
 		~{path_exe} SplitVcfs \
 			~{true="--STRICT" false="" strict} \
 			~{default="" "--SEQUENCE_DICTIONARY " + refDict} \
-			--INPUT ~{in}  \
+			--INPUT ~{in} \
 			--INDEL_OUTPUT ~{outputFileBase + ".indels"}~{"." + extOut} \
 			--SNP_OUTPUT ~{outputFileBase + ".snps"}~{"." + extOut}
 
@@ -1801,7 +1801,7 @@ task splitVcfs {
 			category: 'optional'
 		}
 		strict: {
-			description: 'If true an exception will be thrown if an event type other than SNP or indel is encountered  [default: true]',
+			description: 'If true an exception will be thrown if an event type other than SNP or indel is encountered [default: true]',
 			category: 'optional'
 		}
 		threads: {
@@ -1885,11 +1885,11 @@ task variantFiltration {
 			~{true="--filter-expression \"SOR > " false="" BoolSORStrandBias}~{SORStrandBias}~{true="\" --filter-name \"SORStrandBias\"" false="" BoolSORStrandBias} \
 			~{true="--filter-expression \"POLYX > " false="" BoolHomopolymerRegion}~{HomopolymerRegion}~{true="\" --filter-name \"HomopolymerRegion\"" false="" BoolHomopolymerRegion} \
 			~{true="--filter-expression \"DP < " false="" BoolLowCoverage}~{LowCoverage}~{true="\" --filter-name \"LowCoverage\"" false="" BoolLowCoverage} \
-			~{true="--filter-expression \"" false="" filters}~{default="" sep="\" --filter-expression \""  filtersExpression}~{true="\"" false="" filters} \
-			~{true="--filter-name " false="" filters}~{default="" sep=" --filter-name "  filtersName} \
+			~{true="--filter-expression \"" false="" filters}~{default="" sep="\" --filter-expression \"" filtersExpression}~{true="\"" false="" filters} \
+			~{true="--filter-name " false="" filters}~{default="" sep=" --filter-name " filtersName} \
 			~{true="--create-output-variant-index" false="" createVCFIdx} \
 			~{true="--create-output-variant-md5" false="" createVCFMD5} \
-			--variant ~{in}  \
+			--variant ~{in} \
 			--output ~{outputFile}
 	>>>
 

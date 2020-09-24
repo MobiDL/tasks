@@ -1,7 +1,7 @@
 version 1.0
 
 # MobiDL 2.0 - MobiDL 2 is a collection of tools wrapped in WDL to be used in any WDL pipelines.
-# Copyright (C) 2020  MoBiDiC
+# Copyright (C) 2020 MoBiDiC
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -10,11 +10,11 @@ version 1.0
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 # Options optimizations
 #	- loj, wao: prefer option -v to have complement
@@ -79,7 +79,7 @@ task intersect {
 	}
 
 	parameter_meta {
-        path_exe: {
+		path_exe: {
 			description: "Path used as executable [default: 'bedtools']",
 			category: "Optional"
 		}
@@ -95,7 +95,7 @@ task intersect {
 			description: 'BAM/BED/GFF/VCF files "B" (One or more).',
 			category: "Required"
 		}
-        wa: {
+		wa: {
 			description: 'Write the original entry in A for each overlap.',
 			category: "Optional"
 		}
@@ -103,7 +103,7 @@ task intersect {
 			description: 'Write the original entry in B for each overlap.',
 			category: "Optional"
 		}
-        v: {
+		v: {
 			description: 'Only report those entries in A that have no overlap in B.',
 			category: "Optional"
 		}
@@ -111,7 +111,7 @@ task intersect {
 			description: 'Minimum overlap required as a fraction of A (e.g 0.1). (default: null = 1bp)',
 			category: "Optional"
 		}
-        F: {
+		F: {
 			description: 'Minimum overlap required as a fraction of B(e.g 0.9). (default: null = 1bp)',
 			category: "Optional"
 		}
@@ -119,7 +119,7 @@ task intersect {
 			description: 'Force "strandedness" (true) or "different strandness" (false). [default: null]',
 			category: "Optional"
 		}
-        reciprocal: {
+		reciprocal: {
 			description: 'true : F = f ; false : fileter OR (f OR F is OK) ; default: need to respect f AND F ',
 			category: "Optional"
 		}
@@ -164,7 +164,7 @@ task sort {
 			~{default="" true="-chrThenSizeA" false="-chrThenSizeD" sortByChrSizeAsc} \
 			~{default="" true="-chrThenScoreA" false="-chrThenScoreD" sortByChrScoreAsc} \
 			~{"-faidx " + idx} \
-			-i ~{in}  > ~{outputFile}
+			-i ~{in} > ~{outputFile}
 
 	>>>
 
@@ -173,7 +173,7 @@ task sort {
 	}
 
 	parameter_meta {
-        path_exe: {
+		path_exe: {
 			description: "Path used as executable [default: 'bedtools']",
 			category: "Optional"
 		}
@@ -267,7 +267,7 @@ task coverage {
 	}
 
 	parameter_meta {
-        path_exe: {
+		path_exe: {
 			description: "Path used as executable [default: 'bedtools']",
 			category: "Optional"
 		}
@@ -287,7 +287,7 @@ task coverage {
 			description: 'Minimum overlap required as a fraction of A (e.g 0.1). (default: null = 1bp)',
 			category: "Optional"
 		}
-        F: {
+		F: {
 			description: 'Minimum overlap required as a fraction of B(e.g 0.9). (default: null = 1bp)',
 			category: "Optional"
 		}
@@ -295,7 +295,7 @@ task coverage {
 			description: 'Force "strandedness" (true) or "different strandness" (false). [default: null]',
 			category: "Optional"
 		}
-        reciprocal: {
+		reciprocal: {
 			description: 'true : F = f ; false : fileter OR (f OR F is OK) ; default: need to respect f AND F ',
 			category: "Optional"
 		}

@@ -1,7 +1,7 @@
 version 1.0
 
 # MobiDL 2.0 - MobiDL 2 is a collection of tools wrapped in WDL to be used in any WDL pipelines.
-# Copyright (C) 2020  MoBiDiC
+# Copyright (C) 2020 MoBiDiC
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -10,11 +10,11 @@ version 1.0
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 task findFiles {
 	meta {
@@ -66,44 +66,44 @@ task findFiles {
 		Array[File] files = read_lines("files.txt")
 	}
 
-    parameter_meta {
-        path: {
+	parameter_meta {
+		path: {
 			description: "Path where find will work on.",
 			category: "required"
 		}
-        regexpName: {
+		regexpName: {
 			description: "Base of file name (the path with the leading directories removed) matches shell pattern pattern.",
 			category: "tests"
 		}
-        regexpPath: {
-			description: "File name matches shell pattern pattern.  The metacharacters do not treat `/' or `.' specially.",
+		regexpPath: {
+			description: "File name matches shell pattern pattern. The metacharacters do not treat `/' or `.' specially.",
 			category: "tests"
 		}
-        maxDepth: {
+		maxDepth: {
 			description: "Descend at most levels (a non-negative integer) levels of directories below the starting-points.",
 			category: "global"
 		}
-        minDepth: {
+		minDepth: {
 			description: "Do not apply any tests or actions at levels less than levels (a non-negative integer).",
 			category: "global"
 		}
-        uid: {
+		uid: {
 			description: "File's numeric user ID is n.",
 			category: "tests"
 		}
-        gid: {
+		gid: {
 			description: "File's numeric group ID is n.",
 			category: "tests"
 		}
-        readable: {
-			description: "Matches  files  which  are  readable.",
+		readable: {
+			description: "Matches files which are readable.",
 			category: "global"
 		}
-        writable: {
-			description: "Matches  files  which  are  writable.",
+		writable: {
+			description: "Matches files which are writable.",
 			category: "tests"
 		}
-        executable: {
+		executable: {
 			description: "Matches files which are executable and directories which are searchable (in a file name resolution sense).",
 			category: "tests"
 		}
