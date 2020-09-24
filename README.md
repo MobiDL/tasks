@@ -88,6 +88,8 @@ It calls the following subworkflow :
 	- index
 - Crumble (0.8.3) :
 	- crumble
+- Cutadapt (2.10) :
+	- adaptersTrimming
 - dwgsim (0.1.11) :
 	- simulateReadsIllumina
 - FastQC (v0.11.9) :

@@ -36,6 +36,8 @@ All notable changes to this project will be documented in this file.
 	- index
 - crumble :
 	- crumble
+- cutadapt :
+	- adaptersTrimming
 - dwgsim :
 	- simulateReadsIllumina
 - FastQC :
