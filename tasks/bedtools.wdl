@@ -51,7 +51,17 @@ task intersect {
 
 		Boolean? reciprocal
 		Boolean? strandness
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	Boolean filenames = wb
 
@@ -78,14 +88,19 @@ task intersect {
 		File out = "~{outputFile}"
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: "Path used as executable [default: 'bedtools']",
-			category: "Optional"
+			category: 'optional'
 		}
 		outputPath: {
 			description: 'Path where was generated output. [default: pwd(script)]',
-			category: "Optional"
+			category: 'optional'
 		}
 		bedA: {
 			description: 'BAM/BED/GFF/VCF file "A".',
@@ -97,31 +112,43 @@ task intersect {
 		}
 		wa: {
 			description: 'Write the original entry in A for each overlap.',
-			category: "Optional"
+			category: 'optional'
 		}
 		wb: {
 			description: 'Write the original entry in B for each overlap.',
-			category: "Optional"
+			category: 'optional'
 		}
 		v: {
 			description: 'Only report those entries in A that have no overlap in B.',
-			category: "Optional"
+			category: 'optional'
 		}
 		f: {
 			description: 'Minimum overlap required as a fraction of A (e.g 0.1). (default: null = 1bp)',
-			category: "Optional"
+			category: 'optional'
 		}
 		F: {
 			description: 'Minimum overlap required as a fraction of B(e.g 0.9). (default: null = 1bp)',
-			category: "Optional"
+			category: 'optional'
 		}
 		strandness: {
 			description: 'Force "strandedness" (true) or "different strandness" (false). [default: null]',
-			category: "Optional"
+			category: 'optional'
 		}
 		reciprocal: {
 			description: 'true : F = f ; false : fileter OR (f OR F is OK) ; default: need to respect f AND F ',
-			category: "Optional"
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
 		}
 	}
 }
@@ -149,7 +176,17 @@ task sort {
 		Boolean? sortByChrScoreAsc
 
 		File? idx
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{name}.sort~{ext}" else "~{name}.~{suffix}~{ext}"
 
@@ -172,14 +209,19 @@ task sort {
 		File out = "~{outputFile}"
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: "Path used as executable [default: 'bedtools']",
-			category: "Optional"
+			category: 'optional'
 		}
 		outputPath: {
 			description: 'Path where was generated output. [default: pwd(script)]',
-			category: "Optional"
+			category: 'optional'
 		}
 		in: {
 			description: 'BED/GFF/VCF file.',
@@ -213,6 +255,18 @@ task sort {
 			description: 'sort according to chromosome in file; default: null',
 			category: 'optional'
 		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -243,7 +297,17 @@ task coverage {
 
 		Boolean? reciprocal
 		Boolean? strandness
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{name}" else "~{name}"
 
@@ -266,14 +330,19 @@ task coverage {
 		File out = "~{outputFile}"
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: "Path used as executable [default: 'bedtools']",
-			category: "Optional"
+			category: 'optional'
 		}
 		outputPath: {
 			description: 'Path where was generated output. [default: pwd(script)]',
-			category: "Optional"
+			category: 'optional'
 		}
 		bedA: {
 			description: 'BAM/BED/GFF/VCF file "A".',
@@ -285,19 +354,31 @@ task coverage {
 		}
 		f: {
 			description: 'Minimum overlap required as a fraction of A (e.g 0.1). (default: null = 1bp)',
-			category: "Optional"
+			category: 'optional'
 		}
 		F: {
 			description: 'Minimum overlap required as a fraction of B(e.g 0.9). (default: null = 1bp)',
-			category: "Optional"
+			category: 'optional'
 		}
 		strandness: {
 			description: 'Force "strandedness" (true) or "different strandness" (false). [default: null]',
-			category: "Optional"
+			category: 'optional'
 		}
 		reciprocal: {
 			description: 'true : F = f ; false : fileter OR (f OR F is OK) ; default: need to respect f AND F ',
-			category: "Optional"
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
 		}
 	}
 }

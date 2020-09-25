@@ -51,7 +51,17 @@ task reorderSam {
 		String validationStringency = "STRICT"
 		String verbosity = "INFO"
 		Boolean showHidden = false
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String GA4GHClientSecretsOpt = if defined(GA4GHClientSecrets) then "--GA4GH_CLIENT_SECRETS ~{GA4GHClientSecrets} " else ""
 	String referenceSequenceOpt = if defined(referenceSequence) then "--REFERENCE_SEQUENCE ~{referenceSequence} " else ""
@@ -90,7 +100,12 @@ task reorderSam {
 		File outputFile = "~{outputFile}"
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -179,6 +194,18 @@ task reorderSam {
 			description: 'Display hidden arguments. [Default: false]',
 			category: 'Common options'
 		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -229,7 +256,17 @@ task depthOfCoverage {
 		Boolean showHidden = false
 
 		Array[Int] summaryCoverageThreshold = [5]
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	Array[String] summaryCoverageThresholdOpt = prefix("--summary-coverage-threshold ", summaryCoverageThreshold)
 
@@ -274,7 +311,12 @@ task depthOfCoverage {
 		File outputFile = "~{outputFile}"
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -387,6 +429,18 @@ task depthOfCoverage {
 			description: 'Display hidden arguments. [Default: false]',
 			category: 'Common options'
 		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -418,7 +472,15 @@ task splitIntervals {
 		Boolean intersectionRule = false
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
 	String outputRep = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
@@ -445,7 +507,12 @@ task splitIntervals {
 		Array[File] splittedIntervals = glob("~{outputRep}/*-scattered.interval_list")
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -502,6 +569,18 @@ task splitIntervals {
 			description: 'Set merging approach to use for combining interval inputs to INTERSECTION [default: false => UNION]',
 			category: 'optional'
 		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -542,7 +621,15 @@ task baseRecalibrator {
 		Boolean intersectionRule = false
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseNameIntervals = if defined(intervals) then intervals else ""
 	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","\.$1") else ""
@@ -579,7 +666,12 @@ task baseRecalibrator {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -668,6 +760,14 @@ task baseRecalibrator {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -689,7 +789,15 @@ task gatherBQSRReports {
 		String ext = ".bqsr.report"
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String firstFile = basename(in[0])
 	String baseName = if defined(name) then name else sub(basename(firstFile),subString,"")
@@ -711,7 +819,12 @@ task gatherBQSRReports {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -738,6 +851,14 @@ task gatherBQSRReports {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'optional'
 		}
 	}
@@ -779,7 +900,15 @@ task applyBQSR {
 		Boolean bamMD5 = true
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseNameIntervals = if defined(intervals) then intervals else ""
 	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","\.$1") else ""
@@ -818,7 +947,12 @@ task applyBQSR {
 		File outputBai = outputBaiFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -903,6 +1037,14 @@ task applyBQSR {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -931,7 +1073,15 @@ task gatherBamFiles {
 		Int maxRecordsInRam = 500000
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String firstFile = basename(in[0])
 	String baseName = if defined(name) then name else sub(basename(firstFile),subString,"")
@@ -961,7 +1111,12 @@ task gatherBamFiles {
 		File? outputMD5 = outputBamFile + ".md5"
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -1010,6 +1165,14 @@ task gatherBamFiles {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -1044,7 +1207,15 @@ task leftAlignIndels {
 		Boolean bamMD5 = true
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseNameIntervals = if defined(intervals) then intervals else ""
 	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","\.$1") else ""
@@ -1079,7 +1250,12 @@ task leftAlignIndels {
 		File outputBai = outputBaiFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -1140,6 +1316,14 @@ task leftAlignIndels {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -1173,7 +1357,15 @@ task collectMultipleMetrics {
 		Boolean qualityScoreDistribution = true
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")
 	String outputBase = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}" else "~{baseName}~{suffix}"
@@ -1220,7 +1412,12 @@ task collectMultipleMetrics {
 		])
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -1277,6 +1474,14 @@ task collectMultipleMetrics {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -1301,7 +1506,15 @@ task bedToIntervalList {
 		Boolean unique = false
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(bed)$","$1")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
@@ -1325,7 +1538,12 @@ task bedToIntervalList {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -1362,6 +1580,14 @@ task bedToIntervalList {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -1384,7 +1610,15 @@ task intervalListToBed {
 		Int score = 500
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else sub(basename(in),".interval_list","")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.bed" else "~{baseName}.bed"
@@ -1407,7 +1641,12 @@ task intervalListToBed {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -1434,6 +1673,14 @@ task intervalListToBed {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'optional'
 		}
 	}
@@ -1511,7 +1758,15 @@ task haplotypeCaller {
 		Boolean createVCFMD5 = true
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseNameIntervals = if defined(intervals) then intervals else ""
 	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","\.$1") else ""
@@ -1548,7 +1803,12 @@ task haplotypeCaller {
 		File? outputFileMD5 = outputFile + ".md5"
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -1633,6 +1893,14 @@ task haplotypeCaller {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -1656,7 +1924,15 @@ task gatherVcfFiles {
 		Boolean reorder = true
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String firstFile = basename(in[0])
 	String baseName = if defined(name) then name else sub(basename(firstFile),subString,"")
@@ -1680,7 +1956,12 @@ task gatherVcfFiles {
 		File outputFileIdx = outputFile + ".idx"
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -1714,6 +1995,14 @@ task gatherVcfFiles {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -1739,7 +2028,15 @@ task splitVcfs {
 		Boolean strict = true
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String extOut = if defined(ext) then ext else sub(basename(in),"(.*\.)(vcf|bcf)$","$2")
 	String baseName = if defined(name) then name else sub(basename(in),subString,"")
@@ -1767,7 +2064,12 @@ task splitVcfs {
 		File outputFileIndelIdx = outputFileBase + ".indels." + extOut + ".idx"
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -1806,6 +2108,14 @@ task splitVcfs {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'optional'
 		}
 	}
@@ -1852,7 +2162,15 @@ task variantFiltration {
 		Boolean createVCFMD5 = true
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	Boolean BoolLowQualByDepth = defined(LowQualByDepth)
 	Boolean BoolFSStrandBias = defined(FSStrandBias)
@@ -1897,7 +2215,12 @@ task variantFiltration {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -1990,6 +2313,14 @@ task variantFiltration {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -2015,7 +2346,15 @@ task mergeVcfs {
 		File? refDict
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String firstFile = basename(in[0])
 
@@ -2040,7 +2379,12 @@ task mergeVcfs {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -2081,6 +2425,14 @@ task mergeVcfs {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -2105,7 +2457,15 @@ task sortVcf {
 		File? refDict
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String extOut = if defined(ext) then ext else sub(basename(in),"(.*)(\.vcf|\.bcf)$","$2")
 	String baseName = if defined(name) then name else sub(basename(in),subString,"")
@@ -2128,7 +2488,12 @@ task sortVcf {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'optional'
@@ -2163,6 +2528,14 @@ task sortVcf {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'optional'
 		}
 	}

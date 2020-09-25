@@ -44,11 +44,15 @@ task bamqc {
 		Int nr = 1000
 		Int nWindows = 400
 		Int threads = 1
+		Int memoryByThreads = 768
 		String? memory
 	}
 
-	Int memTemp = 768*threads
-	String totalMem = if defined(memory) then memory else "~{memTemp}M"
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else sub(basename(in),"(\.sam|\.bam|\.cram)","")
 	String outputRep = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
@@ -87,7 +91,12 @@ task bamqc {
 		])
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "qualimap"]',
 			category: 'optional'
@@ -146,6 +155,14 @@ task bamqc {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'optional'
 		}
 	}

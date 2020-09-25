@@ -43,11 +43,11 @@ task sort {
 		String? memory
 	}
 
-	Int memTemp = memoryByThreads*threads
-	String totalMem = if defined(memory) then memory else "~{memTemp}M"
-	Int mem = sub(totalMem,"([0-9]+)(M|G)", "$1")
-	Boolean giga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
-	Int memByThreads = if giga then floor((mem*1024)/threads) else floor((mem)/threads)
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else sub(basename(in),"(\.sam|\.bam|\.cram)","")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.~{format}" else "~{baseName}~{suffix}.~{format}"
@@ -65,7 +65,7 @@ task sort {
 			--output-fmt ~{format} \
 			~{default="" "--reference " + refFasta} \
 			--threads ~{threads - 1} \
-			-m ~{memByThreads}M \
+			-m ~{memoryByThreadsMb}M \
 			-o ~{outputFile} \
 			~{in}
 
@@ -75,7 +75,12 @@ task sort {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'optional'
@@ -154,7 +159,15 @@ task dict {
 		String? uri
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else sub(basename(in),subString,"")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
@@ -179,7 +192,12 @@ task dict {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'optional'
@@ -220,6 +238,14 @@ task dict {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -240,8 +266,17 @@ task index {
 
 		Int? minIntervalSize
 		Boolean csi = false
+
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String extFile = sub(basename(in),"(.*)\.(bam|cram)$","$2")
 	Boolean csiOpt = if (defined(minIntervalSize) || csi) then true else false
@@ -269,7 +304,12 @@ task index {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'optional'
@@ -296,6 +336,14 @@ task index {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'optional'
 		}
 	}
@@ -331,7 +379,15 @@ task view {
 		File? refFasta
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String ext = if cram then "cram" else "bam"
 	String baseName = if defined(name) then name else sub(basename(in),"(\.bam|\.cram|\.sam)","")
@@ -366,7 +422,12 @@ task view {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'optional'
@@ -431,6 +492,14 @@ task view {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -450,7 +519,15 @@ task faidx {
 		String? name
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else basename(in)
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.fai" else "~{baseName}.fai"
@@ -470,7 +547,12 @@ task faidx {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'optional'
@@ -489,6 +571,14 @@ task faidx {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'optional'
 		}
 	}
@@ -510,7 +600,15 @@ task fqidx {
 		String? name
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else basename(in)
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.fai" else "~{baseName}.fai"
@@ -530,7 +628,12 @@ task fqidx {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'optional'
@@ -549,6 +652,14 @@ task fqidx {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'optional'
 		}
 	}
@@ -571,7 +682,15 @@ task flagstat {
 		String ext = ".flagstats"
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String sampleName = if defined(sample) then sample else sub(basename(in),"(\.bam|\.sam|\.cram)","")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{sampleName}~{ext}" else "~{sampleName}~{ext}"
@@ -593,7 +712,12 @@ task flagstat {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'optional'
@@ -616,6 +740,14 @@ task flagstat {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'optional'
 		}
 	}
@@ -643,7 +775,15 @@ task bedcov {
 		Boolean includeDel = true
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else sub(basename(inBam),"\.(sam|bam|cram)","")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.bed" else "~{baseName}~{suffix}.bed"
@@ -666,7 +806,12 @@ task bedcov {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'optional'
@@ -707,6 +852,14 @@ task bedcov {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -735,7 +888,15 @@ task markdup {
 		Boolean markPrimDup = false
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String ext = if defined(outExt) then outExt else sub(basename(in),"(.*)\.(sam|bam|cram)$","$2")
 	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")
@@ -764,7 +925,12 @@ task markdup {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'optional'
@@ -817,6 +983,14 @@ task markdup {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -844,7 +1018,15 @@ task fixmate {
 		Boolean addMateScoreTag = false
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String ext = if defined(outExt) then outExt else sub(basename(in),"(.*)\.(sam|bam|cram)$","$2")
 	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")
@@ -872,7 +1054,12 @@ task fixmate {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'optional'
@@ -921,6 +1108,14 @@ task fixmate {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -942,7 +1137,15 @@ task merge {
 		String ext = "cram"
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else "samtools.merged"
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.~{ext}" else "~{baseName}.~{ext}"
@@ -966,7 +1169,12 @@ task merge {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'optional'
@@ -993,6 +1201,14 @@ task merge {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'optional'
 		}
 	}

@@ -32,8 +32,17 @@ task bgzip {
 		Boolean force = false
 		Boolean index = false
 		Boolean keepFile = false
+
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String outputFile = if ! decompress then "~{outputPath}/" + basename(in) + ".gz" else "~{outputPath}/" + basename(in,".gz")
 	String outputIndex = if (index && ! decompress) then "~{outputFile}.gzi" else "~{outputFile}"
@@ -56,7 +65,12 @@ task bgzip {
 		File index = "~{outputIndex}"
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		in: {
 			description: "File to compres/decompress.",
 			category: "required"
@@ -67,19 +81,27 @@ task bgzip {
 		}
 		decompress: {
 			description: "Decompress file (incompatible with index) [default: false]",
-			category: "optional"
+			category: 'optional'
 		}
 		force: {
 			description: "Overwrite files without asking [default: false]",
-			category: "optional"
+			category: 'optional'
 		}
 		index: {
 			description: "Compress and create BGZF index [default: false]",
-			category: "optional"
+			category: 'optional'
 		}
 		threads: {
-			description: "Sets the number of threads [default: 1]",
-			category: "optional"
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
 		}
 	}
 }

@@ -35,7 +35,15 @@ task index {
 		Int minShift = 14
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String ext = if tabix then ".tbi" else ".csi"
 	Boolean outputDef = defined(outputPath)
@@ -66,10 +74,15 @@ task index {
 		File index = "~{outputIndex}"
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: "Path used as executable [default: 'bcftools']",
-			category: "optional"
+			category: 'optional'
 		}
 		in: {
 			description: "VCF/BCF file to index (extension: '.vcf.gz|.bcf')",
@@ -77,23 +90,31 @@ task index {
 		}
 		outputPath: {
 			description: "Path where was generated output [default: VCF path]",
-			category: "optional"
+			category: 'optional'
 		}
 		tabix: {
 			description: "Generate TBI-format index for VCF files [default: CSI-format]",
-			category: "optional"
+			category: 'optional'
 		}
 		force: {
 			description: "Overwrite index if it already exists [default: false]",
-			category: "optional"
+			category: 'optional'
 		}
 		minShift: {
 			description: "Set minimal interval size for CSI indices to 2^INT (skipped if tabix used) [default: 14]",
-			category: "optional"
+			category: 'optional'
 		}
 		threads: {
-			description: "Sets the number of threads [default: 1]",
-			category: "optional"
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
 		}
 	}
 }
@@ -134,8 +155,17 @@ task merge {
 		String outputType = "v"
 		String? regions
 		File? regionsFile
+
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String useHeaderOpt = if defined(useHeader) then "--use-header ~{useHeader} " else ""
 	String applyFilterOpt = if defined(applyFilter) then "--apply-filter '~{sep=',' applyFilter}' " else ""
@@ -179,10 +209,15 @@ task merge {
 		File outputMerge = "~{outputFile}"
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "bcftools"]',
-			category: "optional"
+			category: 'optional'
 		}
 		in: {
 			description: 'Array of files to merge together (extension: ".vcf.gz|.bcf")',
@@ -190,71 +225,79 @@ task merge {
 		}
 		outputPath: {
 			description: 'Path where was generated output [default: VCF path]',
-			category: "optional"
+			category: 'optional'
 		}
 		forceSamples: {
 			description: 'Resolve duplicate sample names [default: false]',
-			category: "optional"
+			category: 'optional'
 		}
 		printHeader: {
 			description: 'Print only the merged header and exit [default: false]',
-			category: "optional"
+			category: 'optional'
 		}
 		useHeader: {
 			description: 'Use the provided header [default: -]',
-			category: "optional"
+			category: 'optional'
 		}
 		missingToRef: {
 			description: 'Assume genotypes at missing sites are 0/0 [default: false]',
-			category: "optional"
+			category: 'optional'
 		}
 		applyFilter: {
 			description: 'Require at least one of the listed FILTER strings (e.g. "PASS,.")',
-			category: "optional"
+			category: 'optional'
 		}
 		filterLogic: {
 			description: 'Remove filters if some input is PASS ("x"), or apply all filters ("+") [default: "+"]',
-			category: "optional"
+			category: 'optional'
 		}
 		gvcf: {
 			description: 'Merge gVCF blocks, INFO/END tag is expected. Implies -i QS:sum,MinDP:min,I16:sum,IDV:max,IMF:max (#doubt) [default: false]',
-			category: "optional"
+			category: 'optional'
 		}
 		referenceFasta: {
 			description: 'Reference used to merge in gvcf mode',
-			category: "optional"
+			category: 'optional'
 		}
 		infoRules: {
 			description: 'Rules for merging INFO fields (method is one of sum,avg,min,max,join) or "-" to turn off the default [-]',
-			category: "optional"
+			category: 'optional'
 		}
 		fileList: {
 			description: 'Read file names from the file',
-			category: "optional"
+			category: 'optional'
 		}
 		merge: {
 			description: 'Allow multiallelic records for <snps|indels|both|all|none|id> [default: "both"]',
-			category: "optional"
+			category: 'optional'
 		}
 		noVersion: {
 			description: 'Do not append version and command line to the header [default: false]',
-			category: "optional"
+			category: 'optional'
 		}
 		outputType: {
 			description: '"b" compressed BCF; "u" uncompressed BCF; "z" compressed VCF; "v" uncompressed VCF [default: "v"]',
-			category: "optional"
+			category: 'optional'
 		}
 		regions: {
 			description: "Restrict to comma-separated list of regions.",
-			category: "optional"
+			category: 'optional'
 		}
 		regionsFile: {
 			description: "Restrict to regions listed in a file.",
-			category: "optional"
+			category: 'optional'
 		}
 		threads: {
-			description: "Sets the number of threads [default: 1]",
-			category: "optional"
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
 		}
 	}
 }
@@ -301,8 +344,17 @@ task norm {
 		String outputType = "v"
 
 		Int siteWin = 1000
+
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	Map[String,String] extType = {"v" : ".vcf","u" : ".bcf","z" : ".vcf.gz","b" : ".bcf.gz"}
 
@@ -343,10 +395,15 @@ task norm {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: "Path used as executable [default: 'bcftools']",
-			category: "optional"
+			category: 'optional'
 		}
 		in: {
 			description: "VCF/BCF file to left-align and normalize indels (extension: '.vcf.gz|.bcf')",
@@ -378,63 +435,71 @@ task norm {
 		}
 		checkRef: {
 			description: 'Check REF alleles and exit (e), warn (w), exclude (x), or set (s) bad sites [default: e]',
-			category: "optional"
+			category: 'optional'
 		}
 		removeDuplicates: {
 			description: 'Remove duplicate lines of the same type.',
-			category: "optional"
+			category: 'optional'
 		}
 		rmDupType: {
 			description: 'Remove duplicate snps|indels|both|all|none (implies removeDuplicates)',
-			category: "optional"
+			category: 'optional'
 		}
 		splitMA: {
 			description: "Split (true) or join (false) multiallelics sites [default= false]",
-			category: "optional"
+			category: 'optional'
 		}
 		multiallelicType: {
 			description: "Type of Multiallelics to treat for split/join (type: snps|indels|both|any) [default: both]",
-			category: "optional"
+			category: 'optional'
 		}
 		version: {
 			description: 'Append version and command line to the header [default: true]',
-			category: "optional"
+			category: 'optional'
 		}
 		normalize: {
 			description: 'Normalize indels (with -m or -c s) [default: true]',
-			category: "optional"
+			category: 'optional'
 		}
 		outputType: {
 			description: '"b" compressed BCF; "u" uncompressed BCF; "z" compressed VCF; "v" uncompressed VCF [default: "v"]',
-			category: "optional"
+			category: 'optional'
 		}
 		regions: {
 			description: "Restrict to comma-separated list of regions",
-			category: "optional"
+			category: 'optional'
 		}
 		regionsFile: {
 			description: "Restrict to regions listed in a file",
-			category: "optional"
+			category: 'optional'
 		}
 		targets: {
 			description: "Similar to 'regions' but streams rather than index-jumps",
-			category: "optional"
+			category: 'optional'
 		}
 		targetsFile: {
 			description: "Similar to 'regionsFile' but streams rather than index-jumps",
-			category: "optional"
+			category: 'optional'
 		}
 		strictFilter: {
 			description: "When merging (-m+), merged site is PASS only if all sites being merged PASS [default: false]",
-			category: "optional"
+			category: 'optional'
 		}
 		siteWin: {
 			description: "Buffer for sorting lines which changed position during realignment [default: 1000]",
-			category: "optional"
+			category: 'optional'
 		}
 		threads: {
-			description: "Sets the number of threads [default: 0]",
-			category: "optional"
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
 		}
 	}
 }
@@ -491,7 +556,15 @@ task stats {
 		File? targetsFile
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
@@ -533,10 +606,15 @@ task stats {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: "Path used as executable [default: 'bcftools']",
-			category: "optional"
+			category: 'optional'
 		}
 		in: {
 			description: "VCF/BCF file to left-align and normalize indels (extension: '.vcf.gz|.bcf')",
@@ -628,23 +706,31 @@ task stats {
 		}
 		regions: {
 			description: "Restrict to comma-separated list of regions",
-			category: "optional"
+			category: 'optional'
 		}
 		regionsFile: {
 			description: "Restrict to regions listed in a file",
-			category: "optional"
+			category: 'optional'
 		}
 		targets: {
 			description: "Similar to 'regions' but streams rather than index-jumps",
-			category: "optional"
+			category: 'optional'
 		}
 		targetsFile: {
 			description: "Similar to 'regionsFile' but streams rather than index-jumps",
-			category: "optional"
+			category: 'optional'
 		}
 		threads: {
-			description: "Sets the number of threads [default: 0]",
-			category: "optional"
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
 		}
 	}
 }

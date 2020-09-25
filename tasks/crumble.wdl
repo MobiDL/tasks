@@ -41,7 +41,15 @@ task crumble {
 		Int compressionLevel = 9
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String ext = if defined(outputFormat) then outputFormat else sub(basename(in),"(.*)\.(bam|cram|sam)","$2")
 	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
@@ -66,7 +74,12 @@ task crumble {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "crumble"]',
 			category: 'optional'
@@ -109,6 +122,14 @@ task crumble {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'optional'
 		}
 	}

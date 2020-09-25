@@ -41,7 +41,15 @@ task findFiles {
 		Boolean? executable
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String regexpNameOpt = if defined(regexpName) then "-name \"~{regexpName}\" " else ""
 	String regexpPathOpt = if defined(regexpPath) then "-path \"~{regexpPath}\" " else ""
@@ -66,7 +74,12 @@ task findFiles {
 		Array[File] files = read_lines("files.txt")
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		path: {
 			description: "Path where find will work on.",
 			category: "required"
@@ -111,6 +124,14 @@ task findFiles {
 			description: 'Sets the number of threads [default: 1]',
 			category: 'optional'
 		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'optional'
+		}
 	}
 }
 
@@ -131,7 +152,15 @@ task convertBedToIntervals {
 		String ext =".intervals"
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String outputName = if defined(name) then name else sub(basename(in),".bed", "")
 	String outputFile = if defined(outputPath) then outputPath + "/" + outputName + ext else outputName + ext
@@ -157,14 +186,19 @@ task convertBedToIntervals {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		in: {
 			description: 'Input bed to convert.',
 			category: 'required'
 		}
 		outputPath: {
 			description: 'Path where was generated output. [default: "."]',
-			category: "optional"
+			category: 'optional'
 		}
 		name: {
 			description: 'Basename of the output file. [default: sub(basename(in), ".bed")]',
@@ -176,6 +210,14 @@ task convertBedToIntervals {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'optional'
 		}
 	}
@@ -198,7 +240,15 @@ task makeLink {
 		Boolean softLink = false
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String outputName = if defined(name) then name else basename(in)
 	String outputFile = outputPath + "/" + outputName
@@ -224,7 +274,12 @@ task makeLink {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		in: {
 			description: 'Input bed to convert.',
 			category: 'required'
@@ -243,6 +298,14 @@ task makeLink {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'optional'
 		}
 	}
@@ -264,7 +327,15 @@ task concatenateFiles {
 		String subString = "^[0-9]+\-"
 
 		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
 	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else sub(basename(in[0]),subString,"")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
@@ -283,7 +354,12 @@ task concatenateFiles {
 		File outputFile = outputFile
 	}
 
-	parameter_meta {
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
 		in: {
 			description: 'Array of files.',
 			category: 'required'
@@ -302,6 +378,14 @@ task concatenateFiles {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'optional'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'optional'
 		}
 	}
