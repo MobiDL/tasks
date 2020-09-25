@@ -161,3 +161,118 @@ task adaptersTrimming {
 		}
 	}
 }
+
+task qualityTrimming {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-09-25"
+	}
+
+	input {
+		String path_exe = "cutadapt"
+
+		File in
+		String? outputPath
+		String? name
+		String suffix = ".qualityTrim"
+		String subString = "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"
+		String subStringReplace = ""
+
+		Int qualityTrim3 = 30
+		Int? qualityTrim5
+
+		Boolean biColorChem = false
+		Boolean zeroCap = false
+
+		Boolean minimalReport = false
+		Boolean lowComp = false
+
+		Int threads = 1
+	}
+
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.~{ext}" else "~{baseName}~{suffix}.~{ext}"
+	String qualityTrim = if biColorChem then "~{qualityTrim3}" else if defined(qualityTrim5) then "~{qualityTrim5},~{qualityTrim3}" else "~{qualityTrim3}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} \
+			--cores ~{threads} \
+			~{true="--nextseq-trim" false="--quality-cutoff" biColorChem} ~{qualityTrim} \
+			~{true="--zero-cap" false="" zeroCap} \
+			--report ~{true="minimal" false="full" minimalReport} \
+			~{true="-Z" false="" lowComp} \
+			--output ~{outputFile} \
+			~{in}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "cutadapt"]',
+			category: 'optional'
+		}
+		outputPath: {
+			description: 'Output path where files were generated. [default: pwd()]',
+			category: 'optional'
+		}
+		name: {
+			description: 'Name to use for output file name [default: sub(basename(in),subString,subStringReplace)]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Input reads (format: fastq, fastq.gz)',
+			category: 'Required'
+		}
+		suffix: {
+			description: 'Suffix to add to the output [default: .qualityTrim]',
+			category: 'optional'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
+			category: 'optional'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ""]',
+			category: 'optional'
+		}
+		qualityTrim3: {
+			description: 'Trim low quality 3\' end under this threshold [default: 30]',
+			category: 'optional'
+		}
+		qualityTrim5: {
+			description: 'Trim low quality 5\' end under this threshold',
+			category: 'optional'
+		}
+		biColorChem: {
+			description: 'Quality of dark cycles are ignored (G) (NextSeq, MiniSeq...) [default: false]',
+			category: 'optional'
+		}
+		zeroCap: {
+			description: 'Change negative quality values to zero. [default: false]',
+			category: 'optional'
+		}
+		minimalReport: {
+			description: 'Which type of report to print: "full" or "minimal". [default: "full"]',
+			category: 'optional'
+		}
+		lowComp: {
+			description: 'Use compression level 1 for gzipped output files [default: false]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}

@@ -90,6 +90,7 @@ It calls the following subworkflow :
 	- crumble
 - Cutadapt (2.10) :
 	- adaptersTrimming
+	- qualityTrimming
 - dwgsim (0.1.11) :
 	- simulateReadsIllumina
 - FastQC (v0.11.9) :
