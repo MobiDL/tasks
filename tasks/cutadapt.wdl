@@ -276,3 +276,112 @@ task qualityTrimming {
 		}
 	}
 }
+
+
+task hardTrimming {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-09-25"
+	}
+
+	input {
+		String path_exe = "cutadapt"
+
+		File in
+		String? outputPath
+		String? name
+		String suffix = ".hardTrim"
+		String subString = "\.(fastq|fq)(.gz)?"
+		String subStringReplace = ""
+
+		Int hardTrimStart = 0
+		Int hardTrimEnd = 0
+
+		Int? finalLength
+
+		Int threads = 1
+	}
+
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.~{ext}" else "~{baseName}~{suffix}.~{ext}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} \
+			--cores ~{threads} \
+			--cut ~{hardTrimStart} \
+			--cut -~{hardTrimEnd} \
+			~{default="" "--length " + finalLength} \
+			--report ~{true="minimal" false="full" minimalReport} \
+			~{true="-Z" false="" lowComp} \
+			--output ~{outputFile} \
+			~{in}
+
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "cutadapt"]',
+			category: 'optional'
+		}
+		outputPath: {
+			description: 'Output path where files were generated. [default: pwd()]',
+			category: 'optional'
+		}
+		name: {
+			description: 'Name to use for output file name [default: sub(basename(in),subString,subStringReplace)]',
+			category: 'optional'
+		}
+		in: {
+			description: 'Input reads (format: fastq, fastq.gz)',
+			category: 'Required'
+		}
+		suffix: {
+			description: 'Suffix to add to the output [default: .qualityTrim]',
+			category: 'optional'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
+			category: 'optional'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ""]',
+			category: 'optional'
+		}
+		hardTrimStart: {
+			description: 'Cut N base pairs at the beginning of the reads [default: 0]',
+			category: 'optional'
+		}
+		hardTrimEnd: {
+			description: 'Cut N base pairs at the end of the reads [default: 0]',
+			category: 'optional'
+		}
+		finalLength: {
+			description: 'Shorten reads to this length. Positive values remove bases at the end while negative ones remove bases at the beginning',
+			category: 'optional'
+		}
+		minimalReport: {
+			description: 'Which type of report to print: "full" or "minimal". [default: "full"]',
+			category: 'optional'
+		}
+		lowComp: {
+			description: 'Use compression level 1 for gzipped output files [default: false]',
+			category: 'optional'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'optional'
+		}
+	}
+}

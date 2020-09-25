@@ -91,6 +91,7 @@ It calls the following subworkflow :
 - Cutadapt (2.10) :
 	- adaptersTrimming
 	- qualityTrimming
+	- hardTrimming
 - dwgsim (0.1.11) :
 	- simulateReadsIllumina
 - FastQC (v0.11.9) :

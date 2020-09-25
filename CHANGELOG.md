@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - cutadapt :
 	- adaptersTrimming
 	- qualityTrimming
+	- hardTrimming
 - dwgsim :
 	- simulateReadsIllumina
 - FastQC :
