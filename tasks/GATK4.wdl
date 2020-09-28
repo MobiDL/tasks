@@ -347,15 +347,15 @@ task depthOfCoverage {
 		}
 		referenceFasta: {
 			description: 'Path to the reference file (format: fasta)',
-			category: 'required'
+			category: 'Required'
 		}
 		referenceFai: {
 			description: 'Path to the reference file index (format: fai)',
-			category: 'required'
+			category: 'Required'
 		}
 		referenceDict: {
 			description: 'Path to the reference file dict (format: dict)',
-			category: 'required'
+			category: 'Required'
 		}
 		geneList: {
 			description: 'Calculate coverage statistics over this list of genes. (refseq format)',
@@ -539,15 +539,15 @@ task splitIntervals {
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
-			category: 'required'
+			category: 'Required'
 		}
 		refFai: {
 			description: 'Path to the reference file index (format: fai)',
-			category: 'required'
+			category: 'Required'
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
-			category: 'required'
+			category: 'Required'
 		}
 		scatterCount: {
 			description: 'Scatter count: number of output interval files to split into [default: 1]',
@@ -710,15 +710,15 @@ task baseRecalibrator {
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
-			category: 'required'
+			category: 'Required'
 		}
 		refFai: {
 			description: 'Path to the reference file index (format: fai)',
-			category: 'required'
+			category: 'Required'
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
-			category: 'required'
+			category: 'Required'
 		}
 		gapPenality: {
 			description: 'BQSR BAQ gap open penalty (Phred Scaled). Default value is 40. 30 is perhaps better for whole genome call sets [default: 40]',
@@ -987,15 +987,15 @@ task applyBQSR {
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
-			category: 'required'
+			category: 'Required'
 		}
 		refFai: {
 			description: 'Path to the reference file index (format: fai)',
-			category: 'required'
+			category: 'Required'
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
-			category: 'required'
+			category: 'Required'
 		}
 		originalQScore: {
 			description: 'Emit original base qualities under the OQ tag [default: false]',
@@ -1282,15 +1282,15 @@ task leftAlignIndels {
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
-			category: 'required'
+			category: 'Required'
 		}
 		refFai: {
 			description: 'Path to the reference file index (format: fai)',
-			category: 'required'
+			category: 'Required'
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
-			category: 'required'
+			category: 'Required'
 		}
 		intervalsPadding: {
 			description: 'Amount of padding (in bp) to add to each interval you are including. [default: 0]',
@@ -1440,15 +1440,15 @@ task collectMultipleMetrics {
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
-			category: 'required'
+			category: 'Required'
 		}
 		refFai: {
 			description: 'Path to the reference file index (format: fai)',
-			category: 'required'
+			category: 'Required'
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
-			category: 'required'
+			category: 'Required'
 		}
 		collectAlignmentSummaryMetrics: {
 			description: 'Use programm : CollectAlignmentSummaryMetrics [default: true]',
@@ -1566,7 +1566,7 @@ task bedToIntervalList {
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
-			category: 'required'
+			category: 'Required'
 		}
 		sort: {
 			description: 'If true, sort the output interval list before writing it. [default: true]',
@@ -1839,23 +1839,23 @@ task haplotypeCaller {
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
-			category: 'required'
+			category: 'Required'
 		}
 		refFai: {
 			description: 'Path to the reference file index (format: fai)',
-			category: 'required'
+			category: 'Required'
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
-			category: 'required'
+			category: 'Required'
 		}
 		dbsnp: {
 			description: 'Path to the file containing dbsnp (format: vcf)',
-			category: 'required'
+			category: 'Required'
 		}
 		dbsnpIdx: {
 			description: 'Path to the index of dbsnp file (format: tbi)',
-			category: 'required'
+			category: 'Required'
 		}
 		intervals: {
 			description: 'Path to a file containing genomic intervals over which to operate. (format intervals list: chr1:1000-2000)',
@@ -2251,15 +2251,15 @@ task variantFiltration {
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
-			category: 'required'
+			category: 'Required'
 		}
 		refFai: {
 			description: 'Path to the reference file index (format: fai)',
-			category: 'required'
+			category: 'Required'
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
-			category: 'required'
+			category: 'Required'
 		}
 		LowQualByDepth: {
 			description: 'Threshold below which QD the variant will be tagged as LowQualByDepth',
@@ -2419,7 +2419,7 @@ task mergeVcfs {
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
-			category: 'required'
+			category: 'Required'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -2524,7 +2524,7 @@ task sortVcf {
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
-			category: 'required'
+			category: 'Required'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

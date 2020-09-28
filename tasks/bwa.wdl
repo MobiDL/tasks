@@ -124,7 +124,7 @@ task mem {
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
-			category: 'required'
+			category: 'Required'
 		}
 		platformReads: {
 			description: 'Type of plateform that produce reads [default: ILLUMINA]',
@@ -225,7 +225,7 @@ task index {
 		}
 		in:	{
 			description: 'Fasta file to index by bwa.',
-			category: 'required'
+			category: 'Required'
 		}
 		algo: {
 			description: 'BWT construction algorithm: bwtsw, is or rb2 [auto]',

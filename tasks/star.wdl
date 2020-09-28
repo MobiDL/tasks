@@ -93,11 +93,11 @@ task genomeGenerate {
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
-			category: 'required'
+			category: 'Required'
 		}
 		refGTF: {
 			description: 'Path to the GTF reference file (format: GTF)',
-			category: 'required'
+			category: 'Required'
 		}
 		readLength: {
 			description: 'Read length of the sequencing [default: 100]',

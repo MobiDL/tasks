@@ -86,7 +86,7 @@ task index {
 		}
 		in: {
 			description: "VCF/BCF file to index (extension: '.vcf.gz|.bcf')",
-			category: "required"
+			category: 'Required'
 		}
 		outputPath: {
 			description: "Path where was generated output [default: VCF path]",
@@ -221,7 +221,7 @@ task merge {
 		}
 		in: {
 			description: 'Array of files to merge together (extension: ".vcf.gz|.bcf")',
-			category: "required"
+			category: 'Required'
 		}
 		outputPath: {
 			description: 'Path where was generated output [default: VCF path]',
@@ -407,7 +407,7 @@ task norm {
 		}
 		in: {
 			description: "VCF/BCF file to left-align and normalize indels (extension: '.vcf.gz|.bcf')",
-			category: "required"
+			category: 'Required'
 		}
 		outputPath: {
 			description: 'Path where was generated output',
@@ -431,7 +431,7 @@ task norm {
 		}
 		refFasta: {
 			description: 'Reference used to merge in gvcf mode',
-			category: "required"
+			category: 'Required'
 		}
 		checkRef: {
 			description: 'Check REF alleles and exit (e), warn (w), exclude (x), or set (s) bad sites [default: e]',
@@ -618,7 +618,7 @@ task stats {
 		}
 		in: {
 			description: "VCF/BCF file to left-align and normalize indels (extension: '.vcf.gz|.bcf')",
-			category: "required"
+			category: 'Required'
 		}
 		outputPath: {
 			description: 'Path where was generated output',
@@ -642,11 +642,11 @@ task stats {
 		}
 		refFasta: {
 			description: 'Reference in fasta format',
-			category: "required"
+			category: 'Required'
 		}
 		refFai: {
 			description: 'Path to the reference file index (format: fai)',
-			category: 'required'
+			category: 'Required'
 		}
 		afBins: {
 			description: 'Allele frequency bins',

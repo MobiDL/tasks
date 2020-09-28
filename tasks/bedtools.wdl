@@ -104,11 +104,11 @@ task intersect {
 		}
 		bedA: {
 			description: 'BAM/BED/GFF/VCF file "A".',
-			category: "Required"
+			category: 'Required'
 		}
 		bedB: {
 			description: 'BAM/BED/GFF/VCF files "B" (One or more).',
-			category: "Required"
+			category: 'Required'
 		}
 		wa: {
 			description: 'Write the original entry in A for each overlap.',
@@ -225,7 +225,7 @@ task sort {
 		}
 		in: {
 			description: 'BED/GFF/VCF file.',
-			category: "Required"
+			category: 'Required'
 		}
 		ext: {
 			description: 'Extension of the input file (BED/GFF/VCF) [default: ".bed"]',
@@ -346,11 +346,11 @@ task coverage {
 		}
 		bedA: {
 			description: 'BAM/BED/GFF/VCF file "A".',
-			category: "Required"
+			category: 'Required'
 		}
 		bedB: {
 			description: 'BAM/BED/GFF/VCF file "B".',
-			category: "Required"
+			category: 'Required'
 		}
 		f: {
 			description: 'Minimum overlap required as a fraction of A (e.g 0.1). (default: null = 1bp)',

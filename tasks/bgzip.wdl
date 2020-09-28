@@ -79,7 +79,7 @@ task bgzip {
 		}
 		in: {
 			description: "File to compres/decompress.",
-			category: "required"
+			category: 'Required'
 		}
 		outputPath: {
 			description: "Path where was generated output.",

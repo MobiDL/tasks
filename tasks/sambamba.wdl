@@ -562,7 +562,7 @@ task view {
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
-			category: 'required'
+			category: 'Required'
 		}
 		regions:{
 			description: 'Output only reads overlapping one of regions from the BED file',
