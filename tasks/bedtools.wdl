@@ -112,31 +112,31 @@ task intersect {
 		}
 		wa: {
 			description: 'Write the original entry in A for each overlap.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		wb: {
 			description: 'Write the original entry in B for each overlap.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		v: {
 			description: 'Only report those entries in A that have no overlap in B.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		f: {
 			description: 'Minimum overlap required as a fraction of A (e.g 0.1). (default: null = 1bp)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		F: {
 			description: 'Minimum overlap required as a fraction of B(e.g 0.9). (default: null = 1bp)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		strandness: {
 			description: 'Force "strandedness" (true) or "different strandness" (false). [default: null]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		reciprocal: {
 			description: 'true : F = f ; false : fileter OR (f OR F is OK) ; default: need to respect f AND F ',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -241,19 +241,19 @@ task sort {
 		}
 		sortBySizeAsc: {
 			description: 'true: sort by feature size asc; false: sort by feature size desc; default: null',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		sortByChrSizeAsc: {
 			description: 'true: sort by chrom then by feature size asc; false: sort by chrom then by feature size desc; default: null',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		sortByChrScoreAsc: {
 			description: 'true: sort by chrom then by score asc; false: sort by chrom then by score desc; default: null',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		idx: {
 			description: 'sort according to chromosome in file; default: null',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -354,19 +354,19 @@ task coverage {
 		}
 		f: {
 			description: 'Minimum overlap required as a fraction of A (e.g 0.1). (default: null = 1bp)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		F: {
 			description: 'Minimum overlap required as a fraction of B(e.g 0.9). (default: null = 1bp)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		strandness: {
 			description: 'Force "strandedness" (true) or "different strandness" (false). [default: null]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		reciprocal: {
 			description: 'true : F = f ; false : fileter OR (f OR F is OK) ; default: need to respect f AND F ',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

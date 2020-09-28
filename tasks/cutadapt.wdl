@@ -114,19 +114,19 @@ task adaptersTrimming {
 		}
 		suffix: {
 			description: 'Suffix to add to the output [default: .adaptersTrim]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		subStringReplace: {
 			description: 'subString replace by this string [default: ""]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		type: {
 			description: 'Type of adapters (choices: "a": 3\' end; "g": 5\' end, "b": both 3\' or 5\' end)[default: "a"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		adapters: {
 			description: 'File containing adapters sequences',
@@ -134,39 +134,39 @@ task adaptersTrimming {
 		}
 		errorRate: {
 			description: 'Maximum allowed error rate as value between 0 and 1 [default: 0.01]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		allowedIndels: {
 			description: 'Allow mismatches and indels in alignments or only mismatches. [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		times: {
 			description: 'Remove up to TIMES adapters from each read. [default: 1]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		overlap: {
 			description: 'Minimum overlap between read and adapter for an adapter to be found. [default: 3]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		allowedWildards: {
 			description: 'Interpret IUPAC wildcards in adapters. [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		action: {
 			description: 'Action to do with adapters (choices: trim,mask,lowercase,none)[default: "trim"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		checkRevComp: {
 			description: 'Check both the read and its reverse complement for adapter matches. [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		minimalReport: {
 			description: 'Which type of report to print: "full" or "minimal". [default: "full"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		lowComp: {
 			description: 'Use compression level 1 for gzipped output files [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -270,39 +270,39 @@ task qualityTrimming {
 		}
 		suffix: {
 			description: 'Suffix to add to the output [default: .qualityTrim]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		subStringReplace: {
 			description: 'subString replace by this string [default: ""]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		qualityTrim3: {
 			description: 'Trim low quality 3\' end under this threshold [default: 30]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		qualityTrim5: {
 			description: 'Trim low quality 5\' end under this threshold',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		biColorChem: {
 			description: 'Quality of dark cycles are ignored (G) (NextSeq, MiniSeq...) [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		zeroCap: {
 			description: 'Change negative quality values to zero. [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		minimalReport: {
 			description: 'Which type of report to print: "full" or "minimal". [default: "full"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		lowComp: {
 			description: 'Use compression level 1 for gzipped output files [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -404,35 +404,35 @@ task hardTrimming {
 		}
 		suffix: {
 			description: 'Suffix to add to the output [default: .qualityTrim]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		subStringReplace: {
 			description: 'subString replace by this string [default: ""]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		hardTrimStart: {
 			description: 'Cut N base pairs at the beginning of the reads [default: 0]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		hardTrimEnd: {
 			description: 'Cut N base pairs at the end of the reads [default: 0]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		finalLength: {
 			description: 'Shorten reads to this length. Positive values remove bases at the end while negative ones remove bases at the beginning',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		minimalReport: {
 			description: 'Which type of report to print: "full" or "minimal". [default: "full"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		lowComp: {
 			description: 'Use compression level 1 for gzipped output files [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

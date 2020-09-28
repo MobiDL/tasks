@@ -125,63 +125,63 @@ task simulateReadsIllumina {
 		}
 		sizeR1: {
 			description: 'Length of the first read [default: 150]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		sizeR2: {
 			description: 'Length of the second read [default: sizeR1]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		meanCov: {
 			description: 'mean coverage across available positions [default: 100]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		useInnerDistance: {
 			description: 'Use the inner distance instead of the outer distance for pairs [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		insertSize: {
 			description: 'Outer distance between the two ends for pairs [default: 500]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		stdInsert: {
 			description: 'Standard deviation of the distance for pairs [default: 50]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		rateMut: {
 			description: 'Rate of mutations [default: 0.0010]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		freqMut: {
 			description: 'Frequency of given mutation to simulate low fequency somatic mutations [default: 0.5000]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		rateIndels: {
 			description: 'Fraction of mutations that are indels [default: 0.1000]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		probExt: {
 			description: 'Probability an indel is extended [default: 0.3000]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		minSizeIndels: {
 			description: 'The minimum length indel [default: 1]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		probRandomDNA: {
 			description: 'Probability of a random DNA read [default: 0.05]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		maxN: {
 			description: 'Maximum number of Ns allowed in a given read [default: 0]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		target: {
 			description: 'Bed of regions to cover [default: WGS]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		readPrefix: {
 			description: 'Read prefix to prepend to each read name',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

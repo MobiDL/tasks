@@ -94,15 +94,15 @@ task index {
 		}
 		tabix: {
 			description: "Generate TBI-format index for VCF files [default: CSI-format]",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		force: {
 			description: "Overwrite index if it already exists [default: false]",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		minShift: {
 			description: "Set minimal interval size for CSI indices to 2^INT (skipped if tabix used) [default: 14]",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -229,63 +229,63 @@ task merge {
 		}
 		forceSamples: {
 			description: 'Resolve duplicate sample names [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		printHeader: {
 			description: 'Print only the merged header and exit [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		useHeader: {
 			description: 'Use the provided header [default: -]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		missingToRef: {
 			description: 'Assume genotypes at missing sites are 0/0 [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		applyFilter: {
 			description: 'Require at least one of the listed FILTER strings (e.g. "PASS,.")',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		filterLogic: {
 			description: 'Remove filters if some input is PASS ("x"), or apply all filters ("+") [default: "+"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		gvcf: {
 			description: 'Merge gVCF blocks, INFO/END tag is expected. Implies -i QS:sum,MinDP:min,I16:sum,IDV:max,IMF:max (#doubt) [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		referenceFasta: {
 			description: 'Reference used to merge in gvcf mode',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		infoRules: {
 			description: 'Rules for merging INFO fields (method is one of sum,avg,min,max,join) or "-" to turn off the default [-]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		fileList: {
 			description: 'Read file names from the file',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		merge: {
 			description: 'Allow multiallelic records for <snps|indels|both|all|none|id> [default: "both"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		noVersion: {
 			description: 'Do not append version and command line to the header [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		outputType: {
 			description: '"b" compressed BCF; "u" uncompressed BCF; "z" compressed VCF; "v" uncompressed VCF [default: "v"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		regions: {
 			description: "Restrict to comma-separated list of regions.",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		regionsFile: {
 			description: "Restrict to regions listed in a file.",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -435,59 +435,59 @@ task norm {
 		}
 		checkRef: {
 			description: 'Check REF alleles and exit (e), warn (w), exclude (x), or set (s) bad sites [default: e]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		removeDuplicates: {
 			description: 'Remove duplicate lines of the same type.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		rmDupType: {
 			description: 'Remove duplicate snps|indels|both|all|none (implies removeDuplicates)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		splitMA: {
 			description: "Split (true) or join (false) multiallelics sites [default= false]",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		multiallelicType: {
 			description: "Type of Multiallelics to treat for split/join (type: snps|indels|both|any) [default: both]",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		version: {
 			description: 'Append version and command line to the header [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		normalize: {
 			description: 'Normalize indels (with -m or -c s) [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		outputType: {
 			description: '"b" compressed BCF; "u" uncompressed BCF; "z" compressed VCF; "v" uncompressed VCF [default: "v"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		regions: {
 			description: "Restrict to comma-separated list of regions",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		regionsFile: {
 			description: "Restrict to regions listed in a file",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		targets: {
 			description: "Similar to 'regions' but streams rather than index-jumps",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		targetsFile: {
 			description: "Similar to 'regionsFile' but streams rather than index-jumps",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		strictFilter: {
 			description: "When merging (-m+), merged site is PASS only if all sites being merged PASS [default: false]",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		siteWin: {
 			description: "Buffer for sorting lines which changed position during realignment [default: 1000]",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -650,75 +650,75 @@ task stats {
 		}
 		afBins: {
 			description: 'Allele frequency bins',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		afTag: {
 			description: 'Allele frequency tag to use',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		firstAllele: {
 			description: 'Include only 1st allele at multiallelic sites',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		collapse: {
 			description: 'Treat as identical records with <snps|indels|both|all|some|none> [default: none]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		depthMin: {
 			description: 'Minimum depth [default: 0]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		depthMax: {
 			description: 'Maximum depth [default: 500]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		depthBin: {
 			description: 'Bin size depth [default: 1]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		exons: {
 			description: 'Tab-delimited file with exons for indel frameshifts (chr,from,to; 1-based, inclusive, bgzip compressed)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		applyFilters: {
 			description: 'Require at least one of the listed FILTER strings',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		exclude: {
 			description: 'Exclude sites for which the expression is true',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		include: {
 			description: 'Select sites for which the expression is true',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		splitByID: {
 			description: 'Collect stats for sites with ID separately (known vs novel)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		samples: {
 			description: 'List of samples for sample stats ("-" -> all samples)[default: ["-"]]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		userTsTv: {
 			description: 'Collect Ts/Tv stats for any tag using the given binning',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		regions: {
 			description: "Restrict to comma-separated list of regions",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		regionsFile: {
 			description: "Restrict to regions listed in a file",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		targets: {
 			description: "Similar to 'regions' but streams rather than index-jumps",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		targetsFile: {
 			description: "Similar to 'regionsFile' but streams rather than index-jumps",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

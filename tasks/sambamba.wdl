@@ -108,11 +108,11 @@ task markdup {
 		}
 		removeDuplicates: {
 			description: 'Remove duplicates instead of just marking them [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		compressionLevel: {
 			description: 'Specify compression level of the resulting file (from 0 to 9) [default: 6]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -128,19 +128,19 @@ task markdup {
 		}
 		hashTableSize: {
 			description: 'Size of hash table for finding read pairs',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		overflowListSize: {
 			description: 'Size of the overflow list where reads, thrown from the hash table, get a second chance to meet their pairs',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		sortBufferSize: {
 			description: 'Total amount of memory (in *megabytes*) used for sorting purposes',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		bufferSize: {
 			description: 'Two buffers of BUFFER_SIZE *megabytes* each are used for reading and writing BAM during the second pass',
-			category: 'optional'
+			category: 'Tool option'
 		}
 	}
 }
@@ -223,7 +223,7 @@ task index {
 		}
 		checkBins: {
 			description: 'check that bins are set correctly',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -329,23 +329,23 @@ task sort {
 		}
 		compressionLevel: {
 			description: 'Specify compression level of the resulting file (from 0 to 9) [default: 6]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		tempDir: {
 			description: 'Directory for storing intermediate files; default is system directory for temporary files',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		filter: {
 			description: 'Keep only reads that satisfy FILTER',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		sortByReadName: {
 			description: 'Sort by read name instead of coordinate (true: lexicographical; false: natural) (default: null)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		uncompressedChuncks: {
 			description: 'Write sorted chunks as uncompressed BAM (default is writing with compression level 1), that might be faster in some cases but uses more disk space',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -530,11 +530,11 @@ task view {
 		}
 		outputPath: {
 			description: 'Output path where flagstat file was generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		sample: {
 			description: 'Sample name to use for output file name [default: sub(basename(in),"(\.bam|\.sam|\.cram)","")]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		in: {
 			description: 'Bam.',
@@ -542,23 +542,23 @@ task view {
 		}
 		cram: {
 			description: 'Output to cram. [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		filters: {
 			description: 'Set custom filter for alignments',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		numFilter: {
 			description: 'Filter flag bits; "i1/i2" corresponds to -f i1 -F i2 samtools arguments; either of the numbers can be omitted',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		header: {
 			description: 'Print header before reads (always done for BAM output) [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		valid: {
 			description: 'Output only valid alignments [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
@@ -566,12 +566,12 @@ task view {
 		}
 		regions:{
 			description: 'Output only reads overlapping one of regions from the BED file',
-			category: 'optional'
+			category: 'Tool option'
 
 		}
 		compressionLevel: {
 			description: 'Specify compression level of the resulting file (from 0 to 9) [default: 6]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

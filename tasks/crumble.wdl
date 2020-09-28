@@ -98,7 +98,7 @@ task crumble {
 		}
 		suffix: {
 			description: 'Suffix to add to the output [default: .crumble]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "\.(bam|cram|sam)"]',
@@ -110,15 +110,15 @@ task crumble {
 		}
 		outputFormat: {
 			description: 'Output format [default: ext of input file]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		addPGHeader: {
 			description: 'Add an @PG SAM header line [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		compressionLevel: {
 			description: 'Specify compression level of the resulting file (1, 3, 5, 7, 8 or 9) [default: 9]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

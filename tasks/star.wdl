@@ -101,7 +101,7 @@ task genomeGenerate {
 		}
 		readLength: {
 			description: 'Read length of the sequencing [default: 100]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

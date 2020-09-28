@@ -120,7 +120,7 @@ task mem {
 		}
 		fastqR2: {
 			description: 'Input file with reads 2 (fastq, fastq.gz, fq, fq.gz).',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
@@ -128,15 +128,15 @@ task mem {
 		}
 		platformReads: {
 			description: 'Type of plateform that produce reads [default: ILLUMINA]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		markShorter: {
 			description: 'Mark shorter split hits as secondary (for Picard compatibility). [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		minScore: {
 			description: 'Don’t output alignment with score lower than this value. [default: 30]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -229,19 +229,19 @@ task index {
 		}
 		algo: {
 			description: 'BWT construction algorithm: bwtsw, is or rb2 [auto]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		name: {
 			description: 'Prefix of the index files names [fasta name]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		blockSize: {
 			description: 'Block size for the bwtsw algorithm (effective with algo: bwtsw)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		sixtyFour: {
 			description: 'Index files named as <in.fasta>.64.* instead of <in.fasta>.*',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

@@ -87,11 +87,11 @@ task sort {
 		}
 		outputPath: {
 			description: 'Output path where bam file was generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: sub(basename(in),"(\.bam|\.sam|\.cram)","")]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		in: {
 			description: 'Bam file to sort.',
@@ -99,27 +99,27 @@ task sort {
 		}
 		suffix: {
 			description: 'Suffix to add on the output file (e.g. sample.suffix.bam) [default: ".sort"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		format: {
 			description: 'Specify a single output file format option [default: "bam"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		compressionLevel: {
 			description: 'Specify compression level of the resulting file (from 0 to 9) [default: 6]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		sortByReadName: {
 			description: 'Sort by read name [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		tag: {
 			description: 'Sort by value of TAG. Uses position as secondary index (or read name if -n is set)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		refFasta: {
 			description: 'Reference sequence FASTA FILE',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -204,11 +204,11 @@ task dict {
 		}
 		outputPath: {
 			description: 'Output path where dict file was generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: sub(basename(in),subString,"")]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		in: {
 			description: 'Fasta file.',
@@ -216,23 +216,23 @@ task dict {
 		}
 		ext: {
 			description: 'Extension of the output file (e.g. mygenome.dict) [default: ".dict"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		subString: {
 			description: 'Substring to remove to get file basename [default: "\.fa(sta)?(\.gz)?"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		assembly: {
 			description: 'Assembly',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		header: {
 			description: 'Print the header (@HD line) [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		uri: {
 			description: 'URI (e.g. file:///abs/path/to/file.fa)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -316,11 +316,11 @@ task index {
 		}
 		outputPath: {
 			description: 'Output path where index was generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: basename(in)]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		in: {
 			description: 'Input bam or cram to index.',
@@ -328,11 +328,11 @@ task index {
 		}
 		minIntervalSize: {
 			description: 'Set minimum interval size for CSI indices to 2^INT.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		csi: {
 			description: 'Generate CSI-format index for BAM files (not functionnal with cram files) [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -434,11 +434,11 @@ task view {
 		}
 		outputPath: {
 			description: 'Output path where index was generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: basename(in)]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		in: {
 			description: 'Fasta file.',
@@ -446,47 +446,47 @@ task view {
 		}
 		cram: {
 			description: 'Output to cram format. (bam otherwise) [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		faidx: {
 			description: 'Listing reference names and lengths (faidx)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		bed: {
 			description: 'Only include reads overlapping this BED FILE',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		readGroup: {
 			description: 'Only include reads in read group.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		readGroupFile: {
 			description: 'Only include reads with read group listed in a file',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		minQuality: {
 			description: 'Only include reads with mapping quality >= value [default: 0]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		library: {
 			description: 'Only include reads in library.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		minCigarOp: {
 			description: 'Only include reads with number of CIGAR operations consuming query sequence >= value [default: 0]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		multiRegioOperator: {
 			description: 'Use the multi-region iterator (increases the speed, removes duplicates and outputs the reads as they are ordered in the file) [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		collapseCigarOp: {
 			description: 'Collapse the backward CIGAR operation [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		refFasta: {
 			description: 'Reference sequence FASTA FILE [null]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -559,11 +559,11 @@ task faidx {
 		}
 		outputPath: {
 			description: 'Output path where index was generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: basename(in)]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		in: {
 			description: 'Fasta file.',
@@ -640,11 +640,11 @@ task fqidx {
 		}
 		outputPath: {
 			description: 'Output path where index was generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: basename(in)]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		in: {
 			description: 'Fastq file.',
@@ -724,11 +724,11 @@ task flagstat {
 		}
 		outputPath: {
 			description: 'Output path where flagstat file was generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		sample: {
 			description: 'Sample name to use for output file name [default: sub(basename(in),"(\.bam|\.sam|\.cram)","")]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		in: {
 			description: 'Bam file to sort.',
@@ -736,7 +736,7 @@ task flagstat {
 		}
 		ext: {
 			description: 'Extension of the output file [default: ".flagstats"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -818,11 +818,11 @@ task bedcov {
 		}
 		outputPath: {
 			description: 'Output path where bedcov file will be generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: basename(in)]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		inBed: {
 			description: 'Bed file.',
@@ -834,19 +834,19 @@ task bedcov {
 		}
 		inBamIdx: {
 			description: 'Index of the input bam file.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		suffix: {
 			description: 'Suffix to add on the output file (e.g. sample.bedcov.bed) [default: ".bedcov"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		qualityThreshold: {
 			description: 'Mapping quality threshold [default: 0]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		includeDel: {
 			description: 'Include deletions (D) and ref skips (N) in bedcov computation [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -957,27 +957,27 @@ task markdup {
 		}
 		outputOpt: {
 			description: 'Specify output file format option in the form',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		remove: {
 			description: 'Remove duplicates instead of just marking them [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		maxReadsLength: {
 			description: 'Max read length [default: 300]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		markSupAl: {
 			description: 'Mark supplemenary alignments of duplicates as duplicates (slower) [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		reportStat: {
 			description: 'Report stats. [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		markPrimDup: {
 			description: 'Mark primary duplicates with the name of the original in a "do" tag. [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -1066,15 +1066,15 @@ task fixmate {
 		}
 		outputPath: {
 			description: 'Output path where bedcov file will be generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: basename(in)]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		outExt: {
 			description: 'Specify output format (SAM, BAM, CRAM) [default: same as input]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		in: {
 			description: 'Bam file.',
@@ -1082,27 +1082,27 @@ task fixmate {
 		}
 		suffix: {
 			description: 'Suffix to add on the output file (e.g. sample.markdup.bam) [default: ".fixmate"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		outputOpt: {
 			description: 'Specify output file format option in the form',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		remove: {
 			description: 'Remove unmapped reads and secondary alignments [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		disableFR: {
 			description: 'Disable FR proper pair check [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		addTemplateCigar: {
 			description: 'Add template cigar ct tag [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		addMateScoreTag: {
 			description: 'Add mate score tag [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -1185,19 +1185,19 @@ task merge {
 		}
 		outIndex: {
 			description: 'Automatically index the outputFile. [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		outputPath: {
 			description: 'Output path where merged alignement file will be generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: basename(out)]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		ext: {
 			description: 'Specify output format (SAM, BAM, CRAM) [default: cram]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

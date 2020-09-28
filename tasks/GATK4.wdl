@@ -120,7 +120,7 @@ task reorderSam {
 		}
 		ext: {
 			description: 'Extension of the input file (".sam" or ".bam") [default: ".bam"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		prefix: {
 			description: 'Prefix for the output file [default: basename(in, ext)]',
@@ -136,63 +136,63 @@ task reorderSam {
 		}
 		allowIncompleteLengthDiscordance: {
 			description: 'If true, then permits mapping from a read contig to a new reference contig with the same name but a different length. Highly dangerous, only use if you know what you are doing. [Default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		allowIncompleteDictDiscordance: {
 			description: 'If true, allows only a partial overlap of the original contigs with the new reference sequence contigs. By default, this tool requires a corresponding contig in the new reference for each read contig. [Default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		compressionLevel: {
 			description: 'Compression level for all compressed files created (e.g. BAM and VCF). [default: 6]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		createIndex: {
 			description: 'Whether to create a BAM index when writing a coordinate-sorted BAM file. [Default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		createMD5: {
 			description: 'Whether to create an MD5 digest for any BAM or FASTQ files created. [Default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		GA4GHClientSecrets: {
 			description: 'Google Genomics API client_secrets.json file path. [Default: null]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		maxRecordsInRam: {
 			description: 'When writing files that need to be sorted, this will specify the number of records stored in RAM before spilling to disk. Increasing this number reduces the number of file handles needed to sort the file, and increases the amount of RAM needed. [Default: 500000]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		referenceSequence: {
 			description: 'Reference sequence file. [Default: null]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		quiet: {
 			description: 'Whether to suppress job-summary info on System.err. [Default: false]',
-			category: 'Common options'
+			category: 'Tool option'
 		}
 		tmpDir: {
 			description: 'Path to a directory with space available to be used by this program for temporary storage of working files. [Default: null]',
-			category: 'Common options'
+			category: 'Tool option'
 		}
 		useJDKDeflater: {
 			description: 'Use the JDK Deflater instead of the Intel Deflater for writing compressed output. [Default: false]',
-			category: 'Common options'
+			category: 'Tool option'
 		}
 		useJDKInflater: {
 			description: 'Use the JDK Inflater instead of the Intel Inflater for reading compressed input. [Default: false]',
-			category: 'Common options'
+			category: 'Tool option'
 		}
 		validationStringency: {
 			description: ' Validation stringency for all SAM files read by this program. Setting stringency to SILENT can improve performance when processing a BAM file in which variable-length data (read, qualities, tags) do not otherwise need to be decoded. [Default: "STRIC"]',
-			category: 'Common options'
+			category: 'Tool option'
 		}
 		verbosity: {
 			description: 'Control verbosity of logging. [Default: "INFO"]',
-			category: 'Common options'
+			category: 'Tool option'
 		}
 		showHidden: {
 			description: 'Display hidden arguments. [Default: false]',
-			category: 'Common options'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -335,7 +335,7 @@ task depthOfCoverage {
 		}
 		ext: {
 			description: 'Extension of the input file (".sam" or ".bam") [default: ".bam"]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		prefix: {
 			description: 'Prefix for the output file [default: basename(in, ext)]',
@@ -359,75 +359,75 @@ task depthOfCoverage {
 		}
 		geneList: {
 			description: 'Calculate coverage statistics over this list of genes. (refseq format)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		countType: {
 			description: 'How should overlapping reads from the same fragment be handled? (Possible values: {COUNT_READS, COUNT_FRAGMENTS, COUNT_FRAGMENTS_REQUIRE_SAME_BASE}) [default: COUNT_READS]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		disableBamIndexCaching: {
 			description: "If true, don't cache bam indexes, this will reduce memory requirements but may harm performance if many intervals are specified. Caching is automatically disabled if there are no intervals specified. [default: false]",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		disableSequenceDictionaryValidation: {
 			description: 'If specified, do not check the sequence dictionaries from our inputs for compatibility. Use at your own risk! [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		intervalMergingRule: {
 			description: 'Interval merging rule for abutting intervals. (possible values: ALL, OVERLAPPING_ONLY) [default: ALL]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		maxBaseQuality: {
 			description: 'Maximum quality of bases to count towards depth. [default: 127]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		minBaseQuality: {
 			description: 'Minimum quality of bases to count towards depth. [default: 0]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		maxDepthPerSample: {
 			description: 'Maximum number of reads to retain per sample per locus. Reads above this threshold will be downsampled. Set to 0 to disable. [default: 0]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		outputFormat: {
 			description: 'The format of the output file. (possible values: CSV, TABLE) [default: CSV]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		partitionType: {
 			description: 'Partition type for depth of coverage. (possbile values: sample, readgroup and/or library) [default: sample]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		printBaseCounts: {
 			description: 'Add base counts to per-locus output. [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		quiet: {
 			description: 'Whether to suppress job-summary info on System.err. [Default: false]',
-			category: 'Common options'
+			category: 'Tool option'
 		}
 		tmpDir: {
 			description: 'Path to a directory with space available to be used by this program for temporary storage of working files. [Default: null]',
-			category: 'Common options'
+			category: 'Tool option'
 		}
 		useJDKDeflater: {
 			description: 'Use the JDK Deflater instead of the Intel Deflater for writing compressed output. [Default: false]',
-			category: 'Common options'
+			category: 'Tool option'
 		}
 		useJDKInflater: {
 			description: 'Use the JDK Inflater instead of the Intel Inflater for reading compressed input. [Default: false]',
-			category: 'Common options'
+			category: 'Tool option'
 		}
 		validationStringency: {
 			description: ' Validation stringency for all SAM files read by this program. Setting stringency to SILENT can improve performance when processing a BAM file in which variable-length data (read, qualities, tags) do not otherwise need to be decoded. [Default: "STRIC"]',
-			category: 'Common options'
+			category: 'Tool option'
 		}
 		verbosity: {
 			description: 'Control verbosity of logging. [Default: "INFO"]',
-			category: 'Common options'
+			category: 'Tool option'
 		}
 		showHidden: {
 			description: 'Display hidden arguments. [Default: false]',
-			category: 'Common options'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -551,23 +551,23 @@ task splitIntervals {
 		}
 		scatterCount: {
 			description: 'Scatter count: number of output interval files to split into [default: 1]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		subdivisionMode: {
 			description: 'How to divide intervals {INTERVAL_SUBDIVISION, BALANCING_WITHOUT_INTERVAL_SUBDIVISION, BALANCING_WITHOUT_INTERVAL_SUBDIVISION_WITH_OVERFLOW, INTERVAL_COUNT}. [default: INTERVAL_SUBDIVISION]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		intervalsPadding: {
 			description: 'Amount of padding (in bp) to add to each interval you are including. [default: 0]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		overlappingRule: {
 			description: 'Interval merging rule for abutting intervals set to OVERLAPPING_ONLY [default: false => ALL]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		intersectionRule: {
 			description: 'Set merging approach to use for combining interval inputs to INTERSECTION [default: false => UNION]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -686,7 +686,7 @@ task baseRecalibrator {
 		}
 		intervals: {
 			description: 'Path to a file containing genomic intervals over which to operate. (format intervals list: chr1:1000-2000)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		outputPath: {
 			description: 'Output path where bqsr report will be generated.',
@@ -702,11 +702,11 @@ task baseRecalibrator {
 		}
 		knownSites: {
 			description: 'One or more databases of known polymorphic sites used to exclude regions around known polymorphisms from analysis.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		knownSitesIdx: {
 			description: 'Indexes of the inputs known sites.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
@@ -722,39 +722,39 @@ task baseRecalibrator {
 		}
 		gapPenality: {
 			description: 'BQSR BAQ gap open penalty (Phred Scaled). Default value is 40. 30 is perhaps better for whole genome call sets [default: 40]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		indelDefaultQual: {
 			description: 'Default quality for the base insertions/deletions covariate [default: 45]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		lowQualTail: {
 			description: 'Minimum quality for the bases in the tail of the reads to be considered [default: 2]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		indelKmer: {
 			description: 'Size of the k-mer context to be used for base insertions and deletions [default: 3]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		mismatchKmer: {
 			description: 'Size of the k-mer context to be used for base mismatches [default: 2]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		maxCycle: {
 			description: 'The maximum cycle value permitted for the Cycle covariate [default: 500]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		intervalsPadding: {
 			description: 'Amount of padding (in bp) to add to each interval you are including. [default: 0]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		overlappingRule: {
 			description: 'Interval merging rule for abutting intervals set to OVERLAPPING_ONLY [default: false => ALL]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		intersectionRule: {
 			description: 'Set merging approach to use for combining interval inputs to INTERSECTION [default: false => UNION]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -983,7 +983,7 @@ task applyBQSR {
 		}
 		intervals: {
 			description: 'Path to a file containing genomic intervals over which to operate. (format intervals list: chr1:1000-2000)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
@@ -999,39 +999,39 @@ task applyBQSR {
 		}
 		originalQScore: {
 			description: 'Emit original base qualities under the OQ tag [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		globalQScorePrior: {
 			description: 'Global Qscore Bayesian prior to use for BQSR [default: -1]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		preserveQScoreLT: {
 			description: "Don't recalibrate bases with quality scores less than this threshold [default: 6]",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		quantizeQual: {
 			description: 'Quantize quality scores to a given number of levels [default: 0]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		intervalsPadding: {
 			description: 'Amount of padding (in bp) to add to each interval you are including. [default: 0]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		overlappingRule: {
 			description: 'Interval merging rule for abutting intervals set to OVERLAPPING_ONLY [default: false => ALL]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		intersectionRule: {
 			description: 'Set merging approach to use for combining interval inputs to INTERSECTION [default: false => UNION]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		bamIndex: {
 			description: 'Create a BAM/CRAM index when writing a coordinate-sorted BAM/CRAM file [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		bamMD5: {
 			description: 'Create a MD5 digest for any BAM/SAM/CRAM file created [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -1147,19 +1147,19 @@ task gatherBamFiles {
 		}
 		compressionLevel: {
 			description: 'Compression level for all compressed files created (e.g. BAM and VCF). [default: 6]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		maxRecordsInRam: {
 			description: 'When writing files that need to be sorted, this will specify the number of records stored in RAM before spilling to disk. Increasing this number reduces the number of file handles needed to sort the file, and increases the amount of RAM needed. [Default: 500000]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		bamIndex: {
 			description: 'Create a BAM/CRAM index when writing a coordinate-sorted BAM/CRAM file [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		bamMD5: {
 			description: 'Create a MD5 digest for any BAM/SAM/CRAM file created [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -1294,23 +1294,23 @@ task leftAlignIndels {
 		}
 		intervalsPadding: {
 			description: 'Amount of padding (in bp) to add to each interval you are including. [default: 0]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		overlappingRule: {
 			description: 'Interval merging rule for abutting intervals set to OVERLAPPING_ONLY [default: false => ALL]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		intersectionRule: {
 			description: 'Set merging approach to use for combining interval inputs to INTERSECTION [default: false => UNION]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		bamIndex: {
 			description: 'Create a BAM/CRAM index when writing a coordinate-sorted BAM/CRAM file [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		bamMD5: {
 			description: 'Create a MD5 digest for any BAM/SAM/CRAM file created [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -1452,23 +1452,23 @@ task collectMultipleMetrics {
 		}
 		collectAlignmentSummaryMetrics: {
 			description: 'Use programm : CollectAlignmentSummaryMetrics [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		collectBaseDistributionByCycle: {
 			description: 'Use programm : CollectBaseDistributionByCycle [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		collectInsertSizeMetrics: {
 			description: 'Use programm : CollectInsertSizeMetrics [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		meanQualityByCycle: {
 			description: 'Use programm : MeanQualityByCycle [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		qualityScoreDistribution: {
 			description: 'Use programm : QualityScoreDistribution [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -1570,11 +1570,11 @@ task bedToIntervalList {
 		}
 		sort: {
 			description: 'If true, sort the output interval list before writing it. [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		unique: {
 			description: 'If true, unique the output interval list by merging overlapping regions, before writing it (implies sort=true). [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -1665,11 +1665,11 @@ task intervalListToBed {
 		}
 		sort: {
 			description: 'If true, sort the output interval list before writing it. [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		score: {
 			description: 'The score, between 0-1000, to output for each interval in the BED file. [default: 500]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -1859,35 +1859,35 @@ task haplotypeCaller {
 		}
 		intervals: {
 			description: 'Path to a file containing genomic intervals over which to operate. (format intervals list: chr1:1000-2000)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		intervalsPadding: {
 			description: 'Amount of padding (in bp) to add to each interval you are including. [default: 0]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		overlappingRule: {
 			description: 'Interval merging rule for abutting intervals set to OVERLAPPING_ONLY [default: false => ALL]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		intersectionRule: {
 			description: 'Set merging approach to use for combining interval inputs to INTERSECTION [default: false => UNION]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		smithAndWaterman: {
 			description: 'Which Smith-Waterman implementation to use, generally FASTEST_AVAILABLE is the right choice (possible values: FASTEST_AVAILABLE, AVX_ENABLED, JAVA) [default: FASTEST_AVAILABLE]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		emitRefConfidence: {
 			description: 'Mode for emitting reference confidence scores (possible values: NONE, BP_RESOLUTION, GVCF) [default: None]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		createVCFIdx: {
 			description: 'If true, create a VCF index when writing a coordinate-sorted VCF file. [Default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		createVCFMD5: {
 			description: 'If true, create a a MD5 digest any VCF file created. [Default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -1988,7 +1988,7 @@ task gatherVcfFiles {
 		}
 		reorder: {
 			description: 'If true the program will reorder INPUT according to the genomic location of the first variant in each file. [Default: true]',
-			category: 'optional'
+			category: 'Tool option'
 
 		}
 		threads: {
@@ -2100,11 +2100,11 @@ task splitVcfs {
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		strict: {
 			description: 'If true an exception will be thrown if an event type other than SNP or indel is encountered [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -2263,51 +2263,51 @@ task variantFiltration {
 		}
 		LowQualByDepth: {
 			description: 'Threshold below which QD the variant will be tagged as LowQualByDepth',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		FSStrandBias: {
 			description: 'Threshold above which FS the variant will be tagged as FSStrandBias',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		LowMappingQuality: {
 			description: 'Threshold below which MQ the variant will be tagged as LowMappingQuality',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		LowMappingQualityRankSum: {
 			description: 'Threshold below which MQRankSum the variant will be tagged as LowMappingQualityRankSum',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		LowReadPosRankSum: {
 			description: 'Threshold below which ReadPosRankSum the variant will be tagged as LowReadPosRankSum',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		SORStrandBias: {
 			description: 'Threshold above which SOR the variant will be tagged as SORStrandBias',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		HomopolymerRegion: {
 			description: 'Threshold above which POLYX the variant will be tagged as HomopolymerRegion',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		LowCoverage: {
 			description: 'Threshold below which DP the variant will be tagged as LowCoverage',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		filtersExpression: {
 			description: 'Other custom filters',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		filtersName: {
 			description: 'Other custom filters',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		createVCFIdx: {
 			description: 'If true, create a VCF index when writing a coordinate-sorted VCF file. [Default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		createVCFMD5: {
 			description: 'If true, create a a MD5 digest any VCF file created. [Default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

@@ -87,15 +87,15 @@ task bgzip {
 		}
 		decompress: {
 			description: "Decompress file (incompatible with index) [default: false]",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		force: {
 			description: "Overwrite files without asking [default: false]",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		index: {
 			description: "Compress and create BGZF index [default: false]",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

@@ -115,43 +115,43 @@ task bamqc {
 		}
 		chromLimit: {
 			description: 'Paint chromosome limits inside charts [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		featureFile: {
 			description: 'Feature file with regions of interest in GFF/GTF or BED format',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		minHomopolymerSize: {
 			description: 'Minimum size for a homopolymer to be considered in indel analysis[default: 3]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		collectOverlapPairs: {
 			description: 'Activate this option to collect statistics of overlapping paired-end reads [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		outsideStats: {
 			description: 'Report information for the regions outside those defined by feature-file (ignored if no feature file defined) [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		pdf: {
 			description: 'Specify if a pdf report will be generated [default: true]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		skipDuplicates: {
 			description: 'Activate this option to skip duplicated alignments from the analysis. [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		nr: {
 			description: 'Sets number of reads analyzed in a chunk [default: 1000]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		nWindows: {
 			description: 'Sets number of reads analyzed in a windows [default: 400]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (768M*threads)]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

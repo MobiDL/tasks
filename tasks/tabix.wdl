@@ -97,15 +97,15 @@ task index {
 		}
 		csi: {
 			description: 'Generate CSI index for VCF (otherwise is TBI) [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		preset: {
 			description: 'Input format for indexing. Valid values are: gff, bed, sam, vcf.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		minShift: {
 			description: 'Set minimal interval size for CSI indices to 2^INT (if defined force to use csi)',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

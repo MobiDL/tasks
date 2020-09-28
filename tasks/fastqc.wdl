@@ -101,39 +101,39 @@ task fastqc {
 		}
 		extract: {
 			description: 'The zip file will be uncompressed [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		nogroup: {
 			description: 'Disable grouping of bases for reads >50bp. [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		minLength: {
 			description: 'Sets an artificial lower limit on the length of the sequence to be shown in the report.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		format: {
 			description: 'Bypasses the normal sequence file format detection and forces the program to use the specified format.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		kmers: {
 			description: 'Specifies the length of Kmer to look for in the Kmer content module (between 2 and 10). [default: 7]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		contaminants: {
 			description: 'Specifies a non-default file which contains the list of contaminants to screen overrepresented sequences against.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		adapters: {
 			description: 'Specifies a non-default file which contains the list of adapter sequences which will be explicity searched against the library.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		limits: {
 			description: 'Specifies a non-default file which contains a set of criteria which will be used to determine the warn/error limits for the various modules.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		tempDir: {
 			description: 'Selects a directory to be used for temporary files written when generating report images.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -233,35 +233,35 @@ task fastqcNano {
 		}
 		extract: {
 			description: 'The zip file will be uncompressed [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		minLength: {
 			description: 'Sets an artificial lower limit on the length of the sequence to be shown in the report.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		format: {
 			description: 'Bypasses the normal sequence file format detection and forces the program to use the specified format.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		kmers: {
 			description: 'Specifies the length of Kmer to look for in the Kmer content module (between 2 and 10). [default: 7]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		contaminants: {
 			description: 'Specifies a non-default file which contains the list of contaminants to screen overrepresented sequences against.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		adapters: {
 			description: 'Specifies a non-default file which contains the list of adapter sequences which will be explicity searched against the library.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		limits: {
 			description: 'Specifies a non-default file which contains a set of criteria which will be used to determine the warn/error limits for the various modules.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		tempDir: {
 			description: 'Selects a directory to be used for temporary files written when generating report images.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -365,43 +365,43 @@ task fastqcCasava {
 		}
 		extract: {
 			description: 'The zip file will be uncompressed [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		nogroup: {
 			description: 'Disable grouping of bases for reads >50bp. [default: false]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		nofilter: {
 			description: "Don't remove read flagged by casava as poor quality when performing the QC analysis. [default: false]",
-			category: 'optional'
+			category: 'Tool option'
 		}
 		minLength: {
 			description: 'Sets an artificial lower limit on the length of the sequence to be shown in the report.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		format: {
 			description: 'Bypasses the normal sequence file format detection and forces the program to use the specified format.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		kmers: {
 			description: 'Specifies the length of Kmer to look for in the Kmer content module (between 2 and 10). [default: 7]',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		contaminants: {
 			description: 'Specifies a non-default file which contains the list of contaminants to screen overrepresented sequences against.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		adapters: {
 			description: 'Specifies a non-default file which contains the list of adapter sequences which will be explicity searched against the library.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		limits: {
 			description: 'Specifies a non-default file which contains a set of criteria which will be used to determine the warn/error limits for the various modules.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		tempDir: {
 			description: 'Selects a directory to be used for temporary files written when generating report images.',
-			category: 'optional'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
