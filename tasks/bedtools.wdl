@@ -95,8 +95,8 @@ task intersect {
 
  	parameter_meta {
 		path_exe: {
-			description: "Path used as executable [default: 'bedtools']",
-			category: 'optional'
+			description: 'Path used as executable [default: "bedtools"]',
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Path where was generated output. [default: pwd(script)]',
@@ -216,8 +216,8 @@ task sort {
 
  	parameter_meta {
 		path_exe: {
-			description: "Path used as executable [default: 'bedtools']",
-			category: 'optional'
+			description: 'Path used as executable [default: "bedtools"]',
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Path where was generated output. [default: pwd(script)]',
@@ -337,8 +337,8 @@ task coverage {
 
  	parameter_meta {
 		path_exe: {
-			description: "Path used as executable [default: 'bedtools']",
-			category: 'optional'
+			description: 'Path used as executable [default: "bedtools"]',
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Path where was generated output. [default: pwd(script)]',

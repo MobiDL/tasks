@@ -89,7 +89,7 @@ task fastqc {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "fastqc"]',
-			category: 'optional'
+			category: 'System'
 		}
 		path_java: {
 			description: 'Provides the full path to the java binary you want to use to launch fastqc. [default: assuming is in the path]',
@@ -221,7 +221,7 @@ task fastqcNano {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "fastqc"]',
-			category: 'optional'
+			category: 'System'
 		}
 		path_java: {
 			description: 'Provides the full path to the java binary you want to use to launch fastqc. [default: assuming is in the path]',
@@ -353,7 +353,7 @@ task fastqcCasava {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "fastqc"]',
-			category: 'optional'
+			category: 'System'
 		}
 		path_java: {
 			description: 'Provides the full path to the java binary you want to use to launch fastqc. [default: assuming is in the path]',

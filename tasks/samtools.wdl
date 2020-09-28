@@ -83,7 +83,7 @@ task sort {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where bam file was generated. [default: pwd()]',
@@ -200,7 +200,7 @@ task dict {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where dict file was generated. [default: pwd()]',
@@ -312,7 +312,7 @@ task index {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where index was generated. [default: pwd()]',
@@ -430,7 +430,7 @@ task view {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where index was generated. [default: pwd()]',
@@ -555,7 +555,7 @@ task faidx {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where index was generated. [default: pwd()]',
@@ -636,7 +636,7 @@ task fqidx {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where index was generated. [default: pwd()]',
@@ -720,7 +720,7 @@ task flagstat {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where flagstat file was generated. [default: pwd()]',
@@ -814,7 +814,7 @@ task bedcov {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where bedcov file will be generated. [default: pwd()]',
@@ -933,7 +933,7 @@ task markdup {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where bedcov file will be generated. [default: pwd()]',
@@ -1062,7 +1062,7 @@ task fixmate {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where bedcov file will be generated. [default: pwd()]',
@@ -1177,7 +1177,7 @@ task merge {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
-			category: 'optional'
+			category: 'System'
 		}
 		inputPaths: {
 			description: 'Path array of input alignement files to merge',

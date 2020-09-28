@@ -30,7 +30,7 @@ task mem {
 	}
 
 	input {
-		String path_exe_bwa = "bwa"
+		String path_exe = "bwa"
 		String path_exe_samtools = "samtools"
 
 		String? outputPath
@@ -73,7 +73,7 @@ task mem {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		~{path_exe_bwa} mem \
+		~{path_exe} mem \
 			-R "@RG\tID:~{baseName}\tSM:~{baseName}\tPL:~{platformReads}" \
 			-T ~{minScore} \
 			~{true="-M" false="" markShorter} \
@@ -94,13 +94,13 @@ task mem {
  	}
 
  	parameter_meta {
-		path_exe_bwa: {
+		path_exe: {
 			description: 'Path used as executable [default: "bwa"]',
-			category: 'optional'
+			category: 'System'
 		}
 		path_exe_samtools: {
 			description: 'Path used as executable [default: "samtools"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where bam file was generated. [default: pwd()]',
@@ -217,7 +217,7 @@ task index {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "bwa"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where bam file was generated. [default: pwd()]',

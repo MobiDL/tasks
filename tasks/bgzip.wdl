@@ -25,6 +25,8 @@ task bgzip {
 	}
 
 	input {
+		String path_exe = "bgzip"
+
 		File in
 		String outputPath
 
@@ -50,7 +52,7 @@ task bgzip {
 
 	command <<<
 
-		bgzip \
+		~{path_exe} \
 			~{true="--stdout" false="" keepFile} \
 			~{true="--decompress" false="" decompress} \
 			~{true="--force" false="" force}\
@@ -71,6 +73,10 @@ task bgzip {
  	}
 
  	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "bgzip"]',
+			category: 'System'
+		}
 		in: {
 			description: "File to compres/decompress.",
 			category: "required"

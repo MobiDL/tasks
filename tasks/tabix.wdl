@@ -81,7 +81,7 @@ task index {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "sambamba"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where bam file was generated. [default: pwd()]',

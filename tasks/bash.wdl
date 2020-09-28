@@ -82,43 +82,43 @@ task findFiles {
  	parameter_meta {
 		path: {
 			description: "Path where find will work on.",
-			category: "required"
+			category: 'Required'
 		}
 		regexpName: {
 			description: "Base of file name (the path with the leading directories removed) matches shell pattern pattern.",
-			category: "tests"
+			category: 'Tool option'
 		}
 		regexpPath: {
 			description: "File name matches shell pattern pattern. The metacharacters do not treat `/' or `.' specially.",
-			category: "tests"
+			category: 'Tool option'
 		}
 		maxDepth: {
 			description: "Descend at most levels (a non-negative integer) levels of directories below the starting-points.",
-			category: "global"
+			category: 'Tool option'
 		}
 		minDepth: {
 			description: "Do not apply any tests or actions at levels less than levels (a non-negative integer).",
-			category: "global"
+			category: 'Tool option'
 		}
 		uid: {
 			description: "File's numeric user ID is n.",
-			category: "tests"
+			category: 'Tool option'
 		}
 		gid: {
 			description: "File's numeric group ID is n.",
-			category: "tests"
+			category: 'Tool option'
 		}
 		readable: {
 			description: "Matches files which are readable.",
-			category: "global"
+			category: 'Tool option'
 		}
 		writable: {
 			description: "Matches files which are writable.",
-			category: "tests"
+			category: 'Tool option'
 		}
 		executable: {
 			description: "Matches files which are executable and directories which are searchable (in a file name resolution sense).",
-			category: "tests"
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -194,19 +194,19 @@ task convertBedToIntervals {
  	parameter_meta {
 		in: {
 			description: 'Input bed to convert.',
-			category: 'required'
+			category: 'Required'
 		}
 		outputPath: {
 			description: 'Path where was generated output. [default: "."]',
-			category: 'optional'
+			category: 'Output option'
 		}
 		name: {
 			description: 'Basename of the output file. [default: sub(basename(in), ".bed")]',
-			category: 'optional'
+			category: 'Output option'
 		}
 		ext: {
 			description: 'Extension of the output file. [default: ".intervals"]',
-			category: 'optional'
+			category: 'Output option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -286,15 +286,15 @@ task makeLink {
 		}
 		outputPath: {
 			description: 'Path where was generated output.',
-			category: "Output"
+			category: 'Output option'
 		}
 		name: {
 			description: 'Basename of the output file. [default: basename(in)]',
-			category: 'Output'
+			category: 'Output option'
 		}
 		softLink: {
 			description: 'Make soft link (-s). [default: false]',
-			category: 'Option'
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -366,15 +366,15 @@ task concatenateFiles {
 		}
 		outputPath: {
 			description: 'Path where output will be generated.',
-			category: "Outpout"
+			category: 'Output option'
 		}
 		name: {
 			description: 'Name of the output file. [default: sub(basename(in[0]),subString,"")]',
-			category: 'Outpout'
+			category: 'Output option'
 		}
 		subString: {
 			description: 'Substring to remove to create name file [default: "^[0-9]+\-"]',
-			category: 'Outpout'
+			category: 'Output option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

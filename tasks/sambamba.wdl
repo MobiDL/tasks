@@ -88,7 +88,7 @@ task markdup {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "sambamba"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where bam file was generated. [default: pwd()]',
@@ -207,7 +207,7 @@ task index {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "sambamba"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where bam file was generated. [default: pwd()]',
@@ -309,7 +309,7 @@ task sort {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "sambamba"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where bam file was generated. [default: pwd()]',
@@ -417,7 +417,7 @@ task flagstat {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "sambamba"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where flagstat file was generated. [default: pwd()]',
@@ -526,7 +526,7 @@ task view {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "sambamba"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where flagstat file was generated. [default: pwd()]',

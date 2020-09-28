@@ -82,7 +82,7 @@ task crumble {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "crumble"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where files were generated. [default: pwd()]',

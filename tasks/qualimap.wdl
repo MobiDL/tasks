@@ -99,7 +99,7 @@ task bamqc {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "qualimap"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where files were generated. [default: pwd()]',

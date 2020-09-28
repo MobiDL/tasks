@@ -81,8 +81,8 @@ task index {
 
  	parameter_meta {
 		path_exe: {
-			description: "Path used as executable [default: 'bcftools']",
-			category: 'optional'
+			description: 'Path used as executable [default: "bcftools"]',
+			category: 'System'
 		}
 		in: {
 			description: "VCF/BCF file to index (extension: '.vcf.gz|.bcf')",
@@ -217,7 +217,7 @@ task merge {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "bcftools"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'Array of files to merge together (extension: ".vcf.gz|.bcf")',
@@ -402,8 +402,8 @@ task norm {
 
  	parameter_meta {
 		path_exe: {
-			description: "Path used as executable [default: 'bcftools']",
-			category: 'optional'
+			description: 'Path used as executable [default: "bcftools"]',
+			category: 'System'
 		}
 		in: {
 			description: "VCF/BCF file to left-align and normalize indels (extension: '.vcf.gz|.bcf')",
@@ -613,8 +613,8 @@ task stats {
 
  	parameter_meta {
 		path_exe: {
-			description: "Path used as executable [default: 'bcftools']",
-			category: 'optional'
+			description: 'Path used as executable [default: "bcftools"]',
+			category: 'System'
 		}
 		in: {
 			description: "VCF/BCF file to left-align and normalize indels (extension: '.vcf.gz|.bcf')",

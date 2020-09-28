@@ -109,7 +109,7 @@ task simulateReadsIllumina {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "dwgsim"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where files were generated. [default: pwd()]',

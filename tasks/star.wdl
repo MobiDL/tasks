@@ -85,7 +85,7 @@ task genomeGenerate {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where files will be generated. [default: pwd()]',

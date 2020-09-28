@@ -98,7 +98,7 @@ task adaptersTrimming {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "cutadapt"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where files were generated. [default: pwd()]',
@@ -254,7 +254,7 @@ task qualityTrimming {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "cutadapt"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where files were generated. [default: pwd()]',
@@ -388,7 +388,7 @@ task hardTrimming {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "cutadapt"]',
-			category: 'optional'
+			category: 'System'
 		}
 		outputPath: {
 			description: 'Output path where files were generated. [default: pwd()]',

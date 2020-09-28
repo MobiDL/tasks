@@ -108,7 +108,7 @@ task reorderSam {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'Input file (SAM or BAM) to extract reads from..',
@@ -319,7 +319,7 @@ task depthOfCoverage {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'BAM/SAM/CRAM file containing reads.',
@@ -515,7 +515,7 @@ task splitIntervals {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'Path to a file containing genomic intervals over which to operate. (format intervals list: chr1:1000-2000)',
@@ -674,7 +674,7 @@ task baseRecalibrator {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'Alignement file to recalibrate (SAM/BAM/CRAM)',
@@ -827,7 +827,7 @@ task gatherBQSRReports {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'List of scattered BQSR report files',
@@ -955,7 +955,7 @@ task applyBQSR {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'Bam file top apply BQSR.',
@@ -1119,7 +1119,7 @@ task gatherBamFiles {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'Array of BAMs to gather.',
@@ -1258,7 +1258,7 @@ task leftAlignIndels {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'BAM to leftAlign.',
@@ -1420,7 +1420,7 @@ task collectMultipleMetrics {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'BAM to process.',
@@ -1546,7 +1546,7 @@ task bedToIntervalList {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'BED to convert into intervals list.',
@@ -1649,7 +1649,7 @@ task intervalListToBed {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'Intervals list to convert into BED.',
@@ -1811,7 +1811,7 @@ task haplotypeCaller {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'BAM file.',
@@ -1964,7 +1964,7 @@ task gatherVcfFiles {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'Array of VCFs to gather.',
@@ -2072,7 +2072,7 @@ task splitVcfs {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'VCF to split.',
@@ -2223,7 +2223,7 @@ task variantFiltration {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'VCF to filter.',
@@ -2387,7 +2387,7 @@ task mergeVcfs {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'List of VCFs files',
@@ -2496,7 +2496,7 @@ task sortVcf {
  	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'List of VCFs files',
