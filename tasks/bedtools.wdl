@@ -100,7 +100,7 @@ task intersect {
 		}
 		outputPath: {
 			description: 'Path where was generated output. [default: pwd(script)]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		bedA: {
 			description: 'BAM/BED/GFF/VCF file "A".',
@@ -221,7 +221,7 @@ task sort {
 		}
 		outputPath: {
 			description: 'Path where was generated output. [default: pwd(script)]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		in: {
 			description: 'BED/GFF/VCF file.',
@@ -229,15 +229,15 @@ task sort {
 		}
 		ext: {
 			description: 'Extension of the input file (BED/GFF/VCF) [default: ".bed"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Prefix for the output file [default: basename(in, ext)]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		suffix: {
 			description: 'Suffix for the output file (e.g. name.suffix.ext) [default: "sort"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		sortBySizeAsc: {
 			description: 'true: sort by feature size asc; false: sort by feature size desc; default: null',
@@ -342,7 +342,7 @@ task coverage {
 		}
 		outputPath: {
 			description: 'Path where was generated output. [default: pwd(script)]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		bedA: {
 			description: 'BAM/BED/GFF/VCF file "A".',

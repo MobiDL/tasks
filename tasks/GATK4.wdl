@@ -29,7 +29,7 @@ task reorderSam {
 		Array[String]? javaOptions
 
 		File in
-		String outputPath
+		String? outputPath
 		String? prefix
 		String ext = ".bam"
 		String suffix = "reorder"
@@ -67,7 +67,7 @@ task reorderSam {
 	String referenceSequenceOpt = if defined(referenceSequence) then "--REFERENCE_SEQUENCE ~{referenceSequence} " else ""
 
 	String outputName = if defined(prefix) then "~{prefix}.~{suffix}~{ext}" else basename(in,ext) + ".~{suffix}~{ext}"
-	String outputFile = "~{outputPath}/~{outputName}"
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{outputName}" else "~{outputName}"
 
 	command <<<
 
@@ -116,7 +116,7 @@ task reorderSam {
 		}
 		outputPath: {
 			description: 'Output path where file (SAM or BAM) were generated.',
-			category: 'Required'
+			category: 'Output path/name option'
 		}
 		ext: {
 			description: 'Extension of the input file (".sam" or ".bam") [default: ".bam"]',
@@ -124,11 +124,11 @@ task reorderSam {
 		}
 		prefix: {
 			description: 'Prefix for the output file [default: basename(in, ext)]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		suffix: {
 			description: 'Suffix for the output file (e.g. sample.suffix.bam) [default: "reorder"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		sequenceDict: {
 			description: 'Sequence Dictionary for the OUTPUT file (can be read from one of the following file types (SAM, BAM, VCF, BCF, Interval List, Fasta, or Dict)',
@@ -227,7 +227,7 @@ task depthOfCoverage {
 
 		File in
 		File intervals
-		String outputPath
+		String? outputPath
 		String? prefix
 		String ext = ".bam"
 		String suffix = "DoC"
@@ -271,7 +271,7 @@ task depthOfCoverage {
 	Array[String] summaryCoverageThresholdOpt = prefix("--summary-coverage-threshold ", summaryCoverageThreshold)
 
 	String outputName = if defined(prefix) then "~{prefix}.~{suffix}" else basename(in,ext) + ".~{suffix}"
-	String outputFile = "~{outputPath}/~{outputName}"
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{outputName}" else "~{outputName}"
 
 	command <<<
 
@@ -331,7 +331,7 @@ task depthOfCoverage {
 		}
 		outputPath: {
 			description: 'Output path where files were generated.',
-			category: 'Required'
+			category: 'Output path/name option'
 		}
 		ext: {
 			description: 'Extension of the input file (".sam" or ".bam") [default: ".bam"]',
@@ -339,11 +339,11 @@ task depthOfCoverage {
 		}
 		prefix: {
 			description: 'Prefix for the output file [default: basename(in, ext)]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		suffix: {
 			description: 'Suffix for the output file (e.g. prefix.suffix.bam) [default: "DoC"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		referenceFasta: {
 			description: 'Path to the reference file (format: fasta)',
@@ -523,19 +523,19 @@ task splitIntervals {
 		}
 		outputPath: {
 			description: 'Output path where files were generated.',
-			category: 'Required'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output repertory name [default: sub(basename(in),"\.([a-zA-Z]*)$","")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "\.([a-zA-Z]*)$"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subStringReplace: {
 			description: 'subString replace by this string [default: "-split"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
@@ -690,15 +690,15 @@ task baseRecalibrator {
 		}
 		outputPath: {
 			description: 'Output path where bqsr report will be generated.',
-			category: 'Required'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(in),"\.(sam|bam|cram)$","")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		ext: {
 			description: 'Extension for the output file [default: ".recal"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		knownSites: {
 			description: 'One or more databases of known polymorphic sites used to exclude regions around known polymorphisms from analysis.',
@@ -835,19 +835,19 @@ task gatherBQSRReports {
 		}
 		outputPath: {
 			description: 'Output path where bqsr report will be generated.',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		ext: {
 			description: 'Extension for the output file [default: ".bqsr.report"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "\.[0-9]\.recal$"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -967,15 +967,15 @@ task applyBQSR {
 		}
 		outputPath: {
 			description: 'Output path where bam will be generated.',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		suffix: {
 			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".bqsr"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		bqsrReport: {
 			description: 'Path to a file containing bqsr report',
@@ -1131,19 +1131,19 @@ task gatherBamFiles {
 		}
 		outputPath: {
 			description: 'Output path where bam will be generated.',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		suffix: {
 			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".gather"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "(\.[0-9]+)?\.(sam|bam|cram)$"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		compressionLevel: {
 			description: 'Compression level for all compressed files created (e.g. BAM and VCF). [default: 6]',
@@ -1270,15 +1270,15 @@ task leftAlignIndels {
 		}
 		outputPath: {
 			description: 'Output path where bam will be generated.',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		suffix: {
 			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".bqsr"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
@@ -1428,15 +1428,15 @@ task collectMultipleMetrics {
 		}
 		outputPath: {
 			description: 'Output path where bam will be generated.',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		suffix: {
 			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".bqsr"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
@@ -1554,15 +1554,15 @@ task bedToIntervalList {
 		}
 		outputPath: {
 			description: 'Output path where intervals list will be generated.',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(in),"(.*)\.(bed)$","$1")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		ext: {
 			description: 'Extension of the output file [default: ".intervals"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
@@ -1657,11 +1657,11 @@ task intervalListToBed {
 		}
 		outputPath: {
 			description: 'Output path where BED will be generated.',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(in),"(.*)\.(bed)$","$1")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		sort: {
 			description: 'If true, sort the output interval list before writing it. [default: true]',
@@ -1823,19 +1823,19 @@ task haplotypeCaller {
 		}
 		outputPath: {
 			description: 'Output path where files will be generated.',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		suffix: {
 			description: 'Suffix to add to the output file [default: ".haplotypeCaller"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		ext: {
 			description: 'Extension of the output file [default: ".vcf"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
@@ -1972,19 +1972,19 @@ task gatherVcfFiles {
 		}
 		outputPath: {
 			description: 'Output path where vcf will be generated.',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		suffix: {
 			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".gather"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "(\.[0-9]+)?\.vcf$"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		reorder: {
 			description: 'If true the program will reorder INPUT according to the genomic location of the first variant in each file. [Default: true]',
@@ -2080,23 +2080,23 @@ task splitVcfs {
 		}
 		outputPath: {
 			description: 'Output path where vcf will be generated.',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		suffix: {
 			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".gather"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		ext: {
 			description: 'Extension of the output file (".vcf" or ".bcf") [default: same as input]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "(\.[0-9]+)?\.vcf$"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
@@ -2231,23 +2231,23 @@ task variantFiltration {
 		}
 		outputPath: {
 			description: 'Output path where vcf will be generated.',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		suffix: {
 			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".gather"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		ext: {
 			description: 'Extension of the output file (".vcf" or ".bcf") [default: same as input]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "(\.[0-9]+)?\.vcf$"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
@@ -2395,27 +2395,27 @@ task mergeVcfs {
 		}
 		outputPath: {
 			description: 'Output path where merged vcf will be written.',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "\.(vcf|bcf)$"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subStringReplace: {
 			description: 'subString replace by this string [default: ""]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		suffix: {
 			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".merge"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		ext: {
 			description: 'Extension for the output file [default: ".recal"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
@@ -2504,23 +2504,23 @@ task sortVcf {
 		}
 		outputPath: {
 			description: 'Output path where sorted vcf will be written.',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(in),subString,"")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "\.(vcf|bcf)$"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		suffix: {
 			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".sort"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		ext: {
 			description: 'Extension for the output file [default: ".recal"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',

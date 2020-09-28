@@ -83,7 +83,7 @@ task bgzip {
 		}
 		outputPath: {
 			description: "Path where was generated output.",
-			category: "required"
+			category: 'Output path/name option'
 		}
 		decompress: {
 			description: "Decompress file (incompatible with index) [default: false]",

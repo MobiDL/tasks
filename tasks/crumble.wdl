@@ -86,11 +86,11 @@ task crumble {
 		}
 		outputPath: {
 			description: 'Output path where files were generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: sub(basename(in),subString,subStringReplace)]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		in: {
 			description: 'Alignement file used as input (sam, bam or cram).',
@@ -102,11 +102,11 @@ task crumble {
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "\.(bam|cram|sam)"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subStringReplace: {
 			description: 'subString replace by this string [default: ""]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		outputFormat: {
 			description: 'Output format [default: ext of input file]',

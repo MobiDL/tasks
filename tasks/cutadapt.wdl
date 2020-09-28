@@ -102,11 +102,11 @@ task adaptersTrimming {
 		}
 		outputPath: {
 			description: 'Output path where files were generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: sub(basename(in),subString,subStringReplace)]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		in: {
 			description: 'Input reads (format: fastq, fastq.gz)',
@@ -258,11 +258,11 @@ task qualityTrimming {
 		}
 		outputPath: {
 			description: 'Output path where files were generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: sub(basename(in),subString,subStringReplace)]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		in: {
 			description: 'Input reads (format: fastq, fastq.gz)',
@@ -392,11 +392,11 @@ task hardTrimming {
 		}
 		outputPath: {
 			description: 'Output path where files were generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: sub(basename(in),subString,subStringReplace)]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		in: {
 			description: 'Input reads (format: fastq, fastq.gz)',

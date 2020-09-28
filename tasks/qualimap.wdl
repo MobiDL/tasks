@@ -103,11 +103,11 @@ task bamqc {
 		}
 		outputPath: {
 			description: 'Output path where files were generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Name to use for output repertory name [default: sub(basename(in),"(\.bam|\.sam|\.cram)","")]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		in: {
 			description: 'Bam file to analyze.',

@@ -90,7 +90,7 @@ task index {
 		}
 		outputPath: {
 			description: "Path where was generated output [default: VCF path]",
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		tabix: {
 			description: "Generate TBI-format index for VCF files [default: CSI-format]",
@@ -225,7 +225,7 @@ task merge {
 		}
 		outputPath: {
 			description: 'Path where was generated output [default: VCF path]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		forceSamples: {
 			description: 'Resolve duplicate sample names [default: false]',
@@ -411,23 +411,23 @@ task norm {
 		}
 		outputPath: {
 			description: 'Path where was generated output',
-			category: "required"
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(in),subString,"")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "\.(vcf|bcf)(\.gz)?$"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subStringReplace: {
 			description: 'subString replace by this string [default: ""]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		suffix: {
 			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".merge"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		refFasta: {
 			description: 'Reference used to merge in gvcf mode',
@@ -516,7 +516,7 @@ task stats {
 		String path_exe = "bcftools"
 
 		File in
-		String outputPath
+		String? outputPath
 		String? name
 		String subString = "\.(vcf|bcf)(\.gz)?$"
 		String subStringReplace = ""
@@ -622,23 +622,23 @@ task stats {
 		}
 		outputPath: {
 			description: 'Path where was generated output',
-			category: "required"
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Output file base name [default: sub(basename(in),subString,"")].',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "\.(vcf|bcf)(\.gz)?$"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subStringReplace: {
 			description: 'subString replace by this string [default: ""]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		ext: {
 			description: 'Extension use for the output file [default: ".stats"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		refFasta: {
 			description: 'Reference in fasta format',

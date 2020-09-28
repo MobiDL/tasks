@@ -93,7 +93,7 @@ task fastqc {
 		}
 		path_java: {
 			description: 'Provides the full path to the java binary you want to use to launch fastqc. [default: assuming is in the path]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'A set of sequence files (one or more)',
@@ -225,7 +225,7 @@ task fastqcNano {
 		}
 		path_java: {
 			description: 'Provides the full path to the java binary you want to use to launch fastqc. [default: assuming is in the path]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'A set of sequence files (one or more)',
@@ -357,7 +357,7 @@ task fastqcCasava {
 		}
 		path_java: {
 			description: 'Provides the full path to the java binary you want to use to launch fastqc. [default: assuming is in the path]',
-			category: 'optional'
+			category: 'System'
 		}
 		in: {
 			description: 'A set of sequence files (one or more)',

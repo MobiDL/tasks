@@ -104,15 +104,15 @@ task mem {
 		}
 		outputPath: {
 			description: 'Output path where bam file was generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		sample: {
 			description: 'Sample name to use for output file name [default: sub(basename(fastqR1),subString,"")]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Substring to remove to get sample name [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		fastqR1: {
 			description: 'Input file with reads 1 (fastq, fastq.gz, fq, fq.gz).',
@@ -221,7 +221,7 @@ task index {
 		}
 		outputPath: {
 			description: 'Output path where bam file was generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		in:	{
 			description: 'Fasta file to index by bwa.',

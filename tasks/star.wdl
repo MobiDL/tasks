@@ -89,7 +89,7 @@ task genomeGenerate {
 		}
 		outputPath: {
 			description: 'Output path where files will be generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',

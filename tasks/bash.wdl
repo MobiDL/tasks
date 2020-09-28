@@ -198,15 +198,15 @@ task convertBedToIntervals {
 		}
 		outputPath: {
 			description: 'Path where was generated output. [default: "."]',
-			category: 'Output option'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Basename of the output file. [default: sub(basename(in), ".bed")]',
-			category: 'Output option'
+			category: 'Output path/name option'
 		}
 		ext: {
 			description: 'Extension of the output file. [default: ".intervals"]',
-			category: 'Output option'
+			category: 'Output path/name option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
@@ -286,11 +286,11 @@ task makeLink {
 		}
 		outputPath: {
 			description: 'Path where was generated output.',
-			category: 'Output option'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Basename of the output file. [default: basename(in)]',
-			category: 'Output option'
+			category: 'Output path/name option'
 		}
 		softLink: {
 			description: 'Make soft link (-s). [default: false]',
@@ -366,15 +366,15 @@ task concatenateFiles {
 		}
 		outputPath: {
 			description: 'Path where output will be generated.',
-			category: 'Output option'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Name of the output file. [default: sub(basename(in[0]),subString,"")]',
-			category: 'Output option'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Substring to remove to create name file [default: "^[0-9]+\-"]',
-			category: 'Output option'
+			category: 'Output path/name option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

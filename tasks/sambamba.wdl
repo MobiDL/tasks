@@ -92,11 +92,11 @@ task markdup {
 		}
 		outputPath: {
 			description: 'Output path where bam file was generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		sample: {
 			description: 'Sample name to use for output file name [default: sub(basename(in),"(\.bam|\.sam|\.cram)","")]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		in: {
 			description: 'Bam file to mark or remove duplicates.',
@@ -104,7 +104,7 @@ task markdup {
 		}
 		suffix: {
 			description: 'Suffix to add on the output file (e.g. sample.suffix.bam) [default: ".markdup"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		removeDuplicates: {
 			description: 'Remove duplicates instead of just marking them [default: false]',
@@ -211,11 +211,11 @@ task index {
 		}
 		outputPath: {
 			description: 'Output path where bam file was generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		sample: {
 			description: 'Sample name to use for output file name [default: sub(basename(in),"(\.bam|\.cram)","")]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		in: {
 			description: 'Bam or cram file to index.',
@@ -313,11 +313,11 @@ task sort {
 		}
 		outputPath: {
 			description: 'Output path where bam file was generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		sample: {
 			description: 'Sample name to use for output file name [default: sub(basename(in),"(\.bam|\.sam|\.cram)","")]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		in: {
 			description: 'Bam file to sort.',
@@ -325,7 +325,7 @@ task sort {
 		}
 		suffix: {
 			description: 'Suffix to add on the output file (e.g. sample.suffix.bam) [default: ".sort"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		compressionLevel: {
 			description: 'Specify compression level of the resulting file (from 0 to 9) [default: 6]',
@@ -421,11 +421,11 @@ task flagstat {
 		}
 		outputPath: {
 			description: 'Output path where flagstat file was generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		sample: {
 			description: 'Sample name to use for output file name [default: sub(basename(in),"(\.bam|\.sam|\.cram)","")]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		in: {
 			description: 'Bam file to sort.',
@@ -433,7 +433,7 @@ task flagstat {
 		}
 		ext: {
 			description: 'Extension of the output file [default: ".flagstats"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

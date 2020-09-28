@@ -85,11 +85,11 @@ task index {
 		}
 		outputPath: {
 			description: 'Output path where bam file was generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: basename(in)]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		in: {
 			description: 'File to index with tabix.',

@@ -113,11 +113,11 @@ task simulateReadsIllumina {
 		}
 		outputPath: {
 			description: 'Output path where files were generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: dwgsim-illumina]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		in: {
 			description: 'Fasta file used to create fastq.',

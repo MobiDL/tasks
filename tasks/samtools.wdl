@@ -937,15 +937,15 @@ task markdup {
 		}
 		outputPath: {
 			description: 'Output path where bedcov file will be generated. [default: pwd()]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		name: {
 			description: 'Name to use for output file name [default: basename(in)]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		outExt: {
 			description: 'Specify output format (SAM, BAM, CRAM) [default: same as input]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		in: {
 			description: 'Bam file.',
@@ -953,7 +953,7 @@ task markdup {
 		}
 		suffix: {
 			description: 'Suffix to add on the output file (e.g. sample.markdup.bam) [default: ".markdup"]',
-			category: 'optional'
+			category: 'Output path/name option'
 		}
 		outputOpt: {
 			description: 'Specify output file format option in the form',
