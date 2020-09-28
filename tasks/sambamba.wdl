@@ -116,15 +116,15 @@ task markdup {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 		hashTableSize: {
 			description: 'Size of hash table for finding read pairs',
@@ -227,15 +227,15 @@ task index {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -349,15 +349,15 @@ task sort {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -437,15 +437,15 @@ task flagstat {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -575,15 +575,15 @@ task view {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }

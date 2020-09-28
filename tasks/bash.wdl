@@ -122,15 +122,15 @@ task findFiles {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -210,15 +210,15 @@ task convertBedToIntervals {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -282,31 +282,31 @@ task makeLink {
  	parameter_meta {
 		in: {
 			description: 'Input bed to convert.',
-			category: 'required'
+			category: 'Required'
 		}
 		outputPath: {
 			description: 'Path where was generated output.',
-			category: "required"
+			category: "Output"
 		}
 		name: {
 			description: 'Basename of the output file. [default: basename(in)]',
-			category: 'optional'
+			category: 'Output'
 		}
 		softLink: {
 			description: 'Make soft link (-s). [default: false]',
-			category: 'optional'
+			category: 'Option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -362,31 +362,31 @@ task concatenateFiles {
  	parameter_meta {
 		in: {
 			description: 'Array of files.',
-			category: 'required'
+			category: 'Required'
 		}
 		outputPath: {
 			description: 'Path where output will be generated.',
-			category: "required"
+			category: "Outpout"
 		}
 		name: {
 			description: 'Name of the output file. [default: sub(basename(in[0]),subString,"")]',
-			category: 'optional'
+			category: 'Outpout'
 		}
 		subString: {
 			description: 'Substring to remove to create name file [default: "^[0-9]+\-"]',
-			category: 'optional'
+			category: 'Outpout'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }

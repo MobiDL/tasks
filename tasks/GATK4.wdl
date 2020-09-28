@@ -196,15 +196,15 @@ task reorderSam {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -431,15 +431,15 @@ task depthOfCoverage {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -571,15 +571,15 @@ task splitIntervals {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -758,15 +758,15 @@ task baseRecalibrator {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -851,15 +851,15 @@ task gatherBQSRReports {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -1035,15 +1035,15 @@ task applyBQSR {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -1163,15 +1163,15 @@ task gatherBamFiles {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -1314,15 +1314,15 @@ task leftAlignIndels {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -1472,15 +1472,15 @@ task collectMultipleMetrics {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -1578,15 +1578,15 @@ task bedToIntervalList {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -1673,15 +1673,15 @@ task intervalListToBed {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -1891,15 +1891,15 @@ task haplotypeCaller {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -1993,15 +1993,15 @@ task gatherVcfFiles {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -2108,15 +2108,15 @@ task splitVcfs {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -2311,15 +2311,15 @@ task variantFiltration {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -2423,15 +2423,15 @@ task mergeVcfs {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -2528,15 +2528,15 @@ task sortVcf {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }

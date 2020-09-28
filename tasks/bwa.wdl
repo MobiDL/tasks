@@ -140,15 +140,15 @@ task mem {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
@@ -245,15 +245,15 @@ task index {
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
-			category: 'optional'
+			category: 'System'
 		}
 		memory: {
 			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
-			category: 'optional'
+			category: 'System'
 		}
 		memoryByThreads: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
-			category: 'optional'
+			category: 'System'
 		}
 	}
 }
