@@ -114,15 +114,15 @@ task adaptersTrimming {
 		}
 		suffix: {
 			description: 'Suffix to add to the output [default: .adaptersTrim]',
-			category: 'Tool option'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
-			category: 'Tool option'
+			category: 'Output path/name option'
 		}
 		subStringReplace: {
 			description: 'subString replace by this string [default: ""]',
-			category: 'Tool option'
+			category: 'Output path/name option'
 		}
 		type: {
 			description: 'Type of adapters (choices: "a": 3\' end; "g": 5\' end, "b": both 3\' or 5\' end)[default: "a"]',
@@ -270,15 +270,15 @@ task qualityTrimming {
 		}
 		suffix: {
 			description: 'Suffix to add to the output [default: .qualityTrim]',
-			category: 'Tool option'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
-			category: 'Tool option'
+			category: 'Output path/name option'
 		}
 		subStringReplace: {
 			description: 'subString replace by this string [default: ""]',
-			category: 'Tool option'
+			category: 'Output path/name option'
 		}
 		qualityTrim3: {
 			description: 'Trim low quality 3\' end under this threshold [default: 30]',
@@ -404,15 +404,15 @@ task hardTrimming {
 		}
 		suffix: {
 			description: 'Suffix to add to the output [default: .qualityTrim]',
-			category: 'Tool option'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
-			category: 'Tool option'
+			category: 'Output path/name option'
 		}
 		subStringReplace: {
 			description: 'subString replace by this string [default: ""]',
-			category: 'Tool option'
+			category: 'Output path/name option'
 		}
 		hardTrimStart: {
 			description: 'Cut N base pairs at the beginning of the reads [default: 0]',
