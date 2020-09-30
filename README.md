@@ -140,3 +140,5 @@ It calls the following subworkflow :
 	- bamqc
 - tabix (1.10):
 	- index
+- vep (101.0):
+	- vep_cache

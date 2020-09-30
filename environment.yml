@@ -18,3 +18,4 @@ dependencies:
   - qualimap==2.2.2d
   - bioconductor-repitools==1.34.0
   - cutadapt==2.10
+  - ensembl-vep==101.0

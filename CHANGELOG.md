@@ -88,3 +88,5 @@ All notable changes to this project will be documented in this file.
 	- bamqc
 - tabix :
 	- index
+- vep (101.0):
+	- vep_cache
