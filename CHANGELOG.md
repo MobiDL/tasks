@@ -90,5 +90,6 @@ All notable changes to this project will be documented in this file.
 	- index
 - vardict-java :
 	- vardictSoloAmplicons
+	- teststrandbias
 - vep :
 	- vep_cache

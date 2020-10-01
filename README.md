@@ -140,7 +140,8 @@ It calls the following subworkflow :
 	- bamqc
 - tabix (1.10):
 	- index
-- vardict-java (1.8.2)
+- vardict-java (1.8.2):
 	- vardictSoloAmplicons
+	- teststrandbias
 - vep (101.0):
 	- vep_cache
