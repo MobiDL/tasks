@@ -21,7 +21,7 @@ task vardictSoloAmplicons {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
 		version: "0.0.1"
-		date: "2020-09-29"
+		date: "2020-10-01"
 	}
 
 	input {
@@ -446,7 +446,7 @@ task teststrandbias {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
 		version: "0.0.1"
-		date: "2020-09-29"
+		date: "2020-10-01"
 	}
 
 	input {
@@ -522,6 +522,229 @@ task teststrandbias {
 		subStringReplace: {
 			description: 'subString replace by this string [default: ""]',
 			category: 'Output path/name option'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
+
+task var2vcf_valid {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-10-02"
+	}
+
+	input {
+		String path_exe = "var2vcf_valid.pl"
+
+		File in
+		File index
+		String? outputPath
+		String? name
+		String ext = ".vcf"
+		String suffix = ".vardict"
+		String subString = ".vardict.strandbias.txt"
+		String subStringReplace = ""
+
+		File refFasta
+		File refFai
+
+		File target
+
+		Boolean amplicon = true
+		Boolean hardFiltering = false
+		Boolean allVar = true
+		Int? filterNeighbour
+		Int MS = 12
+		Float maxMeanMismatches = 5.25
+		Float meanPosition = 8
+		Boolean positionSTD = false
+		Float minBaseQuality = 22.5
+		Float minMapQualityVar = 10
+		Int minTotalDepth = 3
+		Int minHQVarDepth = 2
+		Float thresholdAF = 0.02
+		Float minSignalNoise = 1.5
+		Float minAFHomozygous = 0.2
+		Boolean endTag = false
+		Int minSplitReadsSV = 1
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{ext}" else "~{baseName}~{suffix}~{ext}"
+
+	Boolean defAdaptors = defined(adaptors)
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		cat ~{in} | ~{path_exe} \
+			-b ~{target} \
+			-G ~{refFasta} \
+			-N ~{baseName} \
+			~{true="-a" false="" amplicon} \
+			~{true="-A" false="" allVar} \
+			-d ~{minTotalDepth} \
+			-v ~{minHQVarDepth} \
+			-f ~{thresholdAF} \
+			-F ~{minAFHomozygous} \
+			-T ~{minSplitReadsSV} \
+			~{true="-S" false="" hardFiltering} \
+			~{default="" "-c" + filterNeighbour} \
+			-m ~{maxMeanMismatches} \
+			-p ~{meanPosition} \
+			-P ~{true="1" false="0" positionSTD} \
+			-q ~{minBaseQuality} \
+			-Q ~{minMapQualityVar} \
+			-o ~{minSignalNoise} \
+			-I ~{MS} \
+			~{true="" false="-E" endTag} \
+			> ~{outputFile}
+
+	>>>
+
+	 output {
+		File outputFile = outputFile
+	}
+
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${totalMemMb}"
+ 	}
+
+ 	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "var2vcf_valid.pl"]',
+			category: 'System'
+		}
+		outputPath: {
+			description: 'Output path where files were generated. [default: pwd()]',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Name to use for output file name [default: sub(basename(in),subString,subStringReplace)]',
+			category: 'Output path/name option'
+		}
+		in: {
+			description: 'Input reads (format: fastq, fastq.gz)',
+			category: 'Required'
+		}
+		suffix: {
+			description: 'Suffix to add to the output [default: .adaptersTrim]',
+			category: 'Output path/name option'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ""]',
+			category: 'Output path/name option'
+		}
+		refFasta: {
+			description: 'Reference in fasta format',
+			category: 'Required'
+		}
+		refFai: {
+			description: 'Path to the reference file index (format: fai)',
+			category: 'Required'
+		}
+		target: {
+			description: 'The target region accept bed files by default (or refGene.txt from IGV, but can be any region). [default: ]',
+			category: 'Required'
+		}
+		amplicon: {
+			description: 'Set on/off amplicon based variant calling. [default: true]',
+			category: 'Tool option'
+		}
+		hardFiltering: {
+			description: 'Sets on/off hard filtering variants (only variant in PASS) [default: false]',
+			category: 'Tool option'
+		}
+		allVar: {
+			description: 'Indicate to output all variants at the same position. [default: true]',
+			category: 'Tool option'
+		}
+		filterNeighbour: {
+			description: 'If two seemingly high quality SNV variants are within {int} bp, they are both filtered.',
+			category: 'Tool option'
+		}
+		MS: {
+			description: 'The maximum non-monomer MSI allowed for a HT variant with AF < 0.5. [default: 12]',
+			category: 'Tool option'
+		}
+		maxMeanMismatches: {
+			description: 'The maximum mean mismatches allowed. [default: 5.25]',
+			category: 'Tool option'
+		}
+		meanPosition: {
+			description: 'The minimum mean position of variants in the read. [default: 8]',
+			category: 'Tool option'
+		}
+		positionSTD: {
+			description: 'Tag variant with filter "PSTD" if variants have position SD bias in reads [default: false]',
+			category: 'Tool option'
+		}
+		minBaseQuality: {
+			description: 'The minimum mean base quality. [default: 22.5]',
+			category: 'Tool option'
+		}
+		minMapQualityVar: {
+			description: 'The minimum mapping quality. [default: 10]',
+			category: 'Tool option'
+		}
+		minTotalDepth: {
+			description: 'The minimum total depth. [default: 3]',
+			category: 'Tool option'
+		}
+		minHQVarDepth: {
+			description: 'The minimum high quality variant depth. [default: 2]',
+			category: 'Tool option'
+		}
+		thresholdAF: {
+			description: 'The minimum allele frequency. [default: 0.02]',
+			category: 'Tool option'
+		}
+		minSignalNoise: {
+			description: 'The minimum signal to noise, or the ratio of hi/(lo+0.5). [default: 1.5]',
+			category: 'Tool option'
+		}
+		minAFHomozygous: {
+			description: 'The minimum allele frequency to consider to be homozygous. [default: 0.2]',
+			category: 'Tool option'
+		}
+		endTag: {
+			description: 'Print END tag [default: true]',
+			category: 'Tool option'
+		}
+		minSplitReadsSV: {
+			description: 'The minimum number of split reads for SV. [default: 1]',
+			category: 'Tool option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

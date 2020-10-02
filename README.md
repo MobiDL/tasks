@@ -143,5 +143,6 @@ It calls the following subworkflow :
 - vardict-java (1.8.2):
 	- vardictSoloAmplicons
 	- teststrandbias
+	- var2vcf_valid
 - vep (101.0):
 	- vep_cache
