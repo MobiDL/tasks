@@ -365,7 +365,9 @@ task view {
 		String? name
 		Boolean cram = false
 
-		File? faidx
+		File? refFai
+		File? refFasta
+
 		File? bed
 		String? readGroup
 		File? readGroupFile
@@ -376,7 +378,6 @@ task view {
 		Boolean multiRegioOperator = false
 		Boolean collapseCigarOp =false
 
-		File? refFasta
 
 		Int threads = 1
 		Int memoryByThreads = 768
@@ -402,7 +403,7 @@ task view {
 		~{path_exe} view \
 			~{true="-C" false="-b" cram} \
 			-o ~{outputFile} \
-			~{default="" "-t " + faidx} \
+			~{default="" "-t " + refFai} \
 			~{default="" "-L " + bed} \
 			~{default="" "-r " + readGroup} \
 			~{default="" "-R " + readGroupFile} \
@@ -448,8 +449,8 @@ task view {
 			description: 'Output to cram format. (bam otherwise) [default: false]',
 			category: 'Tool option'
 		}
-		faidx: {
-			description: 'Listing reference names and lengths (faidx)',
+		refFai: {
+			description: 'Listing reference names and lengths (fasta index)',
 			category: 'Tool option'
 		}
 		bed: {
