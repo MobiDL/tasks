@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 	- convertBedToIntervals
 	- makeLink
 	- concatenateFiles
+	- wget
 - bgzip :
 	- bgzip (compress and decompress)
 - bcftools :

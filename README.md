@@ -72,6 +72,7 @@ It calls the following subworkflow :
 	- convertBedToIntervals
 	- makeLink
 	- concatenateFiles
+	- wget
 - bgzip (v1.10)
 	- bgzip (compress, decompress)
 - bcftools (v1.10) :
