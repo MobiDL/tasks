@@ -77,7 +77,7 @@ task sort {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -194,7 +194,7 @@ task dict {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -306,7 +306,7 @@ task index {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -425,7 +425,7 @@ task view {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -550,7 +550,7 @@ task faidx {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -631,7 +631,7 @@ task fqidx {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -715,7 +715,7 @@ task flagstat {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -809,7 +809,7 @@ task bedcov {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -928,7 +928,7 @@ task markdup {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -1057,7 +1057,7 @@ task fixmate {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -1172,7 +1172,7 @@ task merge {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {

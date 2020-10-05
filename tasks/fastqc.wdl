@@ -83,7 +83,7 @@ task fastqc {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -215,7 +215,7 @@ task fastqcNano {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -347,7 +347,7 @@ task fastqcCasava {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {

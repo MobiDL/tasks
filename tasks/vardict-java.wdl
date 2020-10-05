@@ -185,7 +185,7 @@ task vardictSoloAmplicons {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -491,7 +491,7 @@ task teststrandbias {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -634,7 +634,7 @@ task var2vcf_valid {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {

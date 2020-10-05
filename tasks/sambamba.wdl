@@ -82,7 +82,7 @@ task markdup {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -201,7 +201,7 @@ task index {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -303,7 +303,7 @@ task sort {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -411,7 +411,7 @@ task flagstat {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -520,7 +520,7 @@ task view {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {

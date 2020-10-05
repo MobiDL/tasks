@@ -102,7 +102,7 @@ task reorderSam {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -313,7 +313,7 @@ task depthOfCoverage {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -509,7 +509,7 @@ task splitIntervals {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -668,7 +668,7 @@ task baseRecalibrator {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -821,7 +821,7 @@ task gatherBQSRReports {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -949,7 +949,7 @@ task applyBQSR {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -1113,7 +1113,7 @@ task gatherBamFiles {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -1252,7 +1252,7 @@ task leftAlignIndels {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -1414,7 +1414,7 @@ task collectMultipleMetrics {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -1540,7 +1540,7 @@ task bedToIntervalList {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -1643,7 +1643,7 @@ task intervalListToBed {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -1805,7 +1805,7 @@ task haplotypeCaller {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -1958,7 +1958,7 @@ task gatherVcfFiles {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -2066,7 +2066,7 @@ task splitVcfs {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -2217,7 +2217,7 @@ task variantFiltration {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -2381,7 +2381,7 @@ task mergeVcfs {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
@@ -2490,7 +2490,7 @@ task sortVcf {
 
  	runtime {
 		cpu: "~{threads}"
-		requested_memory_mb_per_core: "${totalMemMb}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
  	}
 
  	parameter_meta {
