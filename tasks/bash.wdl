@@ -401,8 +401,8 @@ task wget {
 
 	input {
 		String path_exe = "wget"
-	 	String in
 
+		String in
 		String? outputPath
 		String? name
 		String subString = ".*/(.*)$"
@@ -479,6 +479,10 @@ task wget {
  	}
 
  	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "wget"]',
+			category: 'System'
+		}
 		in: {
 			description: 'Url of the input file.',
 			category: 'Required'
