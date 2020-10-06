@@ -73,8 +73,9 @@ It calls the following subworkflow :
 	- makeLink
 	- concatenateFiles
 	- wget
+	- gzip (compress/decompress)
 - bgzip (v1.10)
-	- bgzip (compress, decompress)
+	- bgzip (compress/decompress)
 - bcftools (v1.10) :
 	- index
 	- merge

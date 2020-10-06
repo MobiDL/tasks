@@ -573,3 +573,117 @@ task wget {
 		}
 	}
 }
+
+task gzip {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-10-06"
+	}
+
+	input {
+		String path_exe = "wget"
+
+		String in
+		String? outputPath
+		String? name
+		String subString = ""
+		String subStringReplace = ""
+		String ext = ".gz"
+
+		Boolean decompress = false
+		Int levelCompression = 6
+		Boolean recursive = false
+
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseNameTemp = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String baseName = if decompress then sub(baseNameTemp,ext,"") else "~{baseNameTemp}.tralalala.~{ext}"
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} \
+			~{true="--decompress" false="" decompress} \
+			-~{levelCompression} \
+			--stdout \
+			~{in} \
+			> ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+ 	}
+
+ 	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "wget"]',
+			category: 'System'
+		}
+		in: {
+			description: 'Url of the input file.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Path where output will be generated.',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Name of the output file. [default: sub(basename(in),subString,subStringReplace)]',
+			category: 'Output path/name option'
+		}
+		subString: {
+			description: 'Substring to remove to create name file [default: "^[0-9]+\-"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: "$1"]',
+			category: 'Output path/name option'
+		}
+		ext: {
+			description: 'Extension of the output (compress) or input (decompress) file [default: ".gz"]',
+			category: 'Tool option'
+		}
+		decompress: {
+			description: 'Enable decompression mode [default: false]',
+			category: 'System'
+		}
+		levelCompression: {
+			description: 'Set compression level [default: 6]',
+			category: 'System'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}

@@ -21,8 +21,9 @@ All notable changes to this project will be documented in this file.
 	- makeLink
 	- concatenateFiles
 	- wget
+	- gzip (compress/decompress)
 - bgzip :
-	- bgzip (compress and decompress)
+	- bgzip (compress/decompress)
 - bcftools :
 	- index
 	- merge
