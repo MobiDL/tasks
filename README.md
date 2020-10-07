@@ -148,3 +148,5 @@ It calls the following subworkflow :
 	- var2vcf_valid
 - vep (101.0):
 	- vep_cache
+- mpa (1.1.2):
+	- mpa
