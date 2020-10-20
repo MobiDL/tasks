@@ -9,7 +9,7 @@ MobiDL 2 is a collection of tools wrapped in WDL to be used in any WDL pipelines
 ## Introduction
 
 This repo provide a set of workflow in WDL (see [workflows](#workflows-implemented))
-and a set of tools wrapped in WDL tasks (see [tools](#tools-implemented)).
+and a set of tools wrapped in WDL tasks (see [tools](#list-of-tasks)).
 
 The code follows WDL specifications as much as possible ([WDL-spec](https://github.com/openwdl/wdl/blob/main/versions/1.0/SPEC.md)).
 
@@ -65,88 +65,294 @@ It calls the following subworkflow :
 - ***AlignDNAcapture***
 - ***VariantCallingCaptureHC***
 
-## Tools implemented
+## List of tasks
 
-- bash :
-	- findFiles
-	- convertBedToIntervals
-	- makeLink
-	- concatenateFiles
-	- wget
-	- gzip (compress/decompress)
-- bgzip (v1.10)
-	- bgzip (compress/decompress)
-- bcftools (v1.10) :
-	- index
-	- merge
-	- norm
-	- stats
-- bedtools (v2.29.2) :
-	- intersect
-	- sort
-	- coverage
-- BWA (0.7.17-r1188) :
-	- mem
-	- index
-- Crumble (0.8.3) :
-	- crumble
-- Cutadapt (2.10) :
-	- adaptersTrimming
-	- qualityTrimming
-	- hardTrimming
-- dwgsim (0.1.11) :
-	- simulateReadsIllumina
-- FastQC (v0.11.9) :
-	- fastqc
-	- fastqcNano
-	- fastqcCasava
-- GATK4 (4.1.8.1) :
-	- ApplyBQSR
-	- BaseRecalibrator
-	- BedToIntervalList
-	- IntervalListToBed
-	- HaplotypeCaller
-	- CollectMultipleMetrics
-	- GatherBamFiles
-	- GatherBQSRReports
-	- GatherVcfFiles
-	- LeftAlignIndels
-	- ReorderSam
-	- DepthOfCoverage (BETA)
-	- SplitIntervals
-	- SplitVcfs
-	- VariantFiltration
-	- MergeVcfs
-	- SortVcf
-- Sambamba (0.6.6) :
-	- index
-	- flagstat
-	- markdup
-	- sort
-	- view
-- samtools (1.10) :
-	- bedcov
-	- index
-	- flagstat
-	- sort
-	- dict
-	- view
-	- faidx
-	- fqidx
-	- markdup
-	- fixmate
-	- merge
-- Star :
-	- genomeGenerate
-- Qualimap (v.2.2.2-dev) :
-	- bamqc
-- tabix (1.10):
-	- index
-- vardict-java (1.8.2):
-	- vardictSoloAmplicons
-	- teststrandbias
-	- var2vcf_valid
-- vep (101.0):
-	- vep_cache
-- mpa (1.1.2):
-	- mpa
+<table class="tg">
+<thead>
+  <tr>
+    <th>Tool</th>
+    <th>Task</th>
+    <th>Version</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td rowspan="6">bash</td>
+    <td>findFiles</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>convertBedToIntervals</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>makeLink</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>concatenateFiles</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>wget</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>gzip</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="3">bedtools</td>
+    <td>intersect</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>sort</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>coverage</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>bgzip</td>
+    <td>bgzip</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="4">bcftools</td>
+    <td>index</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>merge</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>norm</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>stats</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="2">BWA</td>
+    <td>mem</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>index</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>Crumble</td>
+    <td>crumble</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="3">Cutadapt</td>
+    <td>adaptersTrimming</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>qualityTrimming</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>hardTrimming</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>DWGSim</td>
+    <td>simulateReadsIllumina</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="3">FastQC</td>
+    <td>fastqc</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>fastqcNano</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>fastqcCasava</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="17">GATK4</td>
+    <td>ApplyBQSR</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>BaseRecalibrator</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>BedToIntervalList</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>IntervalListToBed</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>HaplotypeCaller</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>CollectMultipleMetrics</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>GatherBamFiles</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>GatherBQSRReports</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>GatherVcfFiles</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>LeftAlignIndels</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>ReorderSam</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>DepthOfCoverage (BETA)</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>SplitIntervals</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>SplitVcfs</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>VariantFiltration</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>MergeVcfs</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>SortVcf</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>MPA</td>
+    <td>mpa</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>Qualimap</td>
+    <td>bamqc</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="5">Sambamba</td>
+    <td>index</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>flagstat</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>markdup</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>sort</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>view</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="11">Samtools</td>
+    <td>bedcov</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>index</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>flagstat</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>sort</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>dict</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>view</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>faidx</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>fqidx</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>markdup</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>fixmate</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>merge</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>Star</td>
+    <td>genomeGenerate</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>Tabix</td>
+    <td>index</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="3">Vardict-java</td>
+    <td>vardictSoloAmplicons</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>teststrandbias</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>var2vcf_valid</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>VEP</td>
+    <td>vep_cache</td>
+    <td>0.0.1</td>
+  </tr>
+</tbody>
+</table>
