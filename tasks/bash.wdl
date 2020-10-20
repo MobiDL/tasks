@@ -609,7 +609,7 @@ task gzip {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseNameTemp = if defined(name) then name else sub(basename(in),subString,subStringReplace)
-	String baseName = if decompress then sub(baseNameTemp,ext,"") else "~{baseNameTemp}.tralalala.~{ext}"
+	String baseName = if decompress then sub(baseNameTemp,ext,"") else "~{baseNameTemp}.~{ext}"
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
 	command <<<
