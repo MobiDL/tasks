@@ -496,7 +496,7 @@ task wget {
 			category: 'Output path/name option'
 		}
 		subString: {
-			description: 'Substring to remove to create name file [default: "^[0-9]+\-"]',
+			description: 'Substring to remove to create name file [default: ".*/(.*)$"]',
 			category: 'Output path/name option'
 		}
 		subStringReplace: {
@@ -583,7 +583,7 @@ task gzip {
 	}
 
 	input {
-		String path_exe = "wget"
+		String path_exe = "gzip"
 
 		String in
 		String? outputPath
@@ -638,11 +638,11 @@ task gzip {
 
  	parameter_meta {
 		path_exe: {
-			description: 'Path used as executable [default: "wget"]',
+			description: 'Path used as executable [default: "gzip"]',
 			category: 'System'
 		}
 		in: {
-			description: 'Url of the input file.',
+			description: 'Path of the input file.',
 			category: 'Required'
 		}
 		outputPath: {
@@ -654,11 +654,11 @@ task gzip {
 			category: 'Output path/name option'
 		}
 		subString: {
-			description: 'Substring to remove to create name file [default: "^[0-9]+\-"]',
+			description: 'Substring to remove to create name file [default: ""]',
 			category: 'Output path/name option'
 		}
 		subStringReplace: {
-			description: 'subString replace by this string [default: "$1"]',
+			description: 'subString replace by this string [default: ""]',
 			category: 'Output path/name option'
 		}
 		ext: {
