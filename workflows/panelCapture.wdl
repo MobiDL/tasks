@@ -86,8 +86,9 @@ workflow panelCapture {
 	if (! defined(refFai) || ! defined(refDict) || ! defined(refAmb) || ! defined(refAnn) || ! defined(refBwt) || ! defined(refPac) || ! defined(refSa)) {
 		call prepareGenome.prepareGenome as PG {
 			input :
-				fasta = refFasta,
+				genomeLink = refFasta,
 				outputPath = outputPath + "Genome/",
+				locale = true,
 
 				threads = threads,
 				maxThreads = maxThreads,

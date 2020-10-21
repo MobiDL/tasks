@@ -24,48 +24,87 @@ workflow prepareGenome {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
+		version: "0.0.2"
 	}
 
 	input {
-		File fasta
+		String genomeLink = "ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.chromosome.fa.gz"
 		String outputPath
+
+		Boolean locale = false
+
+		Int memoryByThreads = 768
+		Int memoryByThreadsHigh = memoryByThreads
+		Int memoryByThreadsLow = memoryByThreads
 
 		Int threads = 1
 		Int maxThreads = threads
 		Int minThreads = threads
+
+		String memory = threads * memoryByThreads
+		String memoryHigh = maxThreads * memoryByThreadsHigh
+		String memoryLow = minThreads * memoryByThreadsLow
 	}
 
-	call bash.makeLink as GenomeLn {
-		input :
-			in = fasta,
-			outputPath = outputPath,
-			threads = minThreads
-	}
+	## Download and extract genome
 
+	if (! locale) {
+		call bash.wget as getGenome {
+			input :
+				in = genomeLink,
+				outputPath = outputPath,
+				memoryByThreads = memoryByThreadsLow,
+				threads = minThreads
+		}
+	}
+	if (locale) {
+		call bash.makeLink as GenomeLn {
+			input :
+				in = genomeLink,
+				outputPath = outputPath,
+				memoryByThreads = memoryByThreadsLow,
+				threads = minThreads
+		}
+	}
+	File genome = select_first([GenomeLn.outputFile, getGenome.outputFile])
+
+	Boolean isGzip = if sub(genomeLink, "(.*)(\.gz)$","$2") == ".gz" then true else false
+	if (isGzip) {
+		call bash.gzip as gzippedGenome {
+			input :
+				in = genome,
+				outputPath = outputPath,
+				decompress = true,
+				memoryByThreads = memoryByThreadsLow,
+				threads = minThreads
+		}
+	}
+	File fastaRef = select_first([gzippedGenome.outputFile, genome])
+
+	## Index and create dict from fasta
 	call bwa.index as BwaIndexGenome {
 		input :
-			in = fasta,
+			in = fastaRef,
 			outputPath = outputPath,
 			threads = maxThreads
 	}
 
 	call samtools.faidx as SamtoolsIndexGenome {
 		input :
-			in = fasta,
+			in = fastaRef,
 			outputPath = outputPath,
 			threads = maxThreads
 	}
 
 	call samtools.dict as SamtoolsDictGenome {
 		input :
-			in = fasta,
+			in = fastaRef,
 			outputPath = outputPath,
 			threads = maxThreads
 	}
 
 	output {
-		File refFasta = GenomeLn.outputFile
+		File refFasta = fastaRef
 		File refFai = SamtoolsIndexGenome.outputFile
 		File refDict = SamtoolsDictGenome.outputFile
 		File refAmb = BwaIndexGenome.refAmb
@@ -76,13 +115,41 @@ workflow prepareGenome {
 	}
 
 	parameter_meta {
-		fasta: {
-			description : 'Path to the reference file (format: fasta)',
-			category : 'Required'
+		genomeLink: {
+			description : 'Link from genome to download [default: download GRCh37 from ensembl]',
+			category : 'Optional'
 		}
 		outputPath: {
-			description : 'Output path where bam file was generated.',
+			description : 'Output path where fasta will be download and indexes created.',
 			category : 'Required'
+		}
+		locale: {
+			description : 'Defined if genome is locale (make hard link) or to download (wget) [default: false]',
+			category : 'Optional'
+		}
+		memoryByThreads : {
+			description: 'Sets the memory by threads used by default [default: 768]',
+			category: 'System'
+		}
+		memoryByThreadsHigh : {
+			description: 'Sets the number of threads to use for high computing jobs [default: memoryByThreads]',
+			category: 'System'
+		}
+		memoryByThreadsLow : {
+			description: 'Sets the number of threads to use for low computing jobs [default: memoryByThreads]',
+			category: 'System'
+		}
+		memory : {
+			description: 'Sets the memory to use by default [default: memoryByThreads * threads]',
+			category: 'System'
+		}
+		memoryHigh : {
+			description: 'Sets the number of threads to use for high computing jobs [default: memoryByThreadsHigh * maxThreads]',
+			category: 'System'
+		}
+		memoryLow : {
+			description: 'Sets the number of threads to use for low computing jobs [default: memoryByThreadsLow * minThreads]',
+			category: 'System'
 		}
 		threads : {
 			description: 'Sets the number of threads to use by default [default: 1]',
