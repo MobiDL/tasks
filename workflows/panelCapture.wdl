@@ -26,7 +26,7 @@ workflow panelCapture {
 	meta {
 		author: "Mobidic"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
+		version: "0.0.2"
 	}
 
 	input {
@@ -45,13 +45,13 @@ workflow panelCapture {
 
 		# Reference Genome
 		File refFasta
-		File? refFai
-		File? refDict
-		File? refAmb
-		File? refAnn
-		File? refBwt
-		File? refPac
-		File? refSa
+		File refFai
+		File refDict
+		File refAmb
+		File refAnn
+		File refBwt
+		File refPac
+		File refSa
 
 		# Known sites
 		File Indels1000G
@@ -82,27 +82,6 @@ workflow panelCapture {
 
 	String sampleName = if defined(name) then "~{name}" else sub(basename(fastqR1),fastqSubString,fastqSubStringReplace)
 	String outputPath = "~{outputRep}/~{sampleName}/"
-
-	if (! defined(refFai) || ! defined(refDict) || ! defined(refAmb) || ! defined(refAnn) || ! defined(refBwt) || ! defined(refPac) || ! defined(refSa)) {
-		call prepareGenome.prepareGenome as PG {
-			input :
-				genomeLink = refFasta,
-				outputPath = outputPath + "Genome/",
-				locale = true,
-
-				threads = threads,
-				maxThreads = maxThreads,
-				minThreads = minThreads
-		}
-	}
-
-	File refFaiUsed = if defined(PG.refFai) then "~{PG.refFai}" else "~{refFai}"
-	File refDictUsed = if defined(PG.refDict) then "~{PG.refDict}" else "~{refDict}"
-	File refAmbUsed = if defined(PG.refAmb) then "~{PG.refAmb}" else "~{refAmb}"
-	File refAnnUsed = if defined(PG.refAnn) then "~{PG.refAnn}" else "~{refAnn}"
-	File refBwtUsed = if defined(PG.refBwt) then "~{PG.refBwt}" else "~{refBwt}"
-	File refPacUsed = if defined(PG.refPac) then "~{PG.refPac}" else "~{refPac}"
-	File refSaUsed = if defined(PG.refSa) then "~{PG.refSa}" else "~{refSa}"
 
 	if (! defined(Indels1000GIdx)) {
 		call tabix.index as TI_Indels1000GIdx {
@@ -136,13 +115,13 @@ workflow panelCapture {
 			intervalBedFile = intervalBedFile,
 
 			refFasta = refFasta,
-			refFai = refFaiUsed,
-			refDict = refDictUsed,
-			refAmb = refAmbUsed,
-			refAnn = refAnnUsed,
-			refBwt = refBwtUsed,
-			refPac = refPacUsed,
-			refSa = refSaUsed,
+			refFai = refFai,
+			refDict = refDict,
+			refAmb = refAmb,
+			refAnn = refAnn,
+			refBwt = refBwt,
+			refPac = refPac,
+			refSa = refSa,
 
 			Indels1000G = Indels1000G,
 			IndelsMills = IndelsMills,
@@ -167,8 +146,8 @@ workflow panelCapture {
 			bamIdx = ADC.idx,
 			intervalBedFile = intervalBedFile,
 			refFasta = refFasta,
-			refFai = refFaiUsed,
-			refDict = refDictUsed,
+			refFai = refFai,
+			refDict = refDict,
 			dbsnp = dbsnp,
 			dbsnpIdx = dbsnpIdxUsed,
 			outputPath = outputPath + "VariantCallingHC/",

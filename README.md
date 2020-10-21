@@ -61,7 +61,6 @@ It produce some quality metrics from different tools.
 This workflow performed an analysis for capture constitutionnal sample.
 It calls the following subworkflow :
 
-- ***PrepareGenome*** (if necessary, i.e. fasta provided without indexes)
 - ***AlignDNAcapture***
 - ***VariantCallingCaptureHC***
 
