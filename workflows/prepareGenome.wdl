@@ -19,19 +19,24 @@ version 1.0
 import "../tasks/bwa.wdl" as bwa
 import "../tasks/bash.wdl" as bash
 import "../tasks/samtools.wdl" as samtools
+import "../tasks/star.wdl" as star
 
 workflow prepareGenome {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.2"
+		version: "0.0.3"
 	}
 
 	input {
-		String genomeLink = "ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna.chromosome.fa.gz"
-		String outputPath
+		String fastaLink = "https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/latest/hg19.fa.gz"
+		String gtfLink = "https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/genes/hg19.refGene.gtf.gz"
+		String outputPath = "/Users/Charles/Documents/codes/MobiDL2.0/test/prepareGenome"
 
-		Boolean locale = false
+		Boolean localeFasta = false
+		Boolean localeGTF = false
+
+		Boolean prepareStar = false
 
 		Int memoryByThreads = 768
 		Int memoryByThreadsHigh = memoryByThreads
@@ -46,65 +51,118 @@ workflow prepareGenome {
 		String memoryLow = minThreads * memoryByThreadsLow
 	}
 
-	## Download and extract genome
+	##############################################################################
 
-	if (! locale) {
-		call bash.wget as getGenome {
+	## Download and extract fasta
+	if (! localeFasta) {
+		call bash.wget as fastaWget {
 			input :
-				in = genomeLink,
+				in = fastaLink,
 				outputPath = outputPath,
 				memoryByThreads = memoryByThreadsLow,
 				threads = minThreads
 		}
 	}
-	if (locale) {
-		call bash.makeLink as GenomeLn {
+	if (localeFasta) {
+		call bash.makeLink as fastaLn {
 			input :
-				in = genomeLink,
+				in = fastaLink,
 				outputPath = outputPath,
 				memoryByThreads = memoryByThreadsLow,
 				threads = minThreads
 		}
 	}
-	File genome = select_first([GenomeLn.outputFile, getGenome.outputFile])
+	File refFastaTemp = select_first([fastaWget.outputFile, fastaLn.outputFile])
 
-	Boolean isGzip = if sub(genomeLink, "(.*)(\.gz)$","$2") == ".gz" then true else false
-	if (isGzip) {
-		call bash.gzip as gzippedGenome {
+	Boolean isFastaGzip = if sub(refFastaTemp, "(.*)(\.gz)$","$2") == ".gz" then true else false
+	if (isFastaGzip) {
+		call bash.gzip as gunzipFasta {
 			input :
-				in = genome,
+				in = refFastaTemp,
 				outputPath = outputPath,
 				decompress = true,
 				memoryByThreads = memoryByThreadsLow,
 				threads = minThreads
 		}
 	}
-	File fastaRef = select_first([gzippedGenome.outputFile, genome])
+	File refFasta = select_first([gunzipFasta.outputFile, refFastaTemp])
+
+	######################################
+	## Download and extract GTF
+	if (! localeGTF) {
+		call bash.wget as GTFWget {
+			input :
+				in = gtfLink,
+				outputPath = outputPath,
+				memoryByThreads = memoryByThreadsLow,
+				threads = minThreads
+		}
+	}
+	if (localeGTF) {
+		call bash.makeLink as GTFLn {
+			input :
+				in = gtfLink,
+				outputPath = outputPath,
+				memoryByThreads = memoryByThreadsLow,
+				threads = minThreads
+		}
+	}
+	File refGTFTemp = select_first([GTFWget.outputFile, GTFLn.outputFile])
+
+	Boolean isGTFGzip = if sub(refGTFTemp, "(.*)(\.gz)$","$2") == ".gz" then true else false
+	if (isGTFGzip) {
+		call bash.gzip as gunzipGTF {
+			input :
+				in = refGTFTemp,
+				outputPath = outputPath,
+				decompress = true,
+				memoryByThreads = memoryByThreadsLow,
+				threads = minThreads
+		}
+	}
+	File refGTF = select_first([gunzipGTF.outputFile, refGTFTemp])
+
+	##############################################################################
 
 	## Index and create dict from fasta
 	call bwa.index as BwaIndexGenome {
 		input :
-			in = fastaRef,
+			in = refFasta,
 			outputPath = outputPath,
 			threads = maxThreads
 	}
 
 	call samtools.faidx as SamtoolsIndexGenome {
 		input :
-			in = fastaRef,
+			in = refFasta,
 			outputPath = outputPath,
 			threads = maxThreads
 	}
 
 	call samtools.dict as SamtoolsDictGenome {
 		input :
-			in = fastaRef,
+			in = refFasta,
 			outputPath = outputPath,
 			threads = maxThreads
 	}
 
+	##############################################################################
+
+	## Prepare Genome for RNAseq
+	if (prepareStar) {
+		call star.genomeGenerate as SGG {
+			input :
+				refFasta = refFasta,
+				refGTF = refGTF,
+				outputPath = outputPath,
+				threads = maxThreads
+		}
+	}
+
+	##############################################################################
+
 	output {
-		File refFasta = fastaRef
+		File fasta = refFasta
 		File refFai = SamtoolsIndexGenome.outputFile
 		File refDict = SamtoolsDictGenome.outputFile
 		File refAmb = BwaIndexGenome.refAmb
@@ -112,10 +170,26 @@ workflow prepareGenome {
 		File refBwt = BwaIndexGenome.refBwt
 		File refPac = BwaIndexGenome.refPac
 		File refSa = BwaIndexGenome.refSa
+		File GTF = refGTF
+		File? chrLength = SGG.chrLength
+		File? chrNameLength = SGG.chrNameLength
+		File? chrName = SGG.chrName
+		File? chrStart = SGG.chrStart
+		File? exonGeTrInfo = SGG.exonGeTrInfo
+		File? exonInfo = SGG.exonInfo
+		File? geneInfo = SGG.geneInfo
+		File? Genome = SGG.Genome
+		File? genomeParameters = SGG.genomeParameters
+		File? SA = SGG.SA
+		File? SAindex = SGG.SAindex
+		File? sjdbInfo = SGG.sjdbInfo
+		File? sjdbListGTF = SGG.sjdbListGTF
+		File? sjdbList = SGG.sjdbList
+		File? transcriptInfo = SGG.transcriptInfo
 	}
 
 	parameter_meta {
-		genomeLink: {
+		fastaLink: {
 			description : 'Link from genome to download [default: download GRCh37 from ensembl]',
 			category : 'Optional'
 		}
@@ -123,8 +197,16 @@ workflow prepareGenome {
 			description : 'Output path where fasta will be download and indexes created.',
 			category : 'Required'
 		}
-		locale: {
-			description : 'Defined if genome is locale (make hard link) or to download (wget) [default: false]',
+		localeFasta: {
+			description : 'Defined if fasta file is locale (make hard link) or to download (wget) [default: false]',
+			category : 'Optional'
+		}
+		localeGTF: {
+			description : 'Defined if GTF file is locale (make hard link) or to download (wget) [default: false]',
+			category : 'Optional'
+		}
+		prepareStar: {
+			description : 'Should launch star.genomeGenerate (needs at least 32G of RAM) [default: false]',
 			category : 'Optional'
 		}
 		memoryByThreads : {
