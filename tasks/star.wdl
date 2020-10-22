@@ -21,22 +21,25 @@ task genomeGenerate {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
 		version: "0.0.1"
-		date: "2020-08-13"
+		date: "2020-10-21"
 	}
 
 	input {
 		String path_exe = "STAR"
 
 		File refFasta
-		String? outputPath
-
 		File refGTF
+		String? outputPath
+		String? name
+		String subString = "(.fa(sta)?)?(.gtf)?"
+		String subStringReplace = ""
+
 
 		Int readLength = 100
 
 		Int threads = 1
 		Int memoryByThreads = 768
-		String? memory
+		String memory = "32G"
 	}
 
 	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
@@ -45,17 +48,23 @@ task genomeGenerate {
 	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
+	String basenameFa = sub(basename(refFasta),subString,subStringReplace)
+	String basenameGTF = sub(basename(refGTF),subString,subStringReplace)
+	String baseName = if defined(name) then name else "~{basenameFa}_~{basenameGTF}_~{readLength}"
+	String outputRep = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+
 	command <<<
 
-		if [[ ! -d ~{outputPath} ]]; then
-			mkdir -p ~{outputPath}
+		if [[ ! -d ~{outputRep} ]]; then
+			mkdir -p ~{outputRep}
 		fi
 
 		~{path_exe} --runMode genomeGenerate \
-			--genomeDir ~{outputPath} \
+			--genomeDir ~{outputRep} \
 			--genomeFastaFiles ~{refFasta} \
 			--sjdbGTFfile ~{refGTF} \
-			--sjdbOverhang ~{readLength - 1}
+			--sjdbOverhang ~{readLength - 1} \
+			--runThreadN ~{threads}
 
 	>>>
 
@@ -89,6 +98,18 @@ task genomeGenerate {
 		}
 		outputPath: {
 			description: 'Output path where files will be generated. [default: pwd()]',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Name to use for output file name [default: sub(basename(in),"(\.bam|\.sam|\.cram)","")]',
+			category: 'Tool option'
+		}
+		subString: {
+			description: 'Substring to remove to create name file (used for fasta file name and gtf) [default: "(.fa(sta)?)?(.gtf)?"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ""]',
 			category: 'Output path/name option'
 		}
 		refFasta: {
