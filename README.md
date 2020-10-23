@@ -260,6 +260,11 @@ It calls the following subworkflow :
     <td>0.0.1</td>
   </tr>
   <tr>
+    <td>Regtools</td>
+    <td>junctionsExtract</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
     <td rowspan="5">Sambamba</td>
     <td>index</td>
     <td>0.0.1</td>

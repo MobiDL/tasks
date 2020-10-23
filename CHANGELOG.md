@@ -98,3 +98,5 @@ All notable changes to this project will be documented in this file.
 	- vep_cache
 - MPA :
 	- mpa
+- regtools :
+	- junctionsExtract

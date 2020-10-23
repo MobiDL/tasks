@@ -4,6 +4,8 @@ channels:
   - bioconda
   - defaults
 dependencies:
+  - python==3.8.2
+  - pip==20.2.4
   - cromwell==53.1
   - samtools==1.10
   - bedtools==2.29.2
@@ -22,3 +24,4 @@ dependencies:
   - vardict-java==1.8.2
   - wget==1.20.1
   - mobidic-mpa==1.1.2
+  - regtools==0.6.0
