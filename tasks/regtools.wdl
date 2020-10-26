@@ -29,7 +29,6 @@ task junctionsExtract {
 
 		File in
 		File inIdx
-		Boolean outIndex = false
 		String? outputPath
 		String? name
 		String subString = ".bam"
