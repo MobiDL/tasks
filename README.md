@@ -260,8 +260,12 @@ It calls the following subworkflow :
     <td>0.0.1</td>
   </tr>
   <tr>
-    <td>Regtools</td>
+    <td rowspan="2">Regtools</td>
     <td>junctionsExtract</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>junctionsAnnotate</td>
     <td>0.0.1</td>
   </tr>
   <tr>
