@@ -16,6 +16,61 @@ version 1.0
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+task get_version {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-11-20"
+	}
+
+	input {
+		String path_exe = "star"
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	command <<<
+		~{path_exe} --version
+	>>>
+
+	output {
+		String output = read_string(stdout())
+	}
+
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+ 	}
+
+ 	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "bcftools"]',
+			category: 'System'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
+
 task genomeGenerate {
 	meta {
 		author: "Charles VAN GOETHEM"
