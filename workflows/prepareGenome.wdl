@@ -31,12 +31,12 @@ workflow prepareGenome {
 	input {
 		String fastaLink = "https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/latest/hg19.fa.gz"
 		String gtfLink = "https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/genes/hg19.refGene.gtf.gz"
-		String outputPath = "/Users/Charles/Documents/codes/MobiDL2.0/test/prepareGenome"
+		String outputPath
 
 		Boolean localeFasta = false
 		Boolean localeGTF = false
 
-		Boolean prepareStar = false
+		Boolean prepareStar = true
 
 		Int memoryByThreads = 768
 		Int memoryByThreadsHigh = memoryByThreads
