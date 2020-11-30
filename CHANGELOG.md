@@ -73,6 +73,8 @@ All notable changes to this project will be documented in this file.
 - regtools :
 	- junctionsExtract
 	- junctionsAnnotate
+- rsync :
+	- rsync
 - Sambamba :
 	- index
 	- flagstat
