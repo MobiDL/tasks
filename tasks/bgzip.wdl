@@ -53,7 +53,7 @@ task get_version {
 
  	parameter_meta {
 		path_exe: {
-			description: 'Path used as executable [default: "bcftools"]',
+			description: 'Path used as executable [default: "bgzip"]',
 			category: 'System'
 		}
 		threads: {

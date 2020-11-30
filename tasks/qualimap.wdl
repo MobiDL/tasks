@@ -25,7 +25,7 @@ task get_version {
 	}
 
 	input {
-		String path_exe = "qualimap" 
+		String path_exe = "qualimap"
 
 		Int threads = 1
 		Int memoryByThreads = 768
@@ -53,7 +53,7 @@ task get_version {
 
  	parameter_meta {
 		path_exe: {
-			description: 'Path used as executable [default: "bcftools"]',
+			description: 'Path used as executable [default: "qualimap"]',
 			category: 'System'
 		}
 		threads: {
