@@ -51,9 +51,10 @@ workflow prepareGenome {
 		String memoryLow = minThreads * memoryByThreadsLow
 	}
 
-	##############################################################################
+################################################################################
+####### STEP 1 : Fasta file
 
-	## Download and extract fasta
+### 1.1 Download and extract fasta
 	if (! localeFasta) {
 		call bash.wget as fastaWget {
 			input :
@@ -74,6 +75,7 @@ workflow prepareGenome {
 	}
 	File refFastaTemp = select_first([fastaWget.outputFile, fastaLn.outputFile])
 
+### 1.2 Unzip if fasta is gzipped
 	Boolean isFastaGzip = if sub(refFastaTemp, "(.*)(\.gz)$","$2") == ".gz" then true else false
 	if (isFastaGzip) {
 		call bash.gzip as gunzipFasta {
@@ -87,44 +89,7 @@ workflow prepareGenome {
 	}
 	File refFasta = select_first([gunzipFasta.outputFile, refFastaTemp])
 
-	######################################
-	## Download and extract GTF
-	if (! localeGTF) {
-		call bash.wget as GTFWget {
-			input :
-				in = gtfLink,
-				outputPath = outputPath,
-				memoryByThreads = memoryByThreadsLow,
-				threads = minThreads
-		}
-	}
-	if (localeGTF) {
-		call bash.makeLink as GTFLn {
-			input :
-				in = gtfLink,
-				outputPath = outputPath,
-				memoryByThreads = memoryByThreadsLow,
-				threads = minThreads
-		}
-	}
-	File refGTFTemp = select_first([GTFWget.outputFile, GTFLn.outputFile])
-
-	Boolean isGTFGzip = if sub(refGTFTemp, "(.*)(\.gz)$","$2") == ".gz" then true else false
-	if (isGTFGzip) {
-		call bash.gzip as gunzipGTF {
-			input :
-				in = refGTFTemp,
-				outputPath = outputPath,
-				decompress = true,
-				memoryByThreads = memoryByThreadsLow,
-				threads = minThreads
-		}
-	}
-	File refGTF = select_first([gunzipGTF.outputFile, refGTFTemp])
-
-	##############################################################################
-
-	## Index and create dict from fasta
+### 1.3 Create indexes and dict for fasta
 	call bwa.index as BwaIndexGenome {
 		input :
 			in = refFasta,
@@ -146,9 +111,54 @@ workflow prepareGenome {
 			threads = maxThreads
 	}
 
-	##############################################################################
+####### END STEP 1
+################################################################################
 
-	## Prepare Genome for RNAseq
+################################################################################
+####### STEP 2 : Download annotations files
+
+### 2.1 Download GTF
+	if (! localeGTF) {
+		call bash.wget as GTFWget {
+			input :
+				in = gtfLink,
+				outputPath = outputPath,
+				memoryByThreads = memoryByThreadsLow,
+				threads = minThreads
+		}
+	}
+	if (localeGTF) {
+		call bash.makeLink as GTFLn {
+			input :
+				in = gtfLink,
+				outputPath = outputPath,
+				memoryByThreads = memoryByThreadsLow,
+				threads = minThreads
+		}
+	}
+	File refGTFTemp = select_first([GTFWget.outputFile, GTFLn.outputFile])
+
+### 2.1 Unzip if GTF is gzipped
+	Boolean isGTFGzip = if sub(refGTFTemp, "(.*)(\.gz)$","$2") == ".gz" then true else false
+	if (isGTFGzip) {
+		call bash.gzip as gunzipGTF {
+			input :
+				in = refGTFTemp,
+				outputPath = outputPath,
+				decompress = true,
+				memoryByThreads = memoryByThreadsLow,
+				threads = minThreads
+		}
+	}
+	File refGTF = select_first([gunzipGTF.outputFile, refGTFTemp])
+
+####### END STEP 2
+################################################################################
+
+################################################################################
+####### STEP 3 : Prepare RNAseq files for STAR
+
+### 3.1 Prepare Genome for RNAseq
 	if (prepareStar) {
 		call star.genomeGenerate as SGG {
 			input :
@@ -159,7 +169,8 @@ workflow prepareGenome {
 		}
 	}
 
-	##############################################################################
+####### END STEP 3
+################################################################################
 
 	output {
 		File fasta = refFasta
