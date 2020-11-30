@@ -43,7 +43,7 @@ task get_version {
 	>>>
 
 	output {
-		String output = read_string(stdout())
+		String version = read_string(stdout())
 	}
 
  	runtime {
