@@ -22,8 +22,6 @@ All notable changes to this project will be documented in this file.
 	- concatenateFiles
 	- wget
 	- gzip (compress/decompress)
-- bgzip :
-	- bgzip (compress/decompress)
 - bcftools :
 	- index
 	- merge
@@ -33,6 +31,8 @@ All notable changes to this project will be documented in this file.
 	- intersect
 	- sort
 	- coverage
+- bgzip :
+	- bgzip (compress/decompress)
 - bwa :
 	- mem
 	- index
@@ -66,6 +66,13 @@ All notable changes to this project will be documented in this file.
 	- VariantFiltration
 	- MergeVcfs
 	- SortVcf
+- MPA :
+	- mpa
+- Qualimap :
+	- bamqc
+- regtools :
+	- junctionsExtract
+	- junctionsAnnotate
 - Sambamba :
 	- index
 	- flagstat
@@ -86,8 +93,6 @@ All notable changes to this project will be documented in this file.
 	- merge
 - Star :
 	- genomeGenerate
-- Qualimap :
-	- bamqc
 - tabix :
 	- index
 - vardict-java :
@@ -96,8 +101,6 @@ All notable changes to this project will be documented in this file.
 	- var2vcf_valid
 - vep :
 	- vep_cache
-- MPA :
-	- mpa
 - regtools :
 	- junctionsExtract
 	- junctionsAnnotate
