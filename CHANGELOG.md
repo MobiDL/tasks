@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 	- concatenateFiles
 	- wget
 	- gzip (compress/decompress)
+	- sortgtf
 - bcftools :
 	- index
 	- merge

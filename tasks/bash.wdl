@@ -687,3 +687,88 @@ task gzip {
 		}
 	}
 }
+
+task sortgtf {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-12-01"
+		source: "https://www.biostars.org/p/306859/#306895"
+	}
+
+	input {
+		String in
+		String? outputPath
+		String? name
+		String subString = ".(gtf|gff)$"
+		String subStringReplace = ".sorted.$1"
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		(grep -v "Parent=" ~{in}|sort -k1,1 -k4,4n -k5,5n;grep "Parent=" ~{in}|sort -k1,1 -k4,4n -k5,5n)| sort -k1,1 -k4,4n -s > outputFile
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+ 	}
+
+ 	parameter_meta {
+		in: {
+			description: 'Path of the input file.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Path where output will be generated.',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Name of the output file. [default: sub(basename(in),subString,subStringReplace)]',
+			category: 'Output path/name option'
+		}
+		subString: {
+			description: 'Substring to remove to create name file [default: ""]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ""]',
+			category: 'Output path/name option'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
