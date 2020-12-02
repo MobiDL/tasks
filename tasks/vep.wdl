@@ -611,3 +611,184 @@ task vep_cache {
 		}
 	}
 }
+
+task vep_install {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-12-02"
+	}
+
+	input {
+		String path_exe = "vep_install"
+
+		String destDir = "./"
+		String cacheVersion = "101"
+		String cacheDir = "$HOME/.vep/"
+		String pluginsDir = "$HOME/.vep/Plugins/"
+
+		Boolean refseq = true
+		Boolean ensembl = true
+
+		Boolean api = true
+		Boolean cache = true
+		Boolean fasta = false
+		Boolean plugins = false
+
+		Boolean quiet = false
+
+		String species = "homo_sapiens"
+		String assembly = "GRCh37"
+		Array[String]? pluginsList
+
+		Boolean prefer_bin = false
+		Boolean checkHTSLIB = false
+		Boolean checkBioPerl = false
+
+		Boolean convert = false
+
+		String? cacheURL
+		String? fastaURL
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	Boolean merged = if refseq && ensembl then true else false
+	String species_complete = if merged then "~{species}_merged" else if refseq then "~{species}_refseq" else species
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	command <<<
+		~{path_exe} \
+			--NO_UPDATE \
+			--DESTDIR ~{destDir} \
+			--CACHE_VERSION ~{cacheVersion} \
+			--CACHEDIR ~{cacheDir} \
+			--PLUGINSDIR ~{pluginsDir} \
+			--AUTO ~{true="a" false="l" api}~{true="c" false="" cache}~{true="f" false="" fasta}~{true="p" false="" plugins} \
+			--SPECIES ~{species_complete} \
+			--ASSEMBLY ~{assembly} \
+			~{true="--QUIET" false="" quiet} \
+			~{true="--PREFER_BIN" false="" prefer_bin} \
+			~{true="" false="--NO_HTSLIB" checkHTSLIB} \
+			~{true="" false="--NO_BIOPERL" checkBioPerl} \
+			~{true="--CONVERT" false="" convert} \
+			~{default="" "--CACHEURL " + cacheURL} \
+			~{default="" "--FASTAURL " + fastaURL}
+	>>>
+
+	output {
+		File info = "~{cacheDir}/~{species_complete}/~{cacheVersion}_~{assembly}/info.txt}"
+	}
+
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+ 	}
+
+ 	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "vep_install"]',
+			category: 'System'
+		}
+		destDir: {
+			description: "Set destination directory for API install [default: './']",
+			category: "Output path"
+		}
+		cacheVersion: {
+			description: "Set data (cache, FASTA) version to install [default: 101]",
+			category: "Set cache"
+		}
+		cacheDir: {
+			description: "Set destination directory for cache files [default: ]",
+			category: "Output path"
+		}
+		pluginsDir: {
+			description: "Set destination directory for VEP plugins files",
+			category:  "Output path"
+		}
+		refseq: {
+			description: "Defined if install refseq cache [default: true]",
+			category: "Set cache"
+		}
+		ensembl: {
+			description: "Defined if install ensembl cache [default: true]",
+			category: "Set cache"
+		}
+		api: {
+			description: "Defined if install api cache [default: true]",
+			category: "Set cache"
+		}
+		cache: {
+			description: "Defined if install cache [default: true]",
+			category: "Set cache"
+		}
+		fasta: {
+			description: "Defined if install fasta in cache [default: true]",
+			category: "Set fasta"
+		}
+		plugins: {
+			description: "Defined if install plugins in auto [default: false]",
+			category: "Set plugins"
+		}
+		quiet: {
+			description: "Don't write any status output when using --AUTO [default: false]",
+			category: "Mode"
+		}
+		species: {
+			description: "Defined species to install [default: 'homo_sapiens']",
+			category: "Set cache"
+		}
+		assembly: {
+			description: "Defined assembly to install [default: 'GRCh37']",
+			category: "Set cache"
+		}
+		pluginsList: {
+			description: "List plugins to install",
+			category: "Set plugins"
+		}
+		prefer_bin: {
+			description: "Active mode 'prefer_bin' [default: false]",
+			category: "Mode"
+		}
+		checkHTSLIB: {
+			description: "Deactive mode 'NO_HTSLIB' [default: false]",
+			category: "Mode"
+		}
+		checkBioPerl: {
+			description: "Deactive mode 'NO_BIOPERL' [default: false]",
+			category: "Mode"
+		}
+		convert: {
+			description: "Convert downloaded caches to use tabix for retrieving co-located variants [default: false]",
+			category: "Mode"
+		}
+		cacheURL: {
+			description: "Override default cache URL",
+			category: "Set cache"
+		}
+		fastaURL: {
+			description: "Override default fasta URL",
+			category: "Set Fasta"
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}

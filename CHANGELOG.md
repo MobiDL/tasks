@@ -104,6 +104,7 @@ All notable changes to this project will be documented in this file.
 	- var2vcf_valid
 - vep :
 	- vep_cache
+	- vep_install
 - regtools :
 	- junctionsExtract
 	- junctionsAnnotate

@@ -367,8 +367,12 @@ It calls the following subworkflow :
     <td>0.0.1</td>
   </tr>
   <tr>
-    <td>VEP</td>
+    <td rowspan="2">VEP</td>
     <td>vep_cache</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>vep_install</td>
     <td>0.0.1</td>
   </tr>
 </tbody>
