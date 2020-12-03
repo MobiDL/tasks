@@ -87,7 +87,7 @@ task compress {
 		String? outputPath
 		String ext = ".gz"
 
-		Boolean index = true
+		Boolean index = false
 		Int levelCompression = 6
 
 		Int threads = 1
