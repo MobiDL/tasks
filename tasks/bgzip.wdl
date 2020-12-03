@@ -122,8 +122,8 @@ task compress {
 	>>>
 
 	output {
-		File out = outputFile
-		File? outIdx = "~{outputFileIdx}"
+		File outputFile = outputFile
+		File? outputFileIdx = "~{outputFileIdx}"
 	}
 
  	runtime {
@@ -220,7 +220,7 @@ task decompress {
 	>>>
 
 	output {
-		File out = "~{outputFile}"
+		File outputFile = "~{outputFile}"
 	}
 
  	runtime {
