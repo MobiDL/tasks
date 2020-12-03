@@ -95,7 +95,6 @@ task bamqc {
 		Boolean pdf = true
 		Boolean skipDuplicates = false
 
-
 		Int nr = 1000
 		Int nWindows = 400
 		Int threads = 1
