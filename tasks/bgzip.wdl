@@ -103,8 +103,8 @@ task compress {
 
 	String baseName = if defined(name) then name else basename(in)
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
-	String outputFileIdx = "~{outputFile}.gzi"
-	String optIdx = if index then "--index --index-name ~{outputFile}.gzi" else ""
+	String outputFileIdx = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}.gzi"
+	String optIdx = if index then "--index --index-name ~{outputFileIdx}" else ""
 
 	command <<<
 
@@ -123,7 +123,7 @@ task compress {
 
 	output {
 		File outputFile = outputFile
-		File? outputFileIdx = "~{outputFileIdx}"
+		File? outputFileIdx = outputFileIdx
 	}
 
  	runtime {
