@@ -71,24 +71,24 @@ task get_version {
 	}
 }
 
-task bgzip {
+task compress {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
 		version: "0.0.1"
-		date: "2020-07-24"
+		date: "2020-12-03"
 	}
 
 	input {
 		String path_exe = "bgzip"
 
 		File in
-		String outputPath
+		String? name
+		String? outputPath
+		String ext = ".gz"
 
-		Boolean decompress = false
-		Boolean force = false
-		Boolean index = false
-		Boolean keepFile = false
+		Boolean index = true
+		Int levelCompression = 6
 
 		Int threads = 1
 		Int memoryByThreads = 768
@@ -101,25 +101,29 @@ task bgzip {
 	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
-	String outputFile = if ! decompress then "~{outputPath}/" + basename(in) + ".gz" else "~{outputPath}/" + basename(in,".gz")
-	String outputIndex = if (index && ! decompress) then "~{outputFile}.gzi" else "~{outputFile}"
-	String indexOpt = if (index && ! decompress) then "--index --index-name ~{outputIndex}" else ""
+	String baseName = if defined(name) then name else basename(in)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
+	String outputFileIdx = "~{outputFile}.gzi"
+	String optIdx = if index then "--index --index-name ~{outputFile}.gzi" else ""
 
 	command <<<
 
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
 		~{path_exe} \
-			~{true="--stdout" false="" keepFile} \
-			~{true="--decompress" false="" decompress} \
-			~{true="--force" false="" force}\
-			~{indexOpt} \
+			--stdout \
+			~{optIdx} \
+			--compress-level ~{levelCompression} \
 			~{in} \
 			--threads ~{threads} > ~{outputFile}
 
 	>>>
 
 	output {
-		File out = "~{outputFile}"
-		File index = "~{outputIndex}"
+		File out = outputFile
+		File? outIdx = "~{outputFileIdx}"
 	}
 
  	runtime {
@@ -133,24 +137,117 @@ task bgzip {
 			category: 'System'
 		}
 		in: {
-			description: "File to compres/decompress.",
+			description: "File to compress.",
 			category: 'Required'
+		}
+		name: {
+			description: 'Name to use for output [default: basename(in)]',
+			category: 'Output path/name option'
 		}
 		outputPath: {
 			description: "Path where was generated output.",
 			category: 'Output path/name option'
 		}
-		decompress: {
-			description: "Decompress file (incompatible with index) [default: false]",
-			category: 'Tool option'
-		}
-		force: {
-			description: "Overwrite files without asking [default: false]",
-			category: 'Tool option'
+		ext: {
+			description: 'Extension of the output file to add [default: ".gz"]',
+			category: 'Output path/name option'
 		}
 		index: {
 			description: "Compress and create BGZF index [default: false]",
 			category: 'Tool option'
+		}
+		levelCompression: {
+			description: 'Set compression level [default: 6]',
+			category: 'System'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
+
+task decompress {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-12-03"
+	}
+
+	input {
+		String path_exe = "bgzip"
+
+		File in
+		String? name
+		String? outputPath
+		String ext = ".gz"
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else basename(in, ext)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} \
+			--decompress \
+			--stdout \
+			~{in} \
+			--threads ~{threads} > ~{outputFile}
+
+	>>>
+
+	output {
+		File out = "~{outputFile}"
+	}
+
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+ 	}
+
+ 	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "bgzip"]',
+			category: 'System'
+		}
+		in: {
+			description: "File to decompress.",
+			category: 'Required'
+		}
+		name: {
+			description: 'Name to use for output [default: basename(in, ext)]',
+			category: 'Output path/name option'
+		}
+		outputPath: {
+			description: "Path where output will be generated.",
+			category: 'Output path/name option'
+		}
+		ext: {
+			description: 'Extension of the input file to remove [default: ".gz"]',
+			category: 'Output path/name option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

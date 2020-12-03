@@ -33,7 +33,8 @@ All notable changes to this project will be documented in this file.
 	- sort
 	- coverage
 - bgzip :
-	- bgzip (compress/decompress)
+	- compress
+	- decompress
 - bwa :
 	- mem
 	- index

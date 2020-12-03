@@ -118,8 +118,12 @@ It calls the following subworkflow :
     <td>0.0.1</td>
   </tr>
   <tr>
-    <td>bgzip</td>
-    <td>bgzip</td>
+    <td rowspan="2">bgzip</td>
+    <td>compress</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>decompress</td>
     <td>0.0.1</td>
   </tr>
   <tr>
