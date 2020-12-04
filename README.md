@@ -376,7 +376,7 @@ It calls the following subworkflow :
     <td>0.0.1</td>
   </tr>
   <tr>
-    <td>vep_install</td>
+    <td>install</td>
     <td>0.0.1</td>
   </tr>
 </tbody>

@@ -612,7 +612,7 @@ task vep_cache {
 	}
 }
 
-task vep_install {
+task install {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
