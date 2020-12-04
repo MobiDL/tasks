@@ -633,7 +633,7 @@ task install {
 
 		Boolean api = true
 		Boolean cache = true
-		Boolean fasta = false
+		Boolean fasta = true
 		Boolean plugins = false
 
 		Boolean quiet = false
