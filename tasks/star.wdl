@@ -89,7 +89,6 @@ task genomeGenerate {
 		String subString = "(.fa(sta)?)?(.gtf)?"
 		String subStringReplace = ""
 
-
 		Int readLength = 100
 
 		Int threads = 1

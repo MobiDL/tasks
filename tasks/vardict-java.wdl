@@ -64,7 +64,6 @@ task vardictSoloAmplicons {
 		Float lowFreqNorm = 0.05
 		Int? trimBasesAfter
 
-
 		Boolean SVcalling = true
 		Int minSVLenPres = 1000
 		Int insertSizeSTD = 100
@@ -439,7 +438,6 @@ task vardictSoloAmplicons {
 		}
 	}
 }
-
 
 task teststrandbias {
 	meta {

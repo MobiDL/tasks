@@ -596,7 +596,6 @@ task gzip {
 		Int levelCompression = 6
 		Boolean recursive = false
 
-
 		Int threads = 1
 		Int memoryByThreads = 768
 		String? memory

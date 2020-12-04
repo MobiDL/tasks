@@ -127,7 +127,6 @@ task simulateReadsIllumina {
 			mkdir -p $(dirname ~{outputPrefix})
 		fi
 
-
 		~{path_exe} \
 			-1 ~{sizeR1} \
 			-2 ~{sizeR2} \

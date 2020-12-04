@@ -374,7 +374,6 @@ task qualityTrimming {
 	}
 }
 
-
 task hardTrimming {
 	meta {
 		author: "Charles VAN GOETHEM"
@@ -427,7 +426,6 @@ task hardTrimming {
 			~{true="-Z" false="" lowComp} \
 			--output ~{outputFile} \
 			~{in}
-
 
 	>>>
 

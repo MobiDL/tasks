@@ -433,7 +433,6 @@ task view {
 		Boolean multiRegioOperator = false
 		Boolean collapseCigarOp =false
 
-
 		Int threads = 1
 		Int memoryByThreads = 768
 		String? memory
@@ -750,7 +749,6 @@ task flagstat {
 
 	String sampleName = if defined(sample) then sample else sub(basename(in),"(\.bam|\.sam|\.cram)","")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{sampleName}~{ext}" else "~{sampleName}~{ext}"
-
 
 	command <<<
 

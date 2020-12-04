@@ -334,7 +334,6 @@ task depthOfCoverage {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-
 		~{path_exe} DepthOfCoverage \
 			--java-options '~{sep=" " javaOptions}' \
 			--calculate-coverage-over-genes ~{default='null' geneList} \

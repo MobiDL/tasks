@@ -447,7 +447,6 @@ task flagstat {
 	String sampleName = if defined(sample) then sample else sub(basename(in),"(\.bam|\.sam|\.cram)","")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{sampleName}~{ext}" else "~{sampleName}~{ext}"
 
-
 	command <<<
 
 		if [[ ! -d $(dirname ~{outputFile}) ]]; then
@@ -546,7 +545,6 @@ task view {
 	String ext = if cram then ".cram" else ".bam"
 	String sampleName = if defined(sample) then sample else sub(basename(in),"(\.bam|\.sam|\.cram)","")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{sampleName}~{ext}" else "~{sampleName}~{ext}"
-
 
 	command <<<
 
