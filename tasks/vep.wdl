@@ -625,8 +625,8 @@ task install {
 
 		String destDir = "./"
 		String cacheVersion = "101"
-		String cacheDir = "$HOME/.vep/"
-		String pluginsDir = "$HOME/.vep/Plugins/"
+		String? cacheDir
+		String? pluginsDir
 
 		Boolean refseq = true
 		Boolean ensembl = true
@@ -659,6 +659,9 @@ task install {
 	Boolean merged = if refseq && ensembl then true else false
 	String species_complete = if merged then "~{species}_merged" else if refseq then "~{species}_refseq" else species
 
+	String cacheDirFinal = if defined(cacheDir) then "~{cacheDir}" else "~{destDir}/.vep/"
+	String pluginsDirFinal = if defined(pluginsDir) then "~{pluginsDir}" else "~{destDir}/.vep/Plugins/"
+
 	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
 	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
 	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
@@ -670,8 +673,8 @@ task install {
 			--NO_UPDATE \
 			--DESTDIR ~{destDir} \
 			--CACHE_VERSION ~{cacheVersion} \
-			--CACHEDIR ~{cacheDir} \
-			--PLUGINSDIR ~{pluginsDir} \
+			--CACHEDIR ~{cacheDirFinal} \
+			--PLUGINSDIR ~{pluginsDirFinal} \
 			--AUTO ~{true="a" false="l" api}~{true="c" false="" cache}~{true="f" false="" fasta}~{true="p" false="" plugins} \
 			--SPECIES ~{species_complete} \
 			--ASSEMBLY ~{assembly} \
@@ -707,7 +710,7 @@ task install {
 			category: "Set cache"
 		}
 		cacheDir: {
-			description: "Set destination directory for cache files [default: ]",
+			description: "Set destination directory for cache files",
 			category: "Output path"
 		}
 		pluginsDir: {
