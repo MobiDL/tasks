@@ -178,7 +178,7 @@ task vardictSoloAmplicons {
 
 	>>>
 
-	 output {
+	output {
 		File outputFile = outputFile
 	}
 
@@ -483,7 +483,7 @@ task teststrandbias {
 
 	>>>
 
-	 output {
+	output {
 		File outputFile = outputFile
 	}
 
@@ -626,7 +626,7 @@ task var2vcf_valid {
 
 	>>>
 
-	 output {
+	output {
 		File outputFile = outputFile
 	}
 

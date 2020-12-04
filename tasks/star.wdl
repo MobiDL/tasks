@@ -123,21 +123,21 @@ task genomeGenerate {
 	>>>
 
 	output {
-		 File chrLength = outputPath + "chrLength.txt"
-		 File chrNameLength = outputPath + "chrNameLength.txt"
-		 File chrName = outputPath + "chrName.txt"
-		 File chrStart = outputPath + "chrStart.txt"
-		 File exonGeTrInfo = outputPath + "exonGeTrInfo.tab"
-		 File exonInfo = outputPath + "exonInfo.tab"
-		 File geneInfo = outputPath + "geneInfo.tab"
-		 File Genome = outputPath + "Genome"
-		 File genomeParameters = outputPath + "genomeParameters.txt"
-		 File SA = outputPath + "SA"
-		 File SAindex = outputPath + "SAindex"
-		 File sjdbInfo = outputPath + "sjdbInfo.txt"
-		 File sjdbListGTF = outputPath + "sjdbList.fromGTF.out.tab"
-		 File sjdbList = outputPath + "sjdbList.out.tab"
-		 File transcriptInfo = outputPath + "transcriptInfo.tab"
+		File chrLength = outputPath + "chrLength.txt"
+		File chrNameLength = outputPath + "chrNameLength.txt"
+		File chrName = outputPath + "chrName.txt"
+		File chrStart = outputPath + "chrStart.txt"
+		File exonGeTrInfo = outputPath + "exonGeTrInfo.tab"
+		File exonInfo = outputPath + "exonInfo.tab"
+		File geneInfo = outputPath + "geneInfo.tab"
+		File Genome = outputPath + "Genome"
+		File genomeParameters = outputPath + "genomeParameters.txt"
+		File SA = outputPath + "SA"
+		File SAindex = outputPath + "SAindex"
+		File sjdbInfo = outputPath + "sjdbInfo.txt"
+		File sjdbListGTF = outputPath + "sjdbList.fromGTF.out.tab"
+		File sjdbList = outputPath + "sjdbList.out.tab"
+		File transcriptInfo = outputPath + "transcriptInfo.tab"
 	}
 
  	runtime {
