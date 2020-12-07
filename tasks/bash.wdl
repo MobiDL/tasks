@@ -723,7 +723,7 @@ task sortgtf {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		(grep -v "Parent=" ~{in}|sort -k1,1 -k4,4n -k5,5n;grep "Parent=" ~{in}|sort -k1,1 -k4,4n -k5,5n)| sort -k1,1 -k4,4n -s > outputFile
+		(grep -v "Parent=" ~{in}|sort -k1,1 -k4,4n -k5,5n;grep "Parent=" ~{in}|sort -k1,1 -k4,4n -k5,5n)| sort -k1,1 -k4,4n -s > ~{outputFile}
 
 	>>>
 
@@ -750,11 +750,11 @@ task sortgtf {
 			category: 'Output path/name option'
 		}
 		subString: {
-			description: 'Substring to remove to create name file [default: ""]',
+			description: 'Substring to remove to create name file [default: ".(gtf|gff)$"]',
 			category: 'Output path/name option'
 		}
 		subStringReplace: {
-			description: 'subString replace by this string [default: ""]',
+			description: 'subString replace by this string [default: ".sorted.$1"]',
 			category: 'Output path/name option'
 		}
 		threads: {
