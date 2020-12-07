@@ -76,7 +76,7 @@ It calls the following subworkflow :
 </thead>
 <tbody>
   <tr>
-    <td rowspan="7">bash</td>
+    <td rowspan="8">bash</td>
     <td>findFiles</td>
     <td>0.0.1</td>
   </tr>
@@ -102,6 +102,10 @@ It calls the following subworkflow :
   </tr>
   <tr>
     <td>sortgtf</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>fai2bed</td>
     <td>0.0.1</td>
   </tr>
   <tr>

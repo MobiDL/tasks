@@ -771,3 +771,88 @@ task sortgtf {
 		}
 	}
 }
+
+task fai2bed {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-12-07"
+		source: "https://bioinformatics.stackexchange.com/questions/91/how-to-convert-fasta-to-bed#answer-108"
+	}
+
+	input {
+		String in
+		String? outputPath
+		String? name
+		String subString = "\.?(fa)?(sta)?\.fai$"
+		String subStringReplace = ".bed"
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		awk 'BEGIN {FS="\t"}; {print $1 FS "0" FS $2}' ~{in} > ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+ 	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+ 	}
+
+ 	parameter_meta {
+		in: {
+			description: 'Path of the input file.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Path where output will be generated.',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Name of the output file. [default: sub(basename(in),subString,subStringReplace)]',
+			category: 'Output path/name option'
+		}
+		subString: {
+			description: 'Substring to remove to create name file [default: "\.?(fa)?(sta)?\.fai$"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ".bed"]',
+			category: 'Output path/name option'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
