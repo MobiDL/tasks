@@ -51,9 +51,15 @@ workflow getAnnotationsFiles {
 			decompress = true
 	}
 
-	call bgzip.compress as bgzipGTF {
+	call bash.sortgtf as sortGTF {
 		input :
 			in = gunzipGTF.outputFile,
+			outputPath = outputPath
+	}
+
+	call bgzip.compress as bgzipGTF {
+		input :
+			in = sortGTF.outputFile,
 			outputPath = outputPath
 	}
 
