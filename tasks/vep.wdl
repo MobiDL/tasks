@@ -688,7 +688,7 @@ task install {
 	>>>
 
 	output {
-		File info = "~{cacheDirFinal}/~{species_complete}/~{cacheVersion}_~{assembly}/info.txt}"
+		File info = "~{cacheDirFinal}/~{species_complete}/~{cacheVersion}_~{assembly}/info.txt"
 	}
 
  	runtime {
