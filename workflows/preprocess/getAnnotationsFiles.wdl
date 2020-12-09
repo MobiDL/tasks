@@ -38,7 +38,7 @@ workflow getAnnotationsFiles {
 
 ################################################################################
 
-	call rsync.rsync as getGTF {
+	call bash.wget as getGTF {
 		input :
 			in = linkGTF,
 			outputPath = outputPath

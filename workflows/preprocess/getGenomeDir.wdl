@@ -36,7 +36,7 @@ workflow getGenomeDir {
 
 ################################################################################
 
-	call rsync.rsync as getFasta {
+	call bash.wget as getFasta {
 		input :
 			in = linkFa,
 			outputPath = outputPath
