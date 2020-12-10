@@ -1106,8 +1106,8 @@ task gatherBamFiles {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-08-07"
+		version: "0.0.2"
+		date: "2020-12-10"
 	}
 
 	input {
@@ -1119,6 +1119,7 @@ task gatherBamFiles {
 		String? name
 		String suffix = ".gather"
 		String subString = "(\.[0-9]+)?\.(sam|bam|cram)$"
+		String subStringReplace = ""
 
 		Int compressionLevel = 6
 		Boolean bamIndex = true
@@ -1138,9 +1139,9 @@ task gatherBamFiles {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String firstFile = basename(in[0])
-	String baseName = if defined(name) then name else sub(basename(firstFile),subString,"")
-	String ext = sub(basename(firstFile),"\.(sam|bam|cram)$","$1")
-	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}\.~{ext}" else "~{baseName}~{suffix}\.~{ext}"
+	String baseName = if defined(name) then name else sub(basename(firstFile),subString,subStringReplace)
+	String ext = sub(basename(in[0]),"(.*)\.(sam|bam|cram)$","$2")
+	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.~{ext}" else "~{baseName}~{suffix}.~{ext}"
 	String outputBaiFile = sub(outputBamFile,"(m)$","i")
 
 	command <<<
