@@ -288,7 +288,7 @@ It calls the following subworkflow :
   <tr>
     <td rowspan="5">Sambamba</td>
     <td>index</td>
-    <td>0.0.1</td>
+    <td>0.0.2</td>
   </tr>
   <tr>
     <td>flagstat</td>
@@ -304,7 +304,7 @@ It calls the following subworkflow :
   </tr>
   <tr>
     <td>view</td>
-    <td>0.0.1</td>
+    <td>0.0.2</td>
   </tr>
   <tr>
     <td rowspan="11">Samtools</td>

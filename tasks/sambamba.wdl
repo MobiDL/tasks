@@ -204,8 +204,8 @@ task index {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-07-30"
+		version: "0.0.2"
+		date: "2020-12-14"
 	}
 
 	input {
@@ -251,7 +251,7 @@ task index {
 	>>>
 
 	output {
-		File outputIdx = outputIdx + extOut
+		File outputFile = outputIdx + extOut
 	}
 
  	runtime {
@@ -508,8 +508,8 @@ task view {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-08-20"
+		version: "0.0.2"
+		date: "2020-12-14"
 	}
 
 	input {
@@ -527,6 +527,7 @@ task view {
 		Boolean valid = false
 
 		File? refFasta
+		File? refFai
 
 		Int compressionLevel = 6
 		File? regions
