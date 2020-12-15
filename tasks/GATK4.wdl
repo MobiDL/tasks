@@ -1745,8 +1745,8 @@ task haplotypeCaller {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-08-10"
+		version: "0.0.2"
+		date: "2020-12-15"
 	}
 
 	input {
@@ -1808,6 +1808,9 @@ task haplotypeCaller {
 		String smithAndWaterman = "FASTEST_AVAILABLE"
 		String emitRefConfidence = "NONE"
 
+		Boolean useSoftClipped = false
+		Int ploidy = 2
+
 		## output
 		Boolean createVCFIdx = true
 		Boolean createVCFMD5 = true
@@ -1846,6 +1849,8 @@ task haplotypeCaller {
 			--interval-set-rule ~{true="INTERSECTION" false="UNION" intersectionRule} \
 			--smith-waterman ~{smithAndWaterman} \
 			--emit-ref-confidence ~{emitRefConfidence} \
+			--dont-use-soft-clipped-bases ~{true="false" false="true" useSoftClipped} \
+			--sample-ploidy ~{ploidy} \
 			~{true="--create-output-variant-index" false="" createVCFIdx} \
 			~{true="--create-output-variant-md5" false="" createVCFMD5} \
 			--output ~{outputFile}
