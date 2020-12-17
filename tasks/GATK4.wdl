@@ -1745,8 +1745,8 @@ task haplotypeCaller {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.2"
-		date: "2020-12-15"
+		version: "0.0.3"
+		date: "2020-12-17"
 	}
 
 	input {
@@ -1827,10 +1827,10 @@ task haplotypeCaller {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseNameIntervals = if defined(intervals) then intervals else ""
-	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","\.$1") else ""
+	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","$1") else ""
 
 	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{baseIntervals}~{ext}" else "~{baseName}~{suffix}~{baseIntervals}~{ext}"
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.~{baseIntervals}~{ext}" else "~{baseName}~{suffix}~{baseIntervals}~{ext}"
 
 	command <<<
 
@@ -1968,8 +1968,8 @@ task gatherVcfFiles {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-08-25"
+		version: "0.0.2"
+		date: "2020-12-17"
 	}
 
 	input {
@@ -1978,8 +1978,8 @@ task gatherVcfFiles {
 		Array[File]+ in
 		String? outputPath
 		String? name
-		String suffix = ".gather"
-		String subString = "(\.[0-9]+)?\.vcf$"
+		String subString = "(\.[0-9]+)?\.(vcf)$"
+		String subStringReplace = ".gather"
 
 		Boolean reorder = true
 
@@ -1995,8 +1995,8 @@ task gatherVcfFiles {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String firstFile = basename(in[0])
-	String baseName = if defined(name) then name else sub(basename(firstFile),subString,"")
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.vcf" else "~{baseName}~{suffix}.vcf"
+	String baseName = if defined(name) then name else sub(basename(firstFile),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.vcf" else "~{baseName}.vcf"
 
 	command <<<
 
@@ -2038,12 +2038,12 @@ task gatherVcfFiles {
 			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
 			category: 'Output path/name option'
 		}
-		suffix: {
-			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".gather"]',
+		subString: {
+			description: 'Substring to replace (e.g. remove extension) [default: "(\.[0-9]+)?\.vcf$"]',
 			category: 'Output path/name option'
 		}
-		subString: {
-			description: 'Extension to remove from the input file [default: "(\.[0-9]+)?\.vcf$"]',
+		subStringReplace: {
+			description: 'Substring used to replace (e.g. add a suffix) [default: ".gather"]',
 			category: 'Output path/name option'
 		}
 		reorder: {
@@ -2070,8 +2070,8 @@ task splitVcfs {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-08-25"
+		version: "0.0.2"
+		date: "2020-12-17"
 	}
 
 	input {
@@ -2081,7 +2081,8 @@ task splitVcfs {
 		String? outputPath
 		String? name
 		String suffix = ".split"
-		String subString = "\.(vcf|bcf)$"
+		String subString = "\.(vcf|bcf|vcf\.gz)$"
+		String subStringReplace = ".split"
 		String? ext
 
 		File? refDict
@@ -2098,9 +2099,10 @@ task splitVcfs {
 	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
-	String extOut = if defined(ext) then ext else sub(basename(in),"(.*\.)(vcf|bcf)$","$2")
-	String baseName = if defined(name) then name else sub(basename(in),subString,"")
-	String outputFileBase = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}" else "~{baseName}~{suffix}"
+	String extOut = if defined(ext) then ext else sub(basename(in),"(.*\.)(vcf|bcf|vcf\.gz)$","$2")
+	String extIdx = if sub(basename(in),"(.*\.)(.gz)$","$2")== ".gz" then ".tbi" else ".idx"
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String outputFileBase = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
 	command <<<
 
@@ -2119,9 +2121,9 @@ task splitVcfs {
 
 	output {
 		File outputFileSnp = outputFileBase + ".snps." + extOut
-		File outputFileSnpIdx = outputFileBase + ".snps." + extOut + ".idx"
+		File outputFileSnpIdx = outputFileBase + ".snps." + extOut + extIdx
 		File outputFileIndel = outputFileBase + ".indels." + extOut
-		File outputFileIndelIdx = outputFileBase + ".indels." + extOut + ".idx"
+		File outputFileIndelIdx = outputFileBase + ".indels." + extOut + extIdx
 	}
 
  	runtime {

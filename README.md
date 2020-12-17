@@ -211,7 +211,7 @@ It calls the following subworkflow :
   </tr>
   <tr>
     <td>HaplotypeCaller</td>
-    <td>0.0.2</td>
+    <td>0.0.3</td>
   </tr>
   <tr>
     <td>CollectMultipleMetrics</td>
@@ -227,7 +227,7 @@ It calls the following subworkflow :
   </tr>
   <tr>
     <td>GatherVcfFiles</td>
-    <td>0.0.1</td>
+    <td>0.0.2</td>
   </tr>
   <tr>
     <td>LeftAlignIndels</td>
@@ -247,7 +247,7 @@ It calls the following subworkflow :
   </tr>
   <tr>
     <td>SplitVcfs</td>
-    <td>0.0.1</td>
+    <td>0.0.2</td>
   </tr>
   <tr>
     <td>VariantFiltration</td>
