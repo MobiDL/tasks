@@ -2080,7 +2080,6 @@ task splitVcfs {
 		File in
 		String? outputPath
 		String? name
-		String suffix = ".split"
 		String subString = "\.(vcf|bcf|vcf\.gz)$"
 		String subStringReplace = ".split"
 		String? ext
@@ -2148,8 +2147,8 @@ task splitVcfs {
 			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
 			category: 'Output path/name option'
 		}
-		suffix: {
-			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".gather"]',
+		subStringReplace: {
+			description: 'subString to replace [default: ".split"]',
 			category: 'Output path/name option'
 		}
 		ext: {
@@ -2187,18 +2186,19 @@ task variantFiltration {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-08-25"
+		version: "0.0.2"
+		date: "2020-12-17"
 	}
 
 	input {
 		String path_exe = "gatk"
 
 		File in
+		File? inIdx
 		String? outputPath
 		String? name
-		String suffix = ".filter"
-		String subString = "\.(vcf|bcf)$"
+		String subStringReplace = ".filter"
+		String subString = "\.(vcf|bcf|vcf\.gz)$"
 		String? ext
 
 		File refFasta
@@ -2245,9 +2245,10 @@ task variantFiltration {
 
 	Boolean filters = if (defined(filtersExpression) && defined(filtersName)) then true else false
 
-	String extOut = if defined(ext) then ext else sub(basename(in),"(.*\.)(vcf|bcf)$","$2")
-	String baseName = if defined(name) then name else sub(basename(in),subString,"")
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.~{extOut}" else "~{baseName}~{suffix}.~{extOut}"
+	String extOut = if defined(ext) then ext else sub(basename(in),"(.*\.)(vcf|bcf|vcf\.gz)$","$2")
+	String extIdx = if sub(basename(in),"(.*\.)(.gz)$","$2")== ".gz" then ".tbi" else ".idx"
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.~{extOut}" else "~{baseName}.~{extOut}"
 
 	command <<<
 
@@ -2275,6 +2276,8 @@ task variantFiltration {
 
 	output {
 		File outputFile = outputFile
+		File? outputFileIdx = outputFile + extIdx
+		File? outputFileMD5 = outputFile + ".md5"
 	}
 
  	runtime {
@@ -2291,6 +2294,10 @@ task variantFiltration {
 			description: 'VCF to filter.',
 			category: 'Required'
 		}
+		in: {
+			description: 'VCF index.',
+			category: 'Optional'
+		}
 		outputPath: {
 			description: 'Output path where vcf will be generated.',
 			category: 'Output path/name option'
@@ -2299,8 +2306,8 @@ task variantFiltration {
 			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
 			category: 'Output path/name option'
 		}
-		suffix: {
-			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".gather"]',
+		subStringReplace: {
+			description: 'subString to replace [default: ".filter"]',
 			category: 'Output path/name option'
 		}
 		ext: {
