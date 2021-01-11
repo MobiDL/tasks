@@ -1,0 +1,342 @@
+# List of tasks implemented
+
+<table class="tg" style="width:100%">
+<thead>
+  <tr>
+    <th>Tool</th>
+    <th>Version</th>
+    <th>Task</th>
+    <th>Version</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td rowspan="8">bash</td>
+    <td rowspan="8">NA</td>
+    <td>findFiles</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>convertBedToIntervals</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>makeLink</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>concatenateFiles</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>wget</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>gzip</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>sortgtf</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>fai2bed</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="3">bedtools</td>
+    <td rowspan="3">v2.29.2</td>
+    <td>intersect</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>sort</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>coverage</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="2">bgzip</td>
+    <td rowspan="2">1.10.2</td>
+    <td>compress</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>decompress</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="4">bcftools</td>
+    <td rowspan="4">1.10.2</td>
+    <td>index</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>merge</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>norm</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>stats</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="2">BWA</td>
+    <td rowspan="2">0.7.17-r1188</td>
+    <td>mem</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>index</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>Crumble</td>
+    <td>0.8.3</td>
+    <td>crumble</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="3">Cutadapt</td>
+    <td rowspan="3">2.10</td>
+    <td>adaptersTrimming</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>qualityTrimming</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>hardTrimming</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>DWGSim</td>
+    <td>0.1.11</td>
+    <td>simulateReadsIllumina</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="3">FastQC</td>
+    <td rowspan="3">v0.11.9</td>
+    <td>fastqc</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>fastqcNano</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>fastqcCasava</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="17">GATK4</td>
+    <td rowspan="17">v4.1.8.1</td>
+    <td>ApplyBQSR</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>BaseRecalibrator</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>BedToIntervalList</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>IntervalListToBed</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>HaplotypeCaller</td>
+    <td>0.0.3</td>
+  </tr>
+  <tr>
+    <td>CollectMultipleMetrics</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>GatherBamFiles</td>
+    <td>0.0.2</td>
+  </tr>
+  <tr>
+    <td>GatherBQSRReports</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>GatherVcfFiles</td>
+    <td>0.0.2</td>
+  </tr>
+  <tr>
+    <td>LeftAlignIndels</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>ReorderSam</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>DepthOfCoverage (BETA)</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>SplitIntervals</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>SplitVcfs</td>
+    <td>0.0.2</td>
+  </tr>
+  <tr>
+    <td>VariantFiltration</td>
+    <td>0.0.2</td>
+  </tr>
+  <tr>
+    <td>MergeVcfs</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>SortVcf</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>MPA</td>
+    <td>1.1.2</td>
+    <td>mpa</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>Qualimap</td>
+    <td>v.2.2.2-dev</td>
+    <td>bamqc</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>Rsync</td>
+    <td>3.1.3</td>
+    <td>rsync</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="2">Regtools</td>
+    <td rowspan="2">0.5.2</td>
+    <td>junctionsExtract</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>junctionsAnnotate</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="5">Sambamba</td>
+    <td rowspan="5">0.7.1</td>
+    <td>index</td>
+    <td>0.0.2</td>
+  </tr>
+  <tr>
+    <td>flagstat</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>markdup</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>sort</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>view</td>
+    <td>0.0.2</td>
+  </tr>
+  <tr>
+    <td rowspan="11">Samtools</td>
+    <td rowspan="11">1.10</td>
+    <td>bedcov</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>index</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>flagstat</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>sort</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>dict</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>view</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>faidx</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>fqidx</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>markdup</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>fixmate</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>merge</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>Star</td>
+    <td>2.7.5c</td>
+    <td>genomeGenerate</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>Tabix</td>
+    <td>1.10.2</td>
+    <td>index</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="3">Vardict-java</td>
+    <td rowspan="3">1.8.2</td>
+    <td>vardictSoloAmplicons</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>teststrandbias</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>var2vcf_valid</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td rowspan="2">VEP</td>
+    <td rowspan="2">101.0</td>
+    <td>vep_cache</td>
+    <td>0.0.1</td>
+  </tr>
+  <tr>
+    <td>install</td>
+    <td>0.0.1</td>
+  </tr>
+</tbody>
+</table>
