@@ -1,7 +1,7 @@
 version 1.0
 
 # MobiDL 2.0 - MobiDL 2 is a collection of tools wrapped in WDL to be used in any WDL pipelines.
-# Copyright (C) 2020 MoBiDiC
+# Copyright (C) 2021 MoBiDiC
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
