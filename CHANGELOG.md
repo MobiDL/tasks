@@ -8,11 +8,13 @@ All notable changes to this project will be documented in this file.
 
 #### Workflows
 
-- prepareGenome
-- alignDNAcapture
-- variantCallingCaptureHC
-- panelCapture
-- postProcessVCF
+- Preprocess :
+  - getAnnotationsFiles
+  - getGenomeDir
+  - preprocess
+- Subworkflows :
+  - alignmentShortReadsDNA
+  - postProcessVCF
 
 #### Tasks
 
