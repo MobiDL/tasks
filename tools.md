@@ -303,6 +303,12 @@
 			<td>0.0.1</td>
 		</tr>
 		</tr>
+			<td>snpEff</td>
+			<td>5.0</td>
+			<td>install</td>
+			<td>0.0.1</td>
+		</tr>
+		</tr>
 			<td>Star</td>
 			<td>2.7.5c</td>
 			<td>genomeGenerate</td>
