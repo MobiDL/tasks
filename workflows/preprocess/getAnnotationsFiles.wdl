@@ -27,7 +27,8 @@ workflow getAnnotationsFiles {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
 		date: "2020-12-04"
-		version: "0.0.1"
+		last_date: "2021-01-20"
+		version: "0.0.2"
 	}
 
 	input {
@@ -107,6 +108,16 @@ workflow getAnnotationsFiles {
 	call vep.install as vep {
 		input :
 			destDir = outputPath
+	}
+
+################################################################################
+
+################################################################################
+
+	call snpEff.install as snpEff {
+		input :
+			destDir = outputPath,
+			genome = "hg19"
 	}
 
 ################################################################################
