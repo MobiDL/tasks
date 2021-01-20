@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - alignDNAcapture
 - variantCallingCaptureHC
 - panelCapture
+- postProcessVCF
 
 #### Tasks
 

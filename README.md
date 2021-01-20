@@ -31,35 +31,11 @@ This repo include an easy install by conda ([check the installation guide for co
 
 > If you have any issue with the installation please report the issue [here](https://github.com/mobidic/MobiDL2.0/issues/new?assignees=Char-Al&labels=%3Asnake%3A+Installation+bug&template=installation-issue-with-conda.md&title=Installation+with+conda+%3A+%5Bdetails%5D).
 
-## Workflows implemented
+## Workflows
 
-### General
+### Subworkflows
 
-#### PrepareGenome
-
-This workflow is developped to prepare a fasta file to be used into other
-pipelines.
-
-It will process the fasta input files to create indexes and dictionary.
-
-### Panel capture
-
-#### AlignDNAcapture
-
-This workflow align DNA capture sequence against the reference genome.
-
-It produce some quality metrics from different tools.
-
-#### VariantCallingCaptureHC
-
-This workflow apply variant calling by HaplotypeCaller on a capture sequencing.
-
-It produce some quality metrics from different tools.
-
-#### PanelCapture
-
-This workflow performed an analysis for capture constitutionnal sample.
-It calls the following subworkflow :
-
-- ***AlignDNAcapture***
-- ***VariantCallingCaptureHC***
+- alignmentShortReadsDNA
+  - align DNA short reads (Illumina®) against a reference (germline or somatic)
+- postProcessVCF
+  - process a VCF to apply filter and normalization
