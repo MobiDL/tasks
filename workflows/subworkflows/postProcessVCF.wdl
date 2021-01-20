@@ -20,7 +20,7 @@ import "../../tasks/bcftools.wdl" as bcftools
 import "../../tasks/GATK4.wdl" as GATK4
 import "../../tasks/tabix.wdl" as tabix
 
-workflow variantCallingCaptureHC {
+workflow normalization {
 	meta {
 		author: "MoBiDiC"
 		email: "c-vangoethem(at)chu-montpellier.fr"
@@ -48,6 +48,8 @@ workflow variantCallingCaptureHC {
 		Int FSStrandBiasIndels = 200
 		Int LowReadPosRankSumIndels = -5
 		Int SORStrandBiasIndels = 10
+
+		String outputPath = "./postProcessVCF/"
 	}
 
 ################################################################################
@@ -59,19 +61,19 @@ workflow variantCallingCaptureHC {
 			splitMA = true,
 			outputType = "z",
 			refFasta = refFasta,
-			outputPath = outputPath + "HaplotypeCaller/"
+			outputPath = outputPath
 	}
 
 	call tabix.index as TBIBNHC {
 		input :
 			in = BNHC.outputFile,
-			outputPath = outputPath + "HaplotypeCaller/"
+			outputPath = outputPath
 	}
 
 	call GATK4.splitVcfs as GSpV {
 		input :
 			in = BNHC.outputFile,
-			outputPath = outputPath + "HaplotypeCaller/"
+			outputPath = outputPath
 	}
 
 	call GATK4.variantFiltration as GVF_SPN {
@@ -89,7 +91,7 @@ workflow variantCallingCaptureHC {
 			LowCoverage = LowCoverage,
 			LowMappingQuality = LowMappingQualitySNP,
 			LowMappingQualityRankSum = LowMappingQualityRankSumSNP,
-			outputPath = outputPath + "HaplotypeCaller/"
+			outputPath = outputPath
 	}
 
 	call GATK4.variantFiltration as GVF_Indels {
@@ -105,7 +107,7 @@ workflow variantCallingCaptureHC {
 			SORStrandBias = SORStrandBiasIndels,
 			HomopolymerRegion = HomopolymerRegion,
 			LowCoverage = LowCoverage,
-			outputPath = outputPath + "HaplotypeCaller/"
+			outputPath = outputPath
 	}
 
 	call GATK4.mergeVcfs as GMV {
@@ -113,13 +115,13 @@ workflow variantCallingCaptureHC {
 			in = [GVF_SPN.outputFile,GVF_Indels.outputFile],
 			subString = "\.(snps|indels)\.filter\.(vcf|bcf|vcf\.gz)$",
 			subStringReplace = ".filter",
-			outputPath = outputPath + "HaplotypeCaller/"
+			outputPath = outputPath
 	}
 
 	call GATK4.sortVcf as GSoV {
 		input :
 			in = GMV.outputFile,
-			outputPath = outputPath + "HaplotypeCaller/"
+			outputPath = outputPath
 	}
 
 	call bcftools.norm as BN {
@@ -128,13 +130,13 @@ workflow variantCallingCaptureHC {
 			outputType = "z",
 			multiallelicType = "any",
 			refFasta = refFasta,
-			outputPath = outputPath + "HaplotypeCaller/"
+			outputPath = outputPath
 	}
 
 	call tabix.index as TI {
 		input :
 			in = BN.outputFile,
-			outputPath = outputPath + "HaplotypeCaller/"
+			outputPath = outputPath
 	}
 
 ################################################################################
@@ -210,6 +212,10 @@ workflow variantCallingCaptureHC {
 		SORStrandBiasIndels: {
 			description : 'Threshold above which SOR the variant will be tagged as SORStrandBias for INDELs',
 			category: 'Option'
+		}
+		outputPath : {
+			description: 'Path where the output repository will be created [default: ./]',
+			category: 'Output (optional)'
 		}
 	}
 }
