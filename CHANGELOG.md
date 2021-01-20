@@ -97,6 +97,8 @@ All notable changes to this project will be documented in this file.
 	- markdup
 	- fixmate
 	- merge
+- snpEff :
+	- install
 - Star :
 	- genomeGenerate
 - tabix :
