@@ -20,6 +20,7 @@ import "../../tasks/rsync.wdl" as rsync
 import "../../tasks/bash.wdl" as bash
 import "../../tasks/bgzip.wdl" as bgzip
 import "../../tasks/tabix.wdl" as tabix
+import "../../tasks/snpEff.wdl" as snpEff
 import "../../tasks/vep.wdl" as vep
 
 workflow getAnnotationsFiles {
@@ -27,8 +28,8 @@ workflow getAnnotationsFiles {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
 		date: "2020-12-04"
-		last_date: "2021-01-20"
-		version: "0.0.2"
+		last_date: "2021-02-08"
+		version: "0.0.3"
 	}
 
 	input {
