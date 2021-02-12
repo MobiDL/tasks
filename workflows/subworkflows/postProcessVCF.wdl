@@ -24,8 +24,8 @@ workflow normalization {
 	meta {
 		author: "MoBiDiC"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2021-01-20"
+		version: "0.0.2"
+		date: "2021-02-12"
 	}
 
 	input {
@@ -144,7 +144,7 @@ workflow normalization {
 ################################################################################
 
 	output {
-		File vcf = BN.outputFile
+		File vcfOut = BN.outputFile
 		File vcfIdx = TI.outputFile
 	}
 
