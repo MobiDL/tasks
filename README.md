@@ -23,7 +23,7 @@ This repo include an easy install by conda ([check the installation guide for co
 
 2. Install the dependencies:
 
-`$ conda env create environment.yml`
+`$ conda env create -f environment.yml`
 
 3. Load the environnement:
 
