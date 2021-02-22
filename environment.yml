@@ -4,7 +4,8 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - python==3.8.2
+  - python==3.7.10
+  - ensembl-vep==101.0
   - pip==20.2.4
   - cromwell==53.1
   - samtools==1.10
@@ -20,7 +21,6 @@ dependencies:
   - qualimap==2.2.2d
   - bioconductor-repitools==1.34.0
   - cutadapt==2.10
-  - ensembl-vep==101.0
   - vardict-java==1.8.2
   - wget==1.20.1
   - mobidic-mpa==1.1.2
