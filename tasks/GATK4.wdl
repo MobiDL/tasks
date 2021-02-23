@@ -642,8 +642,8 @@ task baseRecalibrator {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-08-06"
+		version: "0.0.2"
+		date: "2021-02-23"
 	}
 
 	input {
@@ -654,6 +654,8 @@ task baseRecalibrator {
 		String? outputPath
 		String? name
 		File? intervals
+		String subString_intervals = "([0-9]+)-scattered.interval_list"
+		String subStringReplace_intervals = "$1"
 		String ext = ".recal"
 
 		Array[File]+ knownSites
@@ -686,10 +688,10 @@ task baseRecalibrator {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseNameIntervals = if defined(intervals) then intervals else ""
-	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","\.$1") else ""
+	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),subString_intervals,subStringReplace_intervals) else ""
 
 	String baseName = if defined(name) then name else sub(basename(in),"\.(sam|bam|cram)$","")
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{baseIntervals}~{ext}" else "~{baseName}~{baseIntervals}~{ext}"
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.~{baseIntervals}~{ext}" else "~{baseName}.~{baseIntervals}~{ext}"
 
 	command <<<
 
@@ -741,6 +743,14 @@ task baseRecalibrator {
 		intervals: {
 			description: 'Path to a file containing genomic intervals over which to operate. (format intervals list: chr1:1000-2000)',
 			category: 'Tool option'
+		}
+		subString_intervals: {
+			description: 'Substring to replace for intervals files (e.g. remove extension) [default: "([0-9]+)-scattered.interval_list"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace_intervals: {
+			description: 'Substring used to replace for intervals files (e.g. add a suffix) [default: "$1"]',
+			category: 'Output path/name option'
 		}
 		outputPath: {
 			description: 'Output path where bqsr report will be generated.',
@@ -922,8 +932,8 @@ task applyBQSR {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-08-07"
+		version: "0.0.2"
+		date: "2021-02-23"
 	}
 
 	input {
@@ -933,6 +943,8 @@ task applyBQSR {
 		File bamIdx
 		File bqsrReport
 		File? intervals
+		String subString_intervals = "([0-9]+)-scattered.interval_list"
+		String subStringReplace_intervals = "$1"
 		String? outputPath
 		String? name
 		String suffix = ".bqsr"
@@ -965,11 +977,11 @@ task applyBQSR {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseNameIntervals = if defined(intervals) then intervals else ""
-	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","\.$1") else ""
+	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),subString_intervals,subStringReplace_intervals) else ""
 
 	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")
 	String ext = sub(basename(in),"(.*)\.(sam|bam|cram)$","$2")
-	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{baseIntervals}\.~{ext}" else "~{baseName}~{suffix}~{baseIntervals}\.~{ext}"
+	String outputBamFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.~{baseIntervals}\.~{ext}" else "~{baseName}~{suffix}.~{baseIntervals}\.~{ext}"
 	String outputBaiFile = sub(outputBamFile,"(m)$","i")
 
 	command <<<
@@ -1038,6 +1050,14 @@ task applyBQSR {
 		intervals: {
 			description: 'Path to a file containing genomic intervals over which to operate. (format intervals list: chr1:1000-2000)',
 			category: 'Tool option'
+		}
+		subString_intervals: {
+			description: 'Substring to replace for intervals files (e.g. remove extension) [default: "([0-9]+)-scattered.interval_list"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace_intervals: {
+			description: 'Substring used to replace for intervals files (e.g. add a suffix) [default: "$1"]',
+			category: 'Output path/name option'
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
