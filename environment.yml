@@ -27,3 +27,4 @@ dependencies:
   - regtools==0.6.0
   - rsync==3.1.3
   - snpeff==5.0
+  - anacore-utils==3.2.0

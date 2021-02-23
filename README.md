@@ -1,6 +1,6 @@
 # MobiDL 2
 
-![plateforms:Linux-64|osx-64](https://img.shields.io/badge/plateform-Linux--64|osx--64-green?&style=for-the-badge)
+![plateforms:Linux-64](https://img.shields.io/badge/plateform-Linux--64-green?&style=for-the-badge)
 
 MobiDL 2 is a collection of tools wrapped in WDL to be used in any WDL pipelines.
 
