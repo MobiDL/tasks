@@ -839,8 +839,8 @@ task gatherBQSRReports {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-08-06"
+		version: "0.0.2"
+		date: "2020-12-23"
 	}
 
 	input {
@@ -849,7 +849,8 @@ task gatherBQSRReports {
 		Array[File]+ in
 		String? outputPath
 		String? name
-		String subString = "\.[0-9]+\.recal$"
+		String subString = "(\.[0-9]+)?\.recal$"
+		String subStringReplace = ""
 		String ext = ".bqsr.report"
 
 		Int threads = 1
@@ -864,7 +865,7 @@ task gatherBQSRReports {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String firstFile = basename(in[0])
-	String baseName = if defined(name) then name else sub(basename(firstFile),subString,"")
+	String baseName = if defined(name) then name else sub(basename(firstFile),subString,subStringReplace)
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
 
 	command <<<
@@ -910,7 +911,11 @@ task gatherBQSRReports {
 			category: 'Output path/name option'
 		}
 		subString: {
-			description: 'Extension to remove from the input file [default: "\.[0-9]\.recal$"]',
+			description: 'Extension to remove from the input file [default: "(\.[0-9]+)?\.recal$"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'Substring used to replace (e.g. add a suffix) [default: ""]',
 			category: 'Output path/name option'
 		}
 		threads: {
