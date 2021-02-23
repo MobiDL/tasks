@@ -17,6 +17,7 @@ version 1.0
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import "../../tasks/bwa.wdl" as bwa
+import "../../tasks/bash.wdl" as bash
 import "../../tasks/crumble.wdl" as crumble
 import "../../tasks/GATK4.wdl" as GATK4
 import "../../tasks/sambamba.wdl" as sambamba
@@ -25,15 +26,15 @@ workflow alignDNA {
 	meta {
 		author: "MoBiDiC"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-12-14"
+		version: "0.0.2"
+		date: "2021-02-23"
 	}
 
 	input {
 		File fastqR1
 		File? fastqR2
 
-		Array[File] splittedIntervals
+		Array[File]? splittedIntervals
 
 		File refFasta
 		File refFai
@@ -125,7 +126,20 @@ workflow alignDNA {
 ################################################################################
 ## Base recalibrator & LeftAlign
 
-	scatter (intervals in splittedIntervals) {
+	call bash.fai2bed as bedGenome {
+		input :
+			in = refFai,
+			outputPath = outputPath + "/regionOfInterest/"
+	}
+
+	call bash.convertBedToIntervals as Bed2Intervals {
+		input :
+			in = bedGenome.outputFile,
+			outputPath = outputPath + "/regionOfInterest/"
+	}
+	Array[File] intervals2use = select_first([splittedIntervals,[Bed2Intervals.outputFile]])
+
+	scatter (intervals in intervals2use) {
 		call GATK4.baseRecalibrator as BR {
 			input :
 				in = bamUsed,
@@ -150,7 +164,7 @@ workflow alignDNA {
 			outputPath = outputPath + "/BQSR"
 	}
 
-	scatter (intervals in splittedIntervals) {
+	scatter (intervals in intervals2use) {
 		call GATK4.applyBQSR as ABR {
 			input :
 				in = bamUsed,
@@ -231,7 +245,7 @@ workflow alignDNA {
 			memory = IndexMemory
 	}
 
-## TODO: fix crumble
+	## TODO: fix crumble
 	/* call crumble.crumble as Crumble {
 		input :
 			in = Bam2Cram.outputFile,
@@ -265,8 +279,8 @@ workflow alignDNA {
 			category: 'Input (optional)'
 		}
 		splittedIntervals : {
-			description: 'Splitted intervals to process bam.',
-			category: 'Input (required)'
+			description: 'Splitted intervals to process bam. (default: use genome to create intervals)',
+			category: 'Option'
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
@@ -365,5 +379,4 @@ workflow alignDNA {
 			category : 'System'
 		}
 	}
-
 }

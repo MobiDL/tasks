@@ -25,7 +25,7 @@
 		<tr>
 			<td rowspan="2">Subworkflow</td>
 			<td>alignmentShortReadsDNA</td>
-			<td>0.0.1</td>
+			<td>0.0.2</td>
 		</tr>
 		<tr>
 			<td>postProcessVCF</td>
