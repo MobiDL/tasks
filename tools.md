@@ -338,7 +338,7 @@
 			<td rowspan="2">VEP</td>
 			<td rowspan="2">101.0</td>
 			<td>vep_cache</td>
-			<td>0.0.1</td>
+			<td>0.0.2</td>
 		</tr>
 		</tr>
 			<td>install</td>

@@ -75,8 +75,8 @@ task vep_cache {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-09-29"
+		version: "0.0.2"
+		date: "2021-02-25"
 	}
 
 	input {
@@ -97,8 +97,8 @@ task vep_cache {
 
 		## Cache options
 		String dirBaseCache = "$HOME/.vep/"
-		String dirCache = "$HOME/.vep/"
-		String dirPlugins = "$HOME/.vep/"
+		String? dirCache
+		String? dirPlugins
 		Boolean offlineMode = true
 		File refFasta
 		File refFai
@@ -212,8 +212,8 @@ task vep_cache {
 			--fork ~{threads} \
 			--cache \
 			--dir ~{dirBaseCache} \
-			--dir_cache ~{dirCache} \
-			--dir_plugins ~{dirPlugins} \
+			~{default="" "--dir_cache " + dirCache} \
+			~{default="" "--dir_plugins " + dirPlugins} \
 			~{true="--offline" false="" offlineMode} \
 			--fasta ~{refFasta} \
 			~{true="--merged" false="--refseq" mergedCache} \
