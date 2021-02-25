@@ -27,7 +27,7 @@ workflow panelCaptureSolo {
 	meta {
 		author: "MoBiDiC"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.2"
+		version: "0.0.3"
 		date: "2021-02-25"
 	}
 
@@ -204,19 +204,14 @@ workflow panelCaptureSolo {
 ## Annotation
 
 	### VEP
-	/* call vep as annotVEP {
+	call vep.vep_cache as annotVEP {
 		input :
 			in = normVCF.vcfOut,
 			outputPath = outputPath + "variant-annot/",
 			name = sampleName,
-
-			## Cache options
-			dirCache = dirCache,
 			refFasta = refFasta,
-			refFai = refFai,
-
-			statsOutput = false
-	} */
+			refFai = refFai
+	}
 	###
 
 ################################################################################

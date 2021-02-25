@@ -34,7 +34,7 @@
 		<tr>
 			<td rowspan="1">Panel capture</td>
 			<td>panelCaptureSolo</td>
-			<td>0.0.2</td>
+			<td>0.0.3</td>
 		</tr>
 	</tbody>
 </table>
