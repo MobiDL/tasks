@@ -27,8 +27,8 @@ workflow panelCaptureSolo {
 	meta {
 		author: "MoBiDiC"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2021-02-17"
+		version: "0.0.2"
+		date: "2021-02-25"
 	}
 
 	input {
@@ -55,7 +55,7 @@ workflow panelCaptureSolo {
 		Int scatterCount=24
 
 		String outputPath = "./"
-		String subString = "(_S[0-9]+)?(_L[0-9]+)?(_R[12])?(_[0-9]+)?.(fastq|fq)(.gz)?"
+		String subString = "(_S[0-9]+)?(_L[0-9]+)?([_.]?R[12])?(_[0-9]+)?.(fastq|fq)(.gz)?"
 		String? name
 
 		## primary systems options
@@ -204,7 +204,7 @@ workflow panelCaptureSolo {
 ## Annotation
 
 	### VEP
-	call vep. as annotVEP {
+	/* call vep as annotVEP {
 		input :
 			in = normVCF.vcfOut,
 			outputPath = outputPath + "variant-annot/",
@@ -216,7 +216,7 @@ workflow panelCaptureSolo {
 			refFai = refFai,
 
 			statsOutput = false
-	}
+	} */
 	###
 
 ################################################################################

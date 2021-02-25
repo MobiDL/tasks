@@ -26,8 +26,8 @@ workflow alignDNA {
 	meta {
 		author: "MoBiDiC"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.2"
-		date: "2021-02-23"
+		version: "0.0.3"
+		date: "2021-02-25"
 	}
 
 	input {
@@ -51,7 +51,7 @@ workflow alignDNA {
 		Boolean amplicons = false
 
 		String outputPath = "./"
-		String subString = "(_S[0-9][0-9])?(_L[0-9][0-9][0-9])?[\._]?(R[12])?(_[0-9]+)?.(fastq|fq)(.gz)?"
+		String subString = "(_S[0-9][0-9])?(_L[0-9][0-9][0-9])?([\._]?R[12])?(_[0-9]+)?.(fastq|fq)(.gz)?"
 		String? name
 
 		Int BWAThreads = 1
@@ -77,6 +77,7 @@ workflow alignDNA {
 			fastqR1 = fastqR1,
 			fastqR2 = fastqR2,
 			subString = subString,
+			sample = sampleName,
 
 			refFasta = refFasta,
 			refFai = refFai,
@@ -137,7 +138,7 @@ workflow alignDNA {
 			in = bedGenome.outputFile,
 			outputPath = outputPath + "/regionOfInterest/"
 	}
-	Array[File] intervals2use = select_first([splittedIntervals,[Bed2Intervals.outputFile]])
+	Array[File] intervals2use = if defined(splittedIntervals) then flatten(select_all([splittedIntervals])) else Bed2Intervals.outputFile
 
 	scatter (intervals in intervals2use) {
 		call GATK4.baseRecalibrator as BR {
