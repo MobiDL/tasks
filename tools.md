@@ -303,6 +303,12 @@
 			<td>0.0.1</td>
 		</tr>
 		</tr>
+			<td>Sed</td>
+			<td>4.8</td>
+			<td>sedReplace</td>
+			<td>0.0.1</td>
+		</tr>
+		</tr>
 			<td>snpEff</td>
 			<td>5.0</td>
 			<td>install</td>

@@ -99,6 +99,8 @@ All notable changes to this project will be documented in this file.
 	- markdup
 	- fixmate
 	- merge
+- sed :
+	- sedReplace
 - snpEff :
 	- install
 - Star :
