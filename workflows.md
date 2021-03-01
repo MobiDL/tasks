@@ -12,7 +12,7 @@
 		<tr>
 			<td rowspan="3">Preprocess</td>
 			<td>getAnnotationsFiles</td>
-			<td>0.0.2</td>
+			<td>0.0.4</td>
 		</tr>
 		<tr>
 			<td>getGenomeDir</td>

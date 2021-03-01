@@ -22,14 +22,14 @@ import "../../tasks/bgzip.wdl" as bgzip
 import "../../tasks/tabix.wdl" as tabix
 import "../../tasks/snpEff.wdl" as snpEff
 import "../../tasks/vep.wdl" as vep
+import "../../tasks/sed.wdl" as sed
 
 workflow getAnnotationsFiles {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		date: "2020-12-04"
-		last_date: "2021-02-08"
-		version: "0.0.3"
+		date: "2021-03-01"
+		version: "0.0.4"
 	}
 
 	input {
@@ -53,9 +53,18 @@ workflow getAnnotationsFiles {
 			decompress = true
 	}
 
-	call bash.sortgtf as sortGTF {
+	call sed.sedReplace as removeChrGTF {
 		input :
 			in = gunzipGTF.outputFile,
+			outputPath = outputPath,
+		    subString = "(.*).gtf",
+		    subStringReplace = "$1.wout_chr.gtf",
+			expression1 = "^chr"
+	}
+
+	call bash.sortgtf as sortGTF {
+		input :
+			in = removeChrGTF.outputFile,
 			outputPath = outputPath
 	}
 
