@@ -80,8 +80,8 @@ task mem {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-07-29"
+		version: "0.0.2"
+		date: "2021-03-05"
 	}
 
 	input {
@@ -91,6 +91,7 @@ task mem {
 		String? outputPath
 		String? sample
 		String subString = "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"
+		String subStringReplace = ""
 
 		File fastqR1
 		File? fastqR2
@@ -119,7 +120,7 @@ task mem {
 	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
-	String baseName = if defined(sample) then sample else sub(basename(fastqR1),subString,"")
+	String baseName = if defined(sample) then sample else sub(basename(fastqR1),subString,subStringReplace)
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.bam" else "~{baseName}.bam"
 
 	command <<<
@@ -167,6 +168,10 @@ task mem {
 		}
 		subString: {
 			description: 'Substring to remove to get sample name [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ""]',
 			category: 'Output path/name option'
 		}
 		fastqR1: {

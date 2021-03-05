@@ -90,7 +90,7 @@
 			<td rowspan="2">BWA</td>
 			<td rowspan="2">0.7.17-r1188</td>
 			<td>mem</td>
-			<td>0.0.1</td>
+			<td>0.0.2</td>
 		</tr>
 		</tr>
 			<td>index</td>
