@@ -46,12 +46,12 @@ task get_version {
 		String version = read_string(stdout())
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "star"]',
 			category: 'System'
@@ -140,12 +140,12 @@ task genomeGenerate {
 		File transcriptInfo = outputPath + "transcriptInfo.tab"
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "star"]',
 			category: 'System'
@@ -324,7 +324,7 @@ task alignReads {
 		Int seedMapMin = 5
 		## Alignments
 		Int alignIntronMin = 21
-		Int alignIntronMax = O
+		Int alignIntronMax = 0
 		Int alignMatesGapMax = 0
 		Int alignSJoverhangMin = 5
 		Int alignSJstitchMismatchNmax1 = 0
@@ -376,7 +376,7 @@ task alignReads {
 	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
-	String baseName = if defined(sample) then sample else sub(basename(fastqR1),subString,subStringReplace)
+	String baseName = if defined(name) then name else sub(basename(fastqR1),subString,subStringReplace)
 	String outputRep = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
 	command <<<
@@ -402,7 +402,7 @@ task alignReads {
 			--sjdbScore ~{sjdbScore} \
 			--sjdbInsertSave ~{true="All" false="Basic" sjdbInsertSaveAll} \
 			--readQualityScoreBase ~{readQualityScoreBase} \
-		 	--clipAdapterType ~{true="Hammer" false="None" clipAdapterHamming} \
+			--clipAdapterType ~{true="Hammer" false="None" clipAdapterHamming} \
 			--clip3pNbases ~{sep=" " clip3pNbases} \
 			--clip3pAdapterSeq ~{sep=" " clip3pAdapterSeq} \
 			--clip3pAdapterMMp ~{sep=" " clip3pAdapterMMp} \
@@ -480,25 +480,23 @@ task alignReads {
 			--winBinNbits ~{winBinNbits} \
 			--winAnchorDistNbins ~{winAnchorDistNbins} \
 			--winFlankNbins ~{winFlankNbins} \
-			--winReadCoverageRelativeMin ~{winReadCoverageRelativeMin} \
-			--winReadCoverageBasesMin ~{winReadCoverageBasesMin} \
 			--quantMode ~{true="TranscriptomeSAM" false="GeneCounts" quantModeSAM} \
 			--quantTranscriptomeBAMcompression ~{quantTranscriptomeBAMcompression} \
 			--quantTranscriptomeBan ~{true="Singleend" false="IndelSoftclipSingleend" quantTranscriptomeBanSingleend} \
 			--twopassMode ~{true="Basic" false="None" twopassMode} \
 			--twopass1readsN ~{twopass1readsN} \
 			~{true="--waspOutputMode SAMtag" false="" waspOutputMode} \
-			--outFileNamePrefix ~{outPrefix} \
+			--outFileNamePrefix ~{outputRep} \
 			--readFilesCommand ~{readFilesCommand}
 
 	>>>
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "star"]',
 			category: 'System'
