@@ -147,7 +147,7 @@ task genomeGenerate {
 
  	parameter_meta {
 		path_exe: {
-			description: 'Path used as executable [default: "samtools"]',
+			description: 'Path used as executable [default: "star"]',
 			category: 'System'
 		}
 		outputPath: {
@@ -156,7 +156,7 @@ task genomeGenerate {
 		}
 		name: {
 			description: 'Name to use for output file name [default: sub(basename(in),"(\.bam|\.sam|\.cram)","")]',
-			category: 'Tool option'
+			category: 'Output path/name option'
 		}
 		subString: {
 			description: 'Substring to remove to create name file (used for fasta file name and gtf) [default: "(.fa(sta)?)?(.gtf)?"]',
@@ -207,6 +207,11 @@ task alignReads {
 		File fastqR1
 		File? fastqR2
 
+		String? outputPath
+		String? name
+		String subString = "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"
+		String subStringReplace = ""
+
 		# Genome Parameters
 		File genomeDir
 		Boolean genomeLoad = false
@@ -226,6 +231,7 @@ task alignReads {
 		File? sjdbBED
 
 		# Read Parameters
+		String readFilesCommand = "zcat"
 		Int readQualityScoreBase = 33
 
 		# Read Clipping
@@ -360,15 +366,6 @@ task alignReads {
 		# WASP
 		Boolean waspOutputMode = false
 
-		String readFilesCommand = "zcat"
-
-		String? outputPath
-		String? name
-		String subString = "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"
-		String subStringReplace = ""
-
-		Int readLength = 100
-
 		Int threads = 1
 		Int memoryByThreads = 768
 		String memory = "32G"
@@ -502,7 +499,7 @@ task alignReads {
 
  	parameter_meta {
 		path_exe: {
-			description: 'Path used as executable [default: "samtools"]',
+			description: 'Path used as executable [default: "star"]',
 			category: 'System'
 		}
 		outputPath: {
@@ -511,10 +508,10 @@ task alignReads {
 		}
 		name: {
 			description: 'Name to use for output file name [default: sub(basename(in),"(\.bam|\.sam|\.cram)","")]',
-			category: 'Tool option'
+			category: 'Output path/name option'
 		}
 		subString: {
-			description: 'Substring to remove to create name file (used for fasta file name and gtf) [default: "(.fa(sta)?)?(.gtf)?"]',
+			description: 'Substring to remove to get sample name [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
 			category: 'Output path/name option'
 		}
 		subStringReplace: {
