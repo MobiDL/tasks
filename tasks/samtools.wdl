@@ -46,12 +46,12 @@ task get_version {
 		String version = read_string(stdout())
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'System'
@@ -130,12 +130,12 @@ task sort {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'System'
@@ -247,12 +247,12 @@ task dict {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'System'
@@ -359,12 +359,12 @@ task index {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'System'
@@ -477,12 +477,12 @@ task view {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'System'
@@ -602,12 +602,12 @@ task faidx {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'System'
@@ -683,12 +683,12 @@ task fqidx {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'System'
@@ -766,12 +766,12 @@ task flagstat {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'System'
@@ -860,12 +860,12 @@ task bedcov {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'System'
@@ -979,12 +979,12 @@ task markdup {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'System'
@@ -1108,12 +1108,12 @@ task fixmate {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'System'
@@ -1223,12 +1223,12 @@ task merge {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "samtools"]',
 			category: 'System'

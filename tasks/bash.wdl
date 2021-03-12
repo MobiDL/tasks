@@ -74,12 +74,12 @@ task findFiles {
 		Array[File] files = read_lines("files.txt")
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path: {
 			description: "Path where find will work on.",
 			category: 'Required'
@@ -186,12 +186,12 @@ task convertBedToIntervals {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		in: {
 			description: 'Input bed to convert.',
 			category: 'Required'
@@ -274,12 +274,12 @@ task makeLink {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		in: {
 			description: 'Input bed to convert.',
 			category: 'Required'
@@ -354,12 +354,12 @@ task concatenateFiles {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		in: {
 			description: 'Array of files.',
 			category: 'Required'
@@ -473,12 +473,12 @@ task wget {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "wget"]',
 			category: 'System'
@@ -630,12 +630,12 @@ task gzip {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gzip"]',
 			category: 'System'
@@ -731,12 +731,12 @@ task sortgtf {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		in: {
 			description: 'Path of the input file.',
 			category: 'Required'
@@ -816,12 +816,12 @@ task fai2bed {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		in: {
 			description: 'Path of the input file.',
 			category: 'Required'

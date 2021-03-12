@@ -46,12 +46,12 @@ task get_version {
 		String version = read_string(stdout())
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "qualimap"]',
 			category: 'System'
@@ -145,12 +145,12 @@ task bamqc {
 		])
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "qualimap"]',
 			category: 'System'

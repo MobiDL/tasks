@@ -57,8 +57,8 @@ workflow getAnnotationsFiles {
 		input :
 			in = gunzipGTF.outputFile,
 			outputPath = outputPath,
-		    subString = "(.*).gtf",
-		    subStringReplace = "$1.wout_chr.gtf",
+			subString = "(.*).gtf",
+			subStringReplace = "$1.wout_chr.gtf",
 			expression1 = "^chr"
 	}
 

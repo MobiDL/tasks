@@ -46,12 +46,12 @@ task get_version {
 		String version = read_string(stdout())
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "fastqc"]',
 			category: 'System'
@@ -136,12 +136,12 @@ task fastqc {
 		Array[File] outZIP = glob(outputPath + "/*.zip")
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "fastqc"]',
 			category: 'System'
@@ -268,12 +268,12 @@ task fastqcNano {
 		Array[File] outZIP = glob(outputPath + "/*.zip")
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "fastqc"]',
 			category: 'System'
@@ -400,12 +400,12 @@ task fastqcCasava {
 		Array[File] outZIP = glob(outputPath + "/*.zip")
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "fastqc"]',
 			category: 'System'

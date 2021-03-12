@@ -46,12 +46,12 @@ task get_version {
 		String version = read_string(stdout())
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "vep"]',
 			category: 'System'
@@ -283,12 +283,12 @@ task vep_cache {
 		File? outputFileStats = outputFileStats
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "cutadapt"]',
 			category: 'System'
@@ -691,12 +691,12 @@ task install {
 		File info = "~{cacheDirFinal}/~{species_complete}/~{cacheVersion}_~{assembly}/info.txt"
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "vep_install"]',
 			category: 'System'

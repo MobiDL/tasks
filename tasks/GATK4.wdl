@@ -46,12 +46,12 @@ task get_version {
 		String version = read_string(stdout())
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -155,12 +155,12 @@ task reorderSam {
 		File outputFile = "~{outputFile}"
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -365,12 +365,12 @@ task depthOfCoverage {
 		File outputFile = "~{outputFile}"
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -561,12 +561,12 @@ task splitIntervals {
 		Array[File] splittedIntervals = glob("~{outputRep}/*-scattered.interval_list")
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -722,12 +722,12 @@ task baseRecalibrator {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -884,12 +884,12 @@ task gatherBQSRReports {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -1018,12 +1018,12 @@ task applyBQSR {
 		File outputBai = outputBaiFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -1191,12 +1191,12 @@ task gatherBamFiles {
 		File? outputMD5 = outputBamFile + ".md5"
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -1330,12 +1330,12 @@ task leftAlignIndels {
 		File outputBai = outputBaiFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -1492,12 +1492,12 @@ task collectMultipleMetrics {
 		])
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -1618,12 +1618,12 @@ task bedToIntervalList {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -1721,12 +1721,12 @@ task intervalListToBed {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -1888,12 +1888,12 @@ task haplotypeCaller {
 		File? outputFileMD5 = outputFile + ".md5"
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -2041,12 +2041,12 @@ task gatherVcfFiles {
 		File outputFileIdx = outputFile + ".idx"
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -2150,12 +2150,12 @@ task splitVcfs {
 		File outputFileIndelIdx = outputFileBase + ".indels." + extOut + extIdx
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -2305,12 +2305,12 @@ task variantFiltration {
 		File? outputFileMD5 = outputFile + ".md5"
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -2473,12 +2473,12 @@ task mergeVcfs {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'
@@ -2582,12 +2582,12 @@ task sortVcf {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "gatk"]',
 			category: 'System'

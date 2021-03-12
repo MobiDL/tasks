@@ -46,12 +46,12 @@ task get_version {
 		String version = read_string(stdout())
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "bcftools"]',
 			category: 'System'
@@ -129,12 +129,12 @@ task index {
 		File index = "~{outputIndex}"
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "bcftools"]',
 			category: 'System'
@@ -175,7 +175,7 @@ task index {
 }
 
 # TODO:
-# 	- simplify options :
+#	- simplify options :
 #		- remove opt : file-list (in worklow read file to convert into file list or reverse)
 #		- correction for options -i default value
 #		- need to test gvcf option more accuratly
@@ -264,12 +264,12 @@ task merge {
 		File outputMerge = "~{outputFile}"
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "bcftools"]',
 			category: 'System'
@@ -450,12 +450,12 @@ task norm {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "bcftools"]',
 			category: 'System'
@@ -661,12 +661,12 @@ task stats {
 		File outputFile = outputFile
 	}
 
- 	runtime {
+	runtime {
 		cpu: "~{threads}"
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
- 	}
+	}
 
- 	parameter_meta {
+	parameter_meta {
 		path_exe: {
 			description: 'Path used as executable [default: "bcftools"]',
 			category: 'System'
