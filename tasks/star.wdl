@@ -542,7 +542,7 @@ task alignReads {
 			category: 'Splice Junctions Database'
 		}
 		sjdbGTFchrPrefix: {
-			description: 'Prefix for chromosome names in a GTF file (e.g.  ’chr’ for usingENSMEBL annotations with UCSC genomes)',
+			description: 'Prefix for chromosome names in a GTF file (e.g. "chr" for usingENSMEBL annotations with UCSC genomes)',
 			category: 'Splice Junctions Database'
 		}
 		sjdbGTFfeatureExon: {
@@ -990,7 +990,7 @@ task alignReads {
 			category: '2-pass Mapping'
 		}
 		waspOutputMode: {
-			description: 'WASP allele-specific output type. https://www.nature.com/articles/nmeth.3582 .',
+			description: 'WASP allele-specific output type. https://www.nature.com/articles/nmeth.3582.',
 			category: 'WASP'
 		}
 		threads: {
