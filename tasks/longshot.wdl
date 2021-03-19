@@ -89,6 +89,13 @@ task module1 {
 		String subString = "(.+\.bam)"
 		String subStringReplace = ""
 
+    Boolean autoMaxCov = false
+    Boolean stableAlignment = false
+    Boolean forceOverwrite = false
+    Boolean maxAlignment = false
+    Boolean noHaps = false
+    Boolean outputRef = false
+
     File bamFile
     File bamFileIndex
     File refGenome
@@ -139,6 +146,12 @@ task module1 {
     --ref ~{refGenome} \
     ~{default="" "--region " + region} \
     --out ~{outputVCF} \
+    ~{true="--auto_max_cov" false="" autoMaxCov} \
+    ~{true="--stable_alignment" false="" stableAlignment} \
+    ~{true="--force_overwrite" false="" forceOverwrite} \
+    ~{true="--max_alignment" false="" maxAlignment} \
+    ~{true="--no_haps" false="" noHaps} \
+    ~{true="--output-ref" false="" outputRef} \
     ~{default="" "--potential_variants" + potentialVariants} \
     ~{default="" "--out_bam " + outBam} \
     ~{default="" "--min_cov " + minCov} \
@@ -191,6 +204,30 @@ task module1 {
 			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'System'
 		}
+    autoMaxCov: {
+      decription: 'Automatically calculate mean coverage for region and set max coverage to mean_coverage + 5*sqrt(mean_coverage). (SLOWER)',
+      category : 'flag'
+    }
+    stableAlignment: {
+      decription: 'Use numerically-stable (logspace) pair HMM forward algorithm. Is significantly slower but may be more accurate. Tests have shown this not to be necessary for highly error prone reads (PacBio CLR).',
+      category : 'flag'
+    }
+    forceOverwrite: {
+      decription: 'If output files (VCF or variant debug directory) exist, delete and overwrite them.',
+      category : 'flag'
+    }
+    maxAlignment: {
+      decription: 'Use max scoring alignment algorithm rather than pair HMM forward algorithm.',
+      category : 'flag'
+    }
+    noHaps: {
+      decription: 'Don\'t call HapCUT2 to phase variants.',
+      category : 'flag'
+    }
+    outputRef: {
+      decription: 'print reference genotypes (non-variant), use this option only in combination with -v option.',
+      category : 'flag'
+    }
     bamFile: {
       description: 'sorted, indexed BAM file with error-prone reads',
       category: 'input'
