@@ -207,6 +207,12 @@
 			<td>0.0.1</td>
 		</tr>
 		</tr>
+			<td>MiniMap2</td>
+			<td>1.1.2</td>
+			<td>mapOnt</td>
+			<td>0.0.1</td>
+		</tr>
+		</tr>
 			<td>MPA</td>
 			<td>1.1.2</td>
 			<td>mpa</td>
