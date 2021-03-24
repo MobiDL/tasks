@@ -21,7 +21,7 @@ task get_version {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
 		version: "0.0.1"
-		date: "2020-11-20"
+		date: "2021-03-19"
 	}
 
 	input {
