@@ -75,19 +75,26 @@ task longshot {
 	meta {
 		author: "David BAUX"
 		email: "d-baux(at)chu-montpellier.fr"
-		version: "0.0.2"
+		version: "0.0.3"
 		date: "2021-03-22"
 	}
 
 	input {
 		String path_exe = "longshot"
-
-		File input
-
 		String? outputPath
 		String? name
 		String subString = "(\.bam)"
 		String subStringReplace = ""
+
+		File bamFile
+		File bamFileIndex
+		File refGenome
+		File refGenomeIndex
+
+		String? region
+		File? potentialVariants
+		String? outBam
+		String? sampleId
 
 		Boolean autoMaxCov = false
 		Boolean stableAlignment = false
@@ -96,14 +103,6 @@ task longshot {
 		Boolean noHaps = false
 		Boolean outputRef = false
 
-		File bamFile
-		File bamFileIndex
-		File refGenome
-		File refGenomeIndex
-		String? region
-		String outputVCF
-		File potentialVariants
-		String outBam
 		Int minCov = 6
 		Int maxCov = 8000
 		Int minMapq = 20
@@ -119,7 +118,6 @@ task longshot {
 		Int maxCigarIndel = 20
 		Int bandWidth = 20
 		String densityParams = "10:500:50"
-		String? sampleId
 		Float homSnvRate = 0.0005
 		Float hetSnvRate = 0.001
 		Float tsTvRatio = 0.5
@@ -137,8 +135,8 @@ task longshot {
 	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
-	String baseName = if defined(name) then name else sub(basename(fastqR1),subString,subStringReplace)
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.bam" else "~{baseName}.bam"
+	String baseName = if defined(name) then name else sub(basename(bamFile),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.vcf" else "~{baseName}.vcf"
 
 	command <<<
 
@@ -150,36 +148,36 @@ task longshot {
 			--bam ~{bamFile} \
 			--ref ~{refGenome} \
 			~{default="" "--region " + region} \
-			--out ~{outputVCF} \
+			~{default="" "--potential_variants" + potentialVariants} \
+			~{default="" "--out_bam " + outBam} \
+			~{default="" "--sample_id " + sampleId} \
 			~{true="--auto_max_cov" false="" autoMaxCov} \
 			~{true="--stable_alignment" false="" stableAlignment} \
 			~{true="--force_overwrite" false="" forceOverwrite} \
 			~{true="--max_alignment" false="" maxAlignment} \
 			~{true="--no_haps" false="" noHaps} \
 			~{true="--output-ref" false="" outputRef} \
-			~{default="" "--potential_variants" + potentialVariants} \
-			~{default="" "--out_bam " + outBam} \
-			~{default="" "--min_cov " + minCov} \
-			~{default="" "--max_cov " + maxCov} \
-			~{default="" "--min_mapq" + minMapq} \
-			~{default="" "--min_allele_qual " + minAlleleQual} \
-			~{default="" "--hap_assignment_qual " + hapAssignmentQual} \
-			~{default="" "--potential_snv_cutoff " + potentialSNVCutoff} \
-			~{default="" "--min_alt_count " + minAltCount} \
-			~{default="" "--min_alt_frac " + minAltFrac} \
-			~{default="" "--hap_converge_delta " + hapConvergeDelta} \
-			~{default="" "--anchor_length " + anchorLength} \
-			~{default="" "--max_snvs " + maxSNVs} \
-			~{default="" "--max_window " + maxWindow} \
-			~{default="" "--max_cigar_indel " + maxCigarIndel} \
-			~{default="" "--band_width " + bandWidth} \
-			~{default="" "--density_params " + densityParams} \
-			~{default="" "--sample_id " + sampleId} \
-			~{default="" "--hom_snv_rate " + homSnvRate} \
-			~{default="" "--het_snv_rate " + hetSnvRate} \
-			~{default="" "--ts_tv_ratio " + tsTvRatio} \
-			~{default="" "--strand_bias_pvalue_cutoff " + strandBiasPvalueCutoff} \
+			--min_cov ~{minCov} \
+			--max_cov ~{maxCov} \
+			--min_mapq ~{minMapq} \
+			--min_allele_qual ~{minAlleleQual} \
+			--hap_assignment_qual ~{hapAssignmentQual} \
+			--potential_snv_cutoff ~{potentialSNVCutoff} \
+			--min_alt_count ~{minAltCount} \
+			--min_alt_frac ~{minAltFrac} \
+			--hap_converge_delta ~{hapConvergeDelta} \
+			--anchor_length ~{anchorLength} \
+			--max_snvs ~{maxSNVs} \
+			--max_window ~{maxWindow} \
+			--max_cigar_indel ~{maxCigarIndel} \
+			--band_width ~{bandWidth} \
+			--density_params ~{densityParams} \
+			--hom_snv_rate ~{homSnvRate} \
+			--het_snv_rate ~{hetSnvRate} \
+			--ts_tv_ratio ~{tsTvRatio} \
+			--strand_bias_pvalue_cutoff ~{strandBiasPvalueCutoff} \
 			~{default="" "--variant_debug_dir " + variantDebugDir} \
+			--out ~{outputFile}
 
 	>>>
 
@@ -198,137 +196,157 @@ task longshot {
 			description: 'Path used as executable [default: "mytool"]',
 			category: 'System'
 		}
-		autoMaxCov: {
-			ecription: 'Automatically calculate mean coverage for region and set max coverage to mean_coverage + 5*sqrt(mean_coverage). (SLOWER)',
-			ategory : 'flag'
+		outputPath: {
+			description: 'Output path where bam file was generated. [default: pwd()]',
+			category: 'Output path/name option'
 		}
-		stableAlignment: {
-			ecription: 'Use numerically-stable (logspace) pair HMM forward algorithm. Is significantly slower but may be more accurate. Tests have shown this not to be necessary for highly error prone reads (PacBio CLR).',
-			ategory : 'flag'
+		name: {
+			description: 'Sample name to use for output file name [default: sub(basename(bamFile),subString,subStringReplace)]',
+			category: 'Output path/name option'
 		}
-		forceOverwrite: {
-			ecription: 'If output files (VCF or variant debug directory) exist, delete and overwrite them.',
-			ategory : 'flag'
+		subString: {
+			description: 'Substring to remove to get sample name [default: "(\.bam)"]',
+			category: 'Output path/name option'
 		}
-		maxAlignment: {
-			ecription: 'Use max scoring alignment algorithm rather than pair HMM forward algorithm.',
-			ategory : 'flag'
-		}
-		noHaps: {
-			ecription: 'Don\'t call HapCUT2 to phase variants.',
-			ategory : 'flag'
-		}
-		outputRef: {
-			ecription: 'print reference genotypes (non-variant), use this option only in combination with -v option.',
-			ategory : 'flag'
+		subStringReplace: {
+			description: 'subString replace by this string [default: ""]',
+			category: 'Output path/name option'
 		}
 		bamFile: {
-			escription: 'sorted, indexed BAM file with error-prone reads',
-			ategory: 'input'
+			description: 'Sorted, indexed BAM file with error-prone reads',
+			category: 'input'
+		}
+		bamFileIndex: {
+			description: 'Index of the bam file',
+			category: 'input'
 		}
 		refGenome: {
-			escription: 'indexed FASTA reference that BAM file is aligned to',
-			ategory: 'input'
+			description: 'Indexed FASTA reference that BAM file is aligned to',
+			category: 'input'
 		}
-		region: {
-			escription: 'Region in format <chrom> or <chrom:start-stop> in which to call variants (1-based, inclusive)',
-			ategory: 'input'
-		}
-		outputVCF: {
-			escription: 'output VCF file with called variants',
-			ategory: 'output'
+		refGenomeIndex: {
+			description: 'Index of th FASTA reference.',
+			category: 'input'
 		}
 		potentialVariants: {
-			escription: 'Genotype and phase the variants in this tabixed/bgzipped VCF instead of using pileup method to find variants. Triallelic variants and structural variants are currently not supported.',
-			ategory: 'input'
+			description: 'Genotype and phase the variants in this tabixed/bgzipped VCF instead of using pileup method to find variants. Triallelic variants and structural variants are currently not supported.',
+			category: 'input'
 		}
 		outBam: {
-			escription: 'Write new bam file with haplotype tags (HP:i:1 and HP:i:2) for reads assigned to each haplotype, any existing HP and PS tags are removed',
-			ategory: 'option'
-		}
-		minCov: {
-			escription: 'Minimum coverage (of reads passing filters) to consider position as a potential SNV. [default: 6]',
-			ategory: 'option'
-		}
-		maxCov: {
-			escription: 'Maximum coverage (of reads passing filters) to consider position as a potential SNV. [default: 8000]',
-			ategory: 'option'
-		}
-		minMapq: {
-			escription: 'Minimum mapping quality to use a read. [default: 20]',
-			ategory: 'option'
-		}
-		minAlleleQual: {
-			escription: 'Minimum estimated quality (Phred-scaled) of allele observation on read to use for genotyping/haplotyping. [default: 7.0]',
-			ategory: 'option'
-		}
-		hapAssignmentQual: {
-			escription: 'Minimum quality (Phred-scaled) of read->haplotype assignment (for read separation). [default: 20.0]',
-			ategory: 'option'
-		}
-		potentialSNVCutoff: {
-			escription: 'Consider a site as a potential SNV if the original PHRED-scaled QUAL score for 0/0 genotype is below this amount (a larger value considers more potential SNV sites). [default: 20.0]',
-			ategory: 'option'
-		}
-		minAltCount: {
-			escription: 'Require a potential SNV to have at least this many alternate allele observations. [default: 3]',
-			ategory: 'option'
-		}
-		minAltFrac: {
-			escription: 'Require a potential SNV to have at least this fraction of alternate allele observations. [default: 0.125]',
-			ategory: 'option'
-		}
-		hapConvergeDelta: {
-			escription: 'Terminate the haplotype/genotype iteration when the relative change in log-likelihood falls below this amount. Setting a larger value results in faster termination but potentially less accurate results. [default:0.0001]',
-			ategory: 'option'
-		}
-		anchorLength: {
-			escription: 'Length of indel-free anchor sequence on the left and right side of read realignment window. [default: 6]',
-			ategory: 'option'
-		}
-		maxSNVs: {
-			escription: 'Cut off variant clusters after this many variants. 2^m haplotypes must be aligned against per read for a variant cluster of size m. [default: 3]',
-			ategory: 'option'
-		}
-		maxWindow: {
-			escription: 'Maximum "padding" bases on either side of variant realignment window [default: 50]',
-			ategory: 'option'
-		}
-		maxCigarIndel: {
-			escription: 'Throw away a read-variant during allelotyping if there is a CIGAR indel (I/D/N) longer than this amount in its window. [default: 20]',
-			ategory: 'option'
-		}
-		bandWidth: {
-			escription: 'Minimum width of alignment band. Band will increase in size if sequences are different lengths. [default: 20]',
-			ategory: 'option'
-		}
-		densityParams: {
-			escription: 'Parameters to flag a variant as part of a "dense cluster". Format <n>:<l>:<gq>. If there are at least n variants within l base pairs with genotype quality >=gq, then these variants are flagged as "dn" [default:10:500:50]',
-			ategory: 'option'
+			description: 'Write new bam file with haplotype tags (HP:i:1 and HP:i:2) for reads assigned to each haplotype, any existing HP and PS tags are removed',
+			category: 'option'
 		}
 		sampleId: {
-			escription: 'Specify a sample ID to write to the output VCF [default: SAMPLE]',
-			ategory: 'option'
+			description: 'Specify a sample ID to write to the output VCF [default: SAMPLE]',
+			category: 'option'
+		}
+		region: {
+			description: 'Region in format <chrom> or <chrom:start-stop> in which to call variants (1-based, inclusive)',
+			category: 'input'
+		}
+		autoMaxCov: {
+			description: 'Automatically calculate mean coverage for region and set max coverage to mean_coverage + 5*sqrt(mean_coverage). (SLOWER)',
+			category : 'Flag'
+		}
+		stableAlignment: {
+			description: 'Use numerically-stable (logspace) pair HMM forward algorithm. Is significantly slower but may be more accurate. Tests have shown this not to be necessary for highly error prone reads (PacBio CLR).',
+			category : 'Flag'
+		}
+		forceOverwrite: {
+			description: 'If output files (VCF or variant debug directory) exist, delete and overwrite them.',
+			category : 'Flag'
+		}
+		maxAlignment: {
+			description: 'Use max scoring alignment algorithm rather than pair HMM forward algorithm.',
+			category : 'Flag'
+		}
+		noHaps: {
+			description: 'Don\'t call HapCUT2 to phase variants.',
+			category : 'Flag'
+		}
+		outputRef: {
+			description: 'print reference genotypes (non-variant), use this option only in combination with -v option.',
+			category : 'Flag'
+		}
+		minCov: {
+			description: 'Minimum coverage (of reads passing filters) to consider position as a potential SNV. [default: 6]',
+			category: 'Option'
+		}
+		maxCov: {
+			description: 'Maximum coverage (of reads passing filters) to consider position as a potential SNV. [default: 8000]',
+			category: 'Option'
+		}
+		minMapq: {
+			description: 'Minimum mapping quality to use a read. [default: 20]',
+			category: 'Option'
+		}
+		minAlleleQual: {
+			description: 'Minimum estimated quality (Phred-scaled) of allele observation on read to use for genotyping/haplotyping. [default: 7.0]',
+			category: 'Option'
+		}
+		hapAssignmentQual: {
+			description: 'Minimum quality (Phred-scaled) of read->haplotype assignment (for read separation). [default: 20.0]',
+			category: 'Option'
+		}
+		potentialSNVCutoff: {
+			description: 'Consider a site as a potential SNV if the original PHRED-scaled QUAL score for 0/0 genotype is below this amount (a larger value considers more potential SNV sites). [default: 20.0]',
+			category: 'Option'
+		}
+		minAltCount: {
+			description: 'Require a potential SNV to have at least this many alternate allele observations. [default: 3]',
+			category: 'Option'
+		}
+		minAltFrac: {
+			description: 'Require a potential SNV to have at least this fraction of alternate allele observations. [default: 0.125]',
+			category: 'Option'
+		}
+		hapConvergeDelta: {
+			description: 'Terminate the haplotype/genotype iteration when the relative change in log-likelihood falls below this amount. Setting a larger value results in faster termination but potentially less accurate results. [default:0.0001]',
+			category: 'Option'
+		}
+		anchorLength: {
+			description: 'Length of indel-free anchor sequence on the left and right side of read realignment window. [default: 6]',
+			category: 'Option'
+		}
+		maxSNVs: {
+			description: 'Cut off variant clusters after this many variants. 2^m haplotypes must be aligned against per read for a variant cluster of size m. [default: 3]',
+			category: 'Option'
+		}
+		maxWindow: {
+			description: 'Maximum "padding" bases on either side of variant realignment window [default: 50]',
+			category: 'Option'
+		}
+		maxCigarIndel: {
+			description: 'Throw away a read-variant during allelotyping if there is a CIGAR indel (I/D/N) longer than this amount in its window. [default: 20]',
+			category: 'Option'
+		}
+		bandWidth: {
+			description: 'Minimum width of alignment band. Band will increase in size if sequences are different lengths. [default: 20]',
+			category: 'Option'
+		}
+		densityParams: {
+			description: 'Parameters to flag a variant as part of a "dense cluster". Format <n>:<l>:<gq>. If there are at least n variants within l base pairs with genotype quality >=gq, then these variants are flagged as "dn" [default:10:500:50]',
+			category: 'Option'
 		}
 		homSnvRate: {
-			escription: 'Specify the homozygous SNV Rate for genotype prior estimation [default:0.0005]',
-			ategory: 'option'
+			description: 'Specify the homozygous SNV Rate for genotype prior estimation [default:0.0005]',
+			category: 'Option'
 		}
 		hetSnvRate: {
-			escription: 'Specify the heterozygous SNV Rate for genotype prior estimation [default:0.001]',
-			ategory: 'option'
+			description: 'Specify the heterozygous SNV Rate for genotype prior estimation [default:0.001]',
+			category: 'Option'
 		}
 		tsTvRatio: {
-			escription: 'Specify the transition/transversion rate for genotype grior estimation [default: 0.5]',
-			ategory: 'option'
+			description: 'Specify the transition/transversion rate for genotype grior estimation [default: 0.5]',
+			category: 'Option'
 		}
 		strandBiasPvalueCutoff: {
-			escription: 'Remove a variant if the allele observations are biased toward one strand (forward or reverse) according to Fisher\'s exact test. Use this cutoff for the two-tailed P-value. [default: 0.01]',
-			ategory: 'option'
+			description: 'Remove a variant if the allele observations are biased toward one strand (forward or reverse) according to Fisher\'s exact test. Use this cutoff for the two-tailed P-value. [default: 0.01]',
+			category: 'Option'
 		}
 		variantDebugDir: {
-			escription: 'write out current information about variants at each step of algorithm to files in this directory',
-			ategory: 'option'
+			description: 'write out current information about variants at each step of algorithm to files in this directory',
+			category: 'Option'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

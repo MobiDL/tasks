@@ -207,6 +207,12 @@
 			<td>0.0.1</td>
 		</tr>
 		<tr>
+			<td>Longshot</td>
+			<td>0.4.1</td>
+			<td>longshot</td>
+			<td>0.0.3</td>
+		</tr>
+		<tr>
 			<td>MiniMap2</td>
 			<td>1.1.2</td>
 			<td>mapOnt</td>
