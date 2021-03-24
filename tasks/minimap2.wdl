@@ -201,11 +201,11 @@ task mapOnt {
 			category: 'Output path/name option'
 		}
 		sample: {
-			description: 'Sample name to use for output file name [default: sub(basename(fastqR1),subString,"")]',
+			description: 'Sample name to use for output file name [default: sub(basename(fastq),subString,subStringReplace)]',
 			category: 'Output path/name option'
 		}
 		subString: {
-			description: 'Substring to remove to get sample name [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
+			description: 'Substring to remove to get sample name [default: ".(fastq|fq)(.gz)?"]',
 			category: 'Output path/name option'
 		}
 		subStringReplace: {
