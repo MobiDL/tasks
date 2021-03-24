@@ -715,7 +715,7 @@ task install {
 		}
 		pluginsDir: {
 			description: "Set destination directory for VEP plugins files",
-			category:  "Output path"
+			category: "Output path"
 		}
 		refseq: {
 			description: "Defined if install refseq cache [default: true]",

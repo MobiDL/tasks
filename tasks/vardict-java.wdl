@@ -333,7 +333,7 @@ task vardictSoloAmplicons {
 			category: 'Tool option'
 		}
 		rmDup: {
-			description: 'Indicate to remove duplicated reads.  Only one pair with same start positions will be kept. [default: false]',
+			description: 'Indicate to remove duplicated reads. Only one pair with same start positions will be kept. [default: false]',
 			category: 'Tool option'
 		}
 		hexFilter: {
@@ -345,7 +345,7 @@ task vardictSoloAmplicons {
 			category: 'Tool option'
 		}
 		maxMismatches: {
-			description: 'Reads with  more than N mismatches will be filtered and ignored. [default: 8]',
+			description: 'Reads with more than N mismatches will be filtered and ignored. [default: 8]',
 			category: 'Tool option'
 		}
 		phredBase: {
@@ -357,7 +357,7 @@ task vardictSoloAmplicons {
 			category: 'Tool option'
 		}
 		qRatio: {
-			description: ' The Qratio of (good_quality_reads)/(bad_quality_reads+0.5).  The quality is defined by phredBase option. [default: 1.5]',
+			description: ' The Qratio of (good_quality_reads)/(bad_quality_reads+0.5). The quality is defined by phredBase option. [default: 1.5]',
 			category: 'Tool option'
 		}
 		minMapQuality: {
@@ -369,7 +369,7 @@ task vardictSoloAmplicons {
 			category: 'Tool option'
 		}
 		meanPosition: {
-			description: 'The read position filter.  If the mean variants position is less that specified, it is considered false positive. [default: 5]',
+			description: 'The read position filter. If the mean variants position is less that specified, it is considered false positive. [default: 5]',
 			category: 'Tool option'
 		}
 		extIndels: {
@@ -421,7 +421,7 @@ task vardictSoloAmplicons {
 			category: 'Tool option'
 		}
 		downsampling: {
-			description: 'For downsampling fraction.  e.g. 0.7 means roughly 70% downsampling.',
+			description: 'For downsampling fraction. e.g. 0.7 means roughly 70% downsampling.',
 			category: 'Tool option'
 		}
 		threads: {
