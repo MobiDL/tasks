@@ -225,12 +225,6 @@
 			<td>0.0.1</td>
 		</tr>
 		<tr>
-			<td>Rsync</td>
-			<td>3.1.3</td>
-			<td>rsync</td>
-			<td>0.0.1</td>
-		</tr>
-		<tr>
 			<td rowspan="2">Regtools</td>
 			<td rowspan="2">0.5.2</td>
 			<td>junctionsExtract</td>
@@ -238,6 +232,12 @@
 		</tr>
 		<tr>
 			<td>junctionsAnnotate</td>
+			<td>0.0.1</td>
+		</tr>
+		<tr>
+			<td>Rsync</td>
+			<td>3.1.3</td>
+			<td>rsync</td>
 			<td>0.0.1</td>
 		</tr>
 		<tr>
