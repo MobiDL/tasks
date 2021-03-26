@@ -69,8 +69,8 @@
 			<td>0.0.1</td>
 		</tr>
 		<tr>
-			<td rowspan="4">bcftools</td>
-			<td rowspan="4">1.10.2</td>
+			<td rowspan="5">bcftools</td>
+			<td rowspan="5">1.10.2</td>
 			<td>index</td>
 			<td>0.0.1</td>
 		</tr>
@@ -84,6 +84,10 @@
 		</tr>
 		<tr>
 			<td>stats</td>
+			<td>0.0.1</td>
+		</tr>
+		<tr>
+			<td>view</td>
 			<td>0.0.1</td>
 		</tr>
 		<tr>

@@ -789,3 +789,144 @@ task stats {
 		}
 	}
 }
+
+/* workflow test {
+	call view {
+		input :
+			in = "/path/to/vcf",
+			index = "/path/to/index",
+			region = "chrX:38143815-38147784",
+			includeExp = "AF>0.5"
+	}
+} */
+
+task view {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2021-03-26"
+	}
+
+	input {
+		String path_exe = "bcftools"
+
+		File in
+		File index
+
+		String? name
+		String? outputPath
+		String subString = "\.(vcf|bcf)(\.gz)?$"
+		String subStringReplace = ""
+
+		String outputType = "v"
+
+		String? region
+		String? includeExp
+		String? excludeExp
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	Map[String,String] extType = {"v" : ".vcf","u" : ".bcf","z" : ".vcf.gz","b" : ".bcf.gz"}
+	String ext = extType[outputType]
+
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
+
+	Boolean regionBool = defined(region)
+	Boolean includeExpBool = defined(includeExp)
+	Boolean excludeExpBool = defined(excludeExp)
+
+	command <<<
+
+		if [[ ! -f ~{outputFile} ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} view \
+			~{default="" "--regions '" + region}~{true="'" false="" regionBool} \
+			~{default="" "--include '" + includeExp}~{true="'" false="" includeExpBool} \
+			~{default="" "--exclude '" + excludeExp}~{true="'" false="" excludeExpBool} \
+			--output-type ~{outputType} \
+			--output-file ~{outputFile} \
+			~{in}
+
+	>>>
+
+	output {
+		File vcf = "~{outputFile}"
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "bcftools"]',
+			category: 'System'
+		}
+		in: {
+			description: "VCF/BCF file to view (extension: '.vcf.gz|.bcf')",
+			category: 'Required'
+		}
+		in: {
+			description: "VCF/BCF index file",
+			category: 'Required'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(in),subString,"")].',
+			category: 'Output path/name option'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "\.(vcf|bcf)(\.gz)?$"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ""]',
+			category: 'Output path/name option'
+		}
+		outputPath: {
+			description: "Path where was generated output [default: VCF path]",
+			category: 'Output path/name option'
+		}
+		outputType: {
+			description: '"b" compressed BCF; "u" uncompressed BCF; "z" compressed VCF; "v" uncompressed VCF [default: "v"]',
+			category: 'Tool option'
+		}
+		region: {
+			description: 'Filter on specific region (chr:start-end)',
+			category: 'Tool option'
+		}
+		includeExp: {
+			description: 'Select sites for which the expression is true',
+			category: 'Tool option'
+		}
+		excludeExp: {
+			description: 'Exclude sites for which the expression is true',
+			category: 'Tool option'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
