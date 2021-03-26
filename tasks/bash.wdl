@@ -856,3 +856,107 @@ task fai2bed {
 		}
 	}
 }
+
+task awkNanoVar2Bed {
+	meta {
+		author: "Thomas GUIGNARD"
+		email: "t-guignard(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2021-03-26"
+	}
+
+	input {
+		String in
+		String? outputPath
+		String? name
+		String genomeBuild
+
+		File inputNanovar
+		String subString = "\.fastq$"
+		String subStringReplace = ".hsblast"
+
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(inputNanovar),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+
+	command <<<
+
+		if [[ ! -d ~{outputPath}/hsblast4igv/ ]]; then
+			mkdir -p ~{outputPath}/hsblast4igv/
+		fi
+
+		awk 'BEGIN{OFS="\t"}{print $1,$2,$2+$3,$5,$12,$8,$2,$2+$3}' ~{outputPath}/NANOVAR_~{genomeBuild}/nanovar_run/hsblast_longreads/~{baseName}-~{genomeBuild}.tsv |
+		awk -F '\t' -v OFS='\t' '{y=$1"\t"$2"\t"$4; a[y]=$0}END{for (y in a) print a[y]}' |
+		awk -F '\t' -v OFS='\t' '{x=$4;
+		        	                y=$1"\t"$2"\t"$3"\t"$4;
+		                	        d[y]=$1"\t"$2"\t"$3;
+		                        	b[y]=$4;c[y]=$5"\t"$6"\t"$7"\t"$8;
+		                        	if(a[x] !~ $1":"){ g[x]=g[x]+1};
+		                        	a[x]=a[x]"~"$1":"$2"-"$3;
+			                        f[x]=f[x]+1}
+		        	                END{for (y in b ){ if (f[b[y]] == 1 ) {print d[y],b[y]""a[b[y]],c[y],"100,100,100"}
+		                	                         else { if (f[b[y]] == 2 ) { if (g[b[y]] == 1) { print d[y],b[y]""a[b[y]],c[y],"0,0,255"}
+		                        	                                                else { print d[y],b[y]""a[b[y]],c[y],"255,0,0" } }
+		                                	                else {if (f[b[y]] >= 3 ) { if (g[b[y]] == 1) { print d[y],b[y]""a[b[y]],c[y],"0,255,0"}
+		                                        	                                 else {if(g[b[y]] < f[b[y]] && g[b[y]]==2) {print d[y],b[y]""a[b[y]],c[y],"255,0,0" }
+		                                                	                                else{print d[y],b[y]""a[b[y]],c[y],"255,127,0"} }
+		                                                	}}}}}' | sort -k1,1 -k2,2n > ~{outputPath}/hsblast4igv/~{baseName}-~{genomeBuild}_igv_sorted.bed
+
+
+	>>>
+
+	#output {
+	#	File outputFile = outputFile
+	#}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		inputNanovar: {
+			description: 'Path to the input of NanoVar',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Path where output will be generated.',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Name of the output file. [default: sub(basename(in),subString,subStringReplace)]',
+			category: 'Output path/name option'
+		}
+		subString: {
+			description: 'Substring to remove to create name file [default: "\.fastq$"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ".hsblast"]',
+			category: 'Output path/name option'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
