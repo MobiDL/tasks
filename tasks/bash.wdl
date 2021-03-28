@@ -861,20 +861,16 @@ task awkNanoVar2Bed {
 	meta {
 		author: "Thomas GUIGNARD"
 		email: "t-guignard(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2021-03-26"
+		version: "0.0.2"
+		date: "2021-03-28"
 	}
 
 	input {
-		String in
+		File inputNanovar
 		String? outputPath
 		String? name
-		String genomeBuild
-
-		File inputNanovar
-		String subString = "\.fastq$"
-		String subStringReplace = ".hsblast"
-
+		String subString = "\.tsv$"
+		String subStringReplace = "_igv_sorted.bed"
 
 		Int threads = 1
 		Int memoryByThreads = 768
@@ -896,7 +892,7 @@ task awkNanoVar2Bed {
 			mkdir -p ~{outputPath}/hsblast4igv/
 		fi
 
-		awk 'BEGIN{OFS="\t"}{print $1,$2,$2+$3,$5,$12,$8,$2,$2+$3}' ~{outputPath}/NANOVAR_~{genomeBuild}/nanovar_run/hsblast_longreads/~{baseName}-~{genomeBuild}.tsv |
+		awk 'BEGIN{OFS="\t"}{print $1,$2,$2+$3,$5,$12,$8,$2,$2+$3}' ~{inputNanovar} |
 		awk -F '\t' -v OFS='\t' '{y=$1"\t"$2"\t"$4; a[y]=$0}END{for (y in a) print a[y]}' |
 		awk -F '\t' -v OFS='\t' '{
 			x=$4;
@@ -932,13 +928,13 @@ task awkNanoVar2Bed {
 					}
 				}
 			}
-		}' | sort -k1,1 -k2,2n > ~{outputPath}/hsblast4igv/~{baseName}-~{genomeBuild}_igv_sorted.bed
+		}' | sort -k1,1 -k2,2n > ~{outputFile}
 
 	>>>
 
-	#output {
-	#	File outputFile = outputFile
-	#}
+	output {
+		File outputFile = outputFile
+	}
 
 	runtime {
 		cpu: "~{threads}"
@@ -959,11 +955,11 @@ task awkNanoVar2Bed {
 			category: 'Output path/name option'
 		}
 		subString: {
-			description: 'Substring to remove to create name file [default: "\.fastq$"]',
+			description: 'Substring to remove to create name file [default: "\.tsv$"]',
 			category: 'Output path/name option'
 		}
 		subStringReplace: {
-			description: 'subString replace by this string [default: ".hsblast"]',
+			description: 'subString replace by this string [default: "_igv_sorted.bed"]',
 			category: 'Output path/name option'
 		}
 		threads: {
