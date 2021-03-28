@@ -129,7 +129,6 @@ task nanovar {
 	~{refFasta} \
 	~{outputPath}
 
-
 	>>>
 
 	output {
@@ -160,37 +159,37 @@ task nanovar {
 			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'System'
 		}
-	minCov: {
+		minCov: {
 			description: 'minimum number of reads required to call a breakend [2]',
 			category: 'Option'
 		}
-	minAlign: {
-			description: 'minimum alignment length for single alignment reads [200]',
-			category: 'Option'
-		}
-	splitPct: {
+		minAlign: {
+				description: 'minimum alignment length for single alignment reads [200]',
+				category: 'Option'
+			}
+		splitPct: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'Option'
 		}
-	gapGenomeBuild: {
+		gapGenomeBuild: {
 			description: 'BED file with genomic regions to be excluded. (e.g. telomeres and centromeres) Either specify name of in-built reference genome filter (i.e. hg38, hg19, mm10) or provide FULL path to own BED file. [None]',
 			category: 'Option'
 		}
-	score: {
+		score: {
 			description: 'score threshold for defining PASS/FAIL SVs in VCF. Default score 1.0 was estimated from simulated analysis. [1.0]',
 			category: 'Option'
 		}
-	refFasta: {
+		refFasta: {
 			description: 'Path to reference genome in FASTA. Genome indexes created will overwrite indexes created by other aligners (e.g. bwa)',
 			category: 'Option'
 		}
-	inputNanovar: {
+		inputNanovar: {
 			description: 'Path to long reads or mapped BAM file. Formats: fasta/fa/fa.gzip/fa.gz/fastq/fq/fq.gzip/fq.gz or .bam',
 			category: 'Input'
 		}
-	outputPath: {
-	  description: 'Path to working directory. Directory will be created if it does not exist',
-	category: 'Input'
-	}
+		outputPath: {
+			description: 'Path to working directory. Directory will be created if it does not exist',
+			category: 'Input'
+		}
 	}
 }
