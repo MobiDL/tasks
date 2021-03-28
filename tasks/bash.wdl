@@ -898,21 +898,41 @@ task awkNanoVar2Bed {
 
 		awk 'BEGIN{OFS="\t"}{print $1,$2,$2+$3,$5,$12,$8,$2,$2+$3}' ~{outputPath}/NANOVAR_~{genomeBuild}/nanovar_run/hsblast_longreads/~{baseName}-~{genomeBuild}.tsv |
 		awk -F '\t' -v OFS='\t' '{y=$1"\t"$2"\t"$4; a[y]=$0}END{for (y in a) print a[y]}' |
-		awk -F '\t' -v OFS='\t' '{x=$4;
-		        	                y=$1"\t"$2"\t"$3"\t"$4;
-		                	        d[y]=$1"\t"$2"\t"$3;
-		                        	b[y]=$4;c[y]=$5"\t"$6"\t"$7"\t"$8;
-		                        	if(a[x] !~ $1":"){ g[x]=g[x]+1};
-		                        	a[x]=a[x]"~"$1":"$2"-"$3;
-			                        f[x]=f[x]+1}
-		        	                END{for (y in b ){ if (f[b[y]] == 1 ) {print d[y],b[y]""a[b[y]],c[y],"100,100,100"}
-		                	                         else { if (f[b[y]] == 2 ) { if (g[b[y]] == 1) { print d[y],b[y]""a[b[y]],c[y],"0,0,255"}
-		                        	                                                else { print d[y],b[y]""a[b[y]],c[y],"255,0,0" } }
-		                                	                else {if (f[b[y]] >= 3 ) { if (g[b[y]] == 1) { print d[y],b[y]""a[b[y]],c[y],"0,255,0"}
-		                                        	                                 else {if(g[b[y]] < f[b[y]] && g[b[y]]==2) {print d[y],b[y]""a[b[y]],c[y],"255,0,0" }
-		                                                	                                else{print d[y],b[y]""a[b[y]],c[y],"255,127,0"} }
-		                                                	}}}}}' | sort -k1,1 -k2,2n > ~{outputPath}/hsblast4igv/~{baseName}-~{genomeBuild}_igv_sorted.bed
-
+		awk -F '\t' -v OFS='\t' '{
+			x=$4;
+			y=$1"\t"$2"\t"$3"\t"$4;
+			d[y]=$1"\t"$2"\t"$3;
+			b[y]=$4;c[y]=$5"\t"$6"\t"$7"\t"$8;
+			if(a[x] !~ $1":"){ g[x]=g[x]+1};
+			a[x]=a[x]"~"$1":"$2"-"$3;
+			f[x]=f[x]+1
+		}END{
+			for (y in b ){
+				if (f[b[y]] == 1 ) {
+					print d[y],b[y]""a[b[y]],c[y],"100,100,100"
+				} else {
+					if (f[b[y]] == 2 ) {
+						if (g[b[y]] == 1) {
+							print d[y],b[y]""a[b[y]],c[y],"0,0,255"
+						} else {
+							print d[y],b[y]""a[b[y]],c[y],"255,0,0"
+						}
+					} else {
+						if (f[b[y]] >= 3 ) {
+							if (g[b[y]] == 1) {
+								print d[y],b[y]""a[b[y]],c[y],"0,255,0"
+							} else {
+								if(g[b[y]] < f[b[y]] && g[b[y]]==2) {
+									print d[y],b[y]""a[b[y]],c[y],"255,0,0"
+								} else{
+									print d[y],b[y]""a[b[y]],c[y],"255,127,0"
+								}
+							}
+						}
+					}
+				}
+			}
+		}' | sort -k1,1 -k2,2n > ~{outputPath}/hsblast4igv/~{baseName}-~{genomeBuild}_igv_sorted.bed
 
 	>>>
 
