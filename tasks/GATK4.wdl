@@ -2229,8 +2229,8 @@ task variantFiltration {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.2"
-		date: "2020-12-17"
+		version: "0.0.3"
+		date: "2021-03-29"
 	}
 
 	input {
@@ -2240,16 +2240,15 @@ task variantFiltration {
 		File? inIdx
 		String? outputPath
 		String? name
-		String subStringReplace = ".filter"
 		String subString = "\.(vcf|bcf|vcf\.gz)$"
-		String? ext
+		String subStringReplace = ".filter.vcf"
 
 		File refFasta
 		File refFai
 		File refDict
 
-		Boolean SNP = false
-		Boolean Indels = false
+		Int clusterSize = 3
+		Int clusterWindow = 0
 
 		Float? LowQualByDepth
 		Float? FSStrandBias
@@ -2259,9 +2258,6 @@ task variantFiltration {
 		Float? LowCoverage
 		Float? LowMappingQuality
 		Float? LowMappingQualityRankSum
-
-		Array[String]? filtersExpression
-		Array[String]? filtersName
 
 		Boolean createVCFIdx = true
 		Boolean createVCFMD5 = true
@@ -2286,12 +2282,9 @@ task variantFiltration {
 	Boolean BoolHomopolymerRegion = defined(HomopolymerRegion)
 	Boolean BoolLowCoverage = defined(LowCoverage)
 
-	Boolean filters = if (defined(filtersExpression) && defined(filtersName)) then true else false
-
-	String extOut = if defined(ext) then ext else sub(basename(in),"(.*\.)(vcf|bcf|vcf\.gz)$","$2")
-	String extIdx = if sub(basename(in),"(.*\.)(.gz)$","$2")== ".gz" then ".tbi" else ".idx"
 	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.~{extOut}" else "~{baseName}.~{extOut}"
+	String extIdx = if sub(baseName,"(.*\.)(.gz)$","$2") == ".gz" then ".tbi" else ".idx"
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
 	command <<<
 
@@ -2301,6 +2294,8 @@ task variantFiltration {
 
 		~{path_exe} VariantFiltration \
 			~{default="" "--sequence-dictionary " + refDict} \
+			--cluster-size ~{clusterSize} \
+			--cluster-window-size ~{clusterWindow} \
 			~{true="--filter-expression \"QD < " false="" BoolLowQualByDepth}~{LowQualByDepth}~{true="\" --filter-name \"LowQualByDepth\"" false="" BoolLowQualByDepth} \
 			~{true="--filter-expression \"FS > " false="" BoolFSStrandBias}~{FSStrandBias}~{true="\" --filter-name \"FSStrandBias\"" false="" BoolFSStrandBias} \
 			~{true="--filter-expression \"MQ < " false="" BoolLowMappingQuality}~{LowMappingQuality}~{true="\" --filter-name \"LowMappingQuality\"" false="" BoolLowMappingQuality} \
@@ -2349,16 +2344,12 @@ task variantFiltration {
 			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
 			category: 'Output path/name option'
 		}
-		subStringReplace: {
-			description: 'subString to replace [default: ".filter"]',
-			category: 'Output path/name option'
-		}
-		ext: {
-			description: 'Extension of the output file (".vcf" or ".bcf") [default: same as input]',
-			category: 'Output path/name option'
-		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "(\.[0-9]+)?\.vcf$"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString to replace [default: ".filter"]',
 			category: 'Output path/name option'
 		}
 		refFasta: {
@@ -2373,45 +2364,45 @@ task variantFiltration {
 			description: 'Path to the reference file dict (format: dict)',
 			category: 'Required'
 		}
+		clusterSize: {
+			description: 'The number of SNPs which make up a cluster. Must be at least 2 [Default: 3]',
+			category: 'Option: cluster'
+		}
+		clusterWindow: {
+			description: 'The window size (in bases) in which to evaluate clustered SNPs [Default: 0]',
+			category: 'Option: cluster'
+		}
 		LowQualByDepth: {
 			description: 'Threshold below which QD the variant will be tagged as LowQualByDepth',
-			category: 'Tool option'
+			category: 'Option: filter (predefined)'
 		}
 		FSStrandBias: {
 			description: 'Threshold above which FS the variant will be tagged as FSStrandBias',
-			category: 'Tool option'
+			category: 'Option: filter (predefined)'
 		}
 		LowMappingQuality: {
 			description: 'Threshold below which MQ the variant will be tagged as LowMappingQuality',
-			category: 'Tool option'
+			category: 'Option: filter (predefined)'
 		}
 		LowMappingQualityRankSum: {
 			description: 'Threshold below which MQRankSum the variant will be tagged as LowMappingQualityRankSum',
-			category: 'Tool option'
+			category: 'Option: filter (predefined)'
 		}
 		LowReadPosRankSum: {
 			description: 'Threshold below which ReadPosRankSum the variant will be tagged as LowReadPosRankSum',
-			category: 'Tool option'
+			category: 'Option: filter (predefined)'
 		}
 		SORStrandBias: {
 			description: 'Threshold above which SOR the variant will be tagged as SORStrandBias',
-			category: 'Tool option'
+			category: 'Option: filter (predefined)'
 		}
 		HomopolymerRegion: {
 			description: 'Threshold above which POLYX the variant will be tagged as HomopolymerRegion',
-			category: 'Tool option'
+			category: 'Option: filter (predefined)'
 		}
 		LowCoverage: {
 			description: 'Threshold below which DP the variant will be tagged as LowCoverage',
-			category: 'Tool option'
-		}
-		filtersExpression: {
-			description: 'Other custom filters',
-			category: 'Tool option'
-		}
-		filtersName: {
-			description: 'Other custom filters',
-			category: 'Tool option'
+			category: 'Option: filter (predefined)'
 		}
 		createVCFIdx: {
 			description: 'If true, create a VCF index when writing a coordinate-sorted VCF file. [Default: true]',

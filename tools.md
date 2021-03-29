@@ -200,7 +200,7 @@
 		</tr>
 		<tr>
 			<td>VariantFiltration</td>
-			<td>0.0.2</td>
+			<td>0.0.3</td>
 		</tr>
 		<tr>
 			<td>MergeVcfs</td>
