@@ -80,6 +80,7 @@ task nanovar {
 	}
 
 	input {
+
 		String path_exe = "nanovar"
 		String path_exe_awk = "awk"
 
@@ -92,7 +93,6 @@ task nanovar {
 		String outputPath
 		String genomeBuild
 		#String? name
-		String? awkOutputPath
 
 		Int minCov = 2
 		Int minAlign = 200
@@ -117,28 +117,24 @@ task nanovar {
 
 	command <<<
 
-	if [[ ! -d $(dirname ~{awkOutputPath}) ]]; then
-		mkdir -p $(dirname ~{awkOutputPath})
-	fi
-
-
-	~{path_exe} \
-		--data_type ont \
-		--threads ~{threads} \
-		--filter_bed ~{gapGenomeBuild} \
-		--score ~{score} \
-		--mincov ~{minCov} \
-		--minalign ~{minAlign} \
-		--splitpct ~{splitPct} \
-		~{inputNanovar} \
-		~{refFasta} \
-		~{outputPath}
+		~{path_exe} \
+	--data_type ont \
+	--threads ~{threads} \
+	--filter_bed ~{gapGenomeBuild} \
+	--score ~{score} \
+	--mincov ~{minCov} \
+	--minalign ~{minAlign} \
+	--splitpct ~{splitPct} \
+	~{inputNanovar} \
+	~{refFasta} \
+	~{outputPath}
 
 	>>>
 
-	#output {
+	output {
 	#	File output = outputRep
-	#}
+	File ~{outputPath}/nanovar_run/hsblast_longreads/ALL.hsblast-~{genomeBuild}.tsv
+	}
 
 	runtime {
 		cpu: "~{threads}"
@@ -168,9 +164,9 @@ task nanovar {
 			category: 'Option'
 		}
 		minAlign: {
-			description: 'minimum alignment length for single alignment reads [200]',
-			category: 'Option'
-		}
+				description: 'minimum alignment length for single alignment reads [200]',
+				category: 'Option'
+			}
 		splitPct: {
 			description: 'Sets the total memory to use (in M) [default: 768]',
 			category: 'Option'
