@@ -1770,7 +1770,7 @@ task haplotypeCaller {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.4"
+		version: "0.0.5"
 		date: "2021-03-29"
 	}
 
@@ -1852,9 +1852,9 @@ task haplotypeCaller {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseNameIntervals = if defined(intervals) then intervals else ""
-	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","$1") else ""
+	String subStringReplaceWithIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","\.$1" + subStringReplace) else subStringReplace
 
-	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String baseName = if defined(name) then name + subStringReplaceWithIntervals else sub(basename(in),subString,subStringReplaceWithIntervals)
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
 	command <<<
