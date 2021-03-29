@@ -1770,8 +1770,8 @@ task haplotypeCaller {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.3"
-		date: "2020-12-17"
+		version: "0.0.4"
+		date: "2021-03-29"
 	}
 
 	input {
@@ -1781,8 +1781,8 @@ task haplotypeCaller {
 		File idx
 		String? outputPath
 		String? name
-		String suffix = ".haplotypeCaller"
-		String ext = ".vcf"
+		String subString = "\.(sam|bam|cram)$"
+		String subStringReplace = ".haplotypeCaller.vcf"
 
 		File refFasta
 		File refFai
@@ -1790,26 +1790,29 @@ task haplotypeCaller {
 
 		## Annotation
 		# File? alleles
-		# Boolean annotateNumAlleleDiscovered = false
+		Boolean annotateNumAlleleDiscovered = false
 		# Array[String]? annotations
 		# Array[String]? annotationGroup
 		# Array[String]? annotationExclude
 		File? dbsnp
 		File? dbsnpIdx
 
-		## filters
-		# Float conta = 0.0
-		# Int baseQuality = 18
-		# Int minBaseQuality = 10
-		# Int standCallConf = 30
-		# Int maxAltAlleles = 6
-		# Int maxGenotypeCount = 1024
-
 		## intervals
 		File? intervals
 		Int intervalsPadding = 0
 		Boolean overlappingRule = false
 		Boolean intersectionRule = false
+
+		## filters
+		Boolean useSoftClipped = false
+		Int ploidy = 2
+		Float standCallConf = 30.0
+		# Int baseQuality = 18
+		# Float conta = 0.0
+		# Int minBaseQuality = 10
+		# Int standCallConf = 30
+		# Int maxAltAlleles = 6
+		# Int maxGenotypeCount = 1024
 
 		## assembly
 		# Boolean graph = false
@@ -1833,9 +1836,6 @@ task haplotypeCaller {
 		String smithAndWaterman = "FASTEST_AVAILABLE"
 		String emitRefConfidence = "NONE"
 
-		Boolean useSoftClipped = false
-		Int ploidy = 2
-
 		## output
 		Boolean createVCFIdx = true
 		Boolean createVCFMD5 = true
@@ -1854,8 +1854,8 @@ task haplotypeCaller {
 	String baseNameIntervals = if defined(intervals) then intervals else ""
 	String baseIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","$1") else ""
 
-	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.~{baseIntervals}~{ext}" else "~{baseName}~{suffix}~{baseIntervals}~{ext}"
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
 	command <<<
 
@@ -1867,15 +1867,17 @@ task haplotypeCaller {
 			--input ~{in} \
 			--reference ~{refFasta} \
 			--sequence-dictionary ~{refDict} \
+			--annotate-with-num-discovered-alleles ~{true="true" false="false" annotateNumAlleleDiscovered} \
 			~{default="" "--dbsnp " + dbsnp} \
 			~{default="" "--intervals " + intervals} \
 			--interval-padding ~{intervalsPadding} \
 			--interval-merging-rule ~{true="OVERLAPPING_ONLY" false="ALL" overlappingRule} \
 			--interval-set-rule ~{true="INTERSECTION" false="UNION" intersectionRule} \
-			--smith-waterman ~{smithAndWaterman} \
-			--emit-ref-confidence ~{emitRefConfidence} \
 			--dont-use-soft-clipped-bases ~{true="false" false="true" useSoftClipped} \
 			--sample-ploidy ~{ploidy} \
+			--standard-min-confidence-threshold-for-calling ~{standCallConf} \
+			--smith-waterman ~{smithAndWaterman} \
+			--emit-ref-confidence ~{emitRefConfidence} \
 			~{true="--create-output-variant-index" false="" createVCFIdx} \
 			~{true="--create-output-variant-md5" false="" createVCFMD5} \
 			--output ~{outputFile}
@@ -1914,12 +1916,12 @@ task haplotypeCaller {
 			description: 'Output file base name [default: sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")].',
 			category: 'Output path/name option'
 		}
-		suffix: {
-			description: 'Suffix to add to the output file [default: ".haplotypeCaller"]',
+		subString: {
+			description: 'Substring to replace (e.g. remove extension) [default: "\.(sam|bam|cram)$"]',
 			category: 'Output path/name option'
 		}
-		ext: {
-			description: 'Extension of the output file [default: ".vcf"]',
+		subStringReplace: {
+			description: 'Substring used to replace (e.g. add a suffix) [default: ".haplotypeCaller.vcf"]',
 			category: 'Output path/name option'
 		}
 		refFasta: {
@@ -1934,45 +1936,61 @@ task haplotypeCaller {
 			description: 'Path to the reference file dict (format: dict)',
 			category: 'Required'
 		}
+		annotateNumAlleleDiscovered: {
+			description: 'If provided, we will annotate records with the number of alternate alleles that were discovered (but not necessarily genotyped) at a given site [default: false]',
+			category: 'Option: Annotation'
+		}
 		dbsnp: {
 			description: 'Path to the file containing dbsnp (format: vcf)',
-			category: 'Required'
+			category: 'Option: Annotation'
 		}
 		dbsnpIdx: {
 			description: 'Path to the index of dbsnp file (format: tbi)',
-			category: 'Required'
+			category: 'Option: Annotation'
 		}
 		intervals: {
 			description: 'Path to a file containing genomic intervals over which to operate. (format intervals list: chr1:1000-2000)',
-			category: 'Tool option'
+			category: 'Option: Intervals'
 		}
 		intervalsPadding: {
 			description: 'Amount of padding (in bp) to add to each interval you are including. [default: 0]',
-			category: 'Tool option'
+			category: 'Option: Intervals'
 		}
 		overlappingRule: {
 			description: 'Interval merging rule for abutting intervals set to OVERLAPPING_ONLY [default: false => ALL]',
-			category: 'Tool option'
+			category: 'Option: Intervals'
 		}
 		intersectionRule: {
 			description: 'Set merging approach to use for combining interval inputs to INTERSECTION [default: false => UNION]',
-			category: 'Tool option'
+			category: 'Option: Intervals'
+		}
+		useSoftClipped: {
+			description: 'Analyze soft clipped bases in the reads [default: false]',
+			category: 'Option: filters'
+		}
+		ploidy: {
+			description: 'Ploidy (number of chromosomes) per sample. [default: 2]',
+			category: 'Option: filters'
+		}
+		standCallConf: {
+			description: 'The minimum phred-scaled confidence threshold at which variants should be called [default: 30.0]',
+			category: 'Option: filters'
 		}
 		smithAndWaterman: {
 			description: 'Which Smith-Waterman implementation to use, generally FASTEST_AVAILABLE is the right choice (possible values: FASTEST_AVAILABLE, AVX_ENABLED, JAVA) [default: FASTEST_AVAILABLE]',
-			category: 'Tool option'
+			category: 'Option: Algo'
 		}
 		emitRefConfidence: {
 			description: 'Mode for emitting reference confidence scores (possible values: NONE, BP_RESOLUTION, GVCF) [default: None]',
-			category: 'Tool option'
+			category: 'Option: Algo'
 		}
 		createVCFIdx: {
 			description: 'If true, create a VCF index when writing a coordinate-sorted VCF file. [Default: true]',
-			category: 'Tool option'
+			category: 'Option: output'
 		}
 		createVCFMD5: {
 			description: 'If true, create a a MD5 digest any VCF file created. [Default: true]',
-			category: 'Tool option'
+			category: 'Option: output'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
