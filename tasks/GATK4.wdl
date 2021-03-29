@@ -2229,7 +2229,7 @@ task variantFiltration {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.3"
+		version: "0.0.4"
 		date: "2021-03-29"
 	}
 
@@ -2304,8 +2304,6 @@ task variantFiltration {
 			~{true="--filter-expression \"SOR > " false="" BoolSORStrandBias}~{SORStrandBias}~{true="\" --filter-name \"SORStrandBias\"" false="" BoolSORStrandBias} \
 			~{true="--filter-expression \"POLYX > " false="" BoolHomopolymerRegion}~{HomopolymerRegion}~{true="\" --filter-name \"HomopolymerRegion\"" false="" BoolHomopolymerRegion} \
 			~{true="--filter-expression \"DP < " false="" BoolLowCoverage}~{LowCoverage}~{true="\" --filter-name \"LowCoverage\"" false="" BoolLowCoverage} \
-			~{true="--filter-expression \"" false="" filters}~{default="" sep="\" --filter-expression \"" filtersExpression}~{true="\"" false="" filters} \
-			~{true="--filter-name " false="" filters}~{default="" sep=" --filter-name " filtersName} \
 			~{true="--create-output-variant-index" false="" createVCFIdx} \
 			~{true="--create-output-variant-md5" false="" createVCFMD5} \
 			--variant ~{in} \
