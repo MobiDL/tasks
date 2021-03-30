@@ -2750,3 +2750,120 @@ task splitNCigarReads {
 		}
 	}
 }
+
+
+task revertSam {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2021-03-30"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		File in
+		String? outputPath
+		String? name
+		String subString = "(\.sam|\.bam|\.cram)$"
+		String subStringReplace = ".revertSam.bam"
+
+		String validationStringency = "SILENT"
+		String sortOrder = "queryname"
+		Array[String] attrToClear = ["NM", "UQ", "PG", "MD", "MQ", "SA", "MC", "AS"]
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String baseNameTSV = sub(baseName,"\.(bam|sam|cram)",".tsv")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+	String outputFileTSV = if defined(outputPath) then "~{outputPath}/~{baseNameTSV}" else "~{baseNameTSV}"
+
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} RevertSam \
+			--VALIDATION_STRINGENCY ~{validationStringency} \
+			--ATTRIBUTE_TO_CLEAR ~{sep="--ATTRIBUTE_TO_CLEAR " attrToClear} \
+			--SORT_ORDER ~{sortOrder} \
+			--INPUT ~{in} \
+			--OUTPUT ~{outputFile} \
+			--OUTPUT_MAP ~{outputFileTSV}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+		File outputFileTSV = outputFileTSV
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'System'
+		}
+		in: {
+			description: 'Input file bam.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where sorted vcf will be written.',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(in),subString,"")].',
+			category: 'Output path/name option'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "(\.sam|\.bam|\.cram)$"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ".spliNcigar.bam"]',
+			category: 'Output path/name option'
+		}
+		validationStringency: {
+			description: 'Validation stringency for all SAM files read by this program. Setting stringency to SILENT can improve performance when processing a BAM file in which variable-length data (read, qualities, tags) do not otherwise need to be decoded. [Default: "SILENT"]',
+			category: 'Option: GATK common'
+		}
+		attrToClear: {
+			description: 'When removing alignment information, the set of optional tags to remove.  [Default: ["NM", "UQ", "PG", "MD", "MQ", "SA", "MC", "AS"]]',
+			category: 'Option: filter'
+		}
+		sortOrder: {
+			description: 'The sort order to create the reverted output file with.  [Default: "queryname"]  Possible values: {unsorted, queryname, coordinate, duplicate, unknown}',
+			category: 'Option: filter'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
