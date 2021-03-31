@@ -2751,7 +2751,6 @@ task splitNCigarReads {
 	}
 }
 
-
 task revertSam {
 	meta {
 		author: "Charles VAN GOETHEM"
@@ -2770,6 +2769,7 @@ task revertSam {
 		String subStringReplace = ".revertSam.bam"
 
 		String validationStringency = "SILENT"
+
 		String sortOrder = "queryname"
 		Array[String] attrToClear = ["NM", "UQ", "PG", "MD", "MQ", "SA", "MC", "AS"]
 
@@ -2788,7 +2788,6 @@ task revertSam {
 	String baseNameTSV = sub(baseName,"\.(bam|sam|cram)",".tsv")
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 	String outputFileTSV = if defined(outputPath) then "~{outputPath}/~{baseNameTSV}" else "~{baseNameTSV}"
-
 
 	command <<<
 
@@ -2846,11 +2845,11 @@ task revertSam {
 			category: 'Option: GATK common'
 		}
 		attrToClear: {
-			description: 'When removing alignment information, the set of optional tags to remove.  [Default: ["NM", "UQ", "PG", "MD", "MQ", "SA", "MC", "AS"]]',
+			description: 'When removing alignment information, the set of optional tags to remove. [Default: ["NM", "UQ", "PG", "MD", "MQ", "SA", "MC", "AS"]]',
 			category: 'Option: filter'
 		}
 		sortOrder: {
-			description: 'The sort order to create the reverted output file with.  [Default: "queryname"]  Possible values: {unsorted, queryname, coordinate, duplicate, unknown}',
+			description: 'The sort order to create the reverted output file with. [Default: "queryname"] Possible values: {unsorted, queryname, coordinate, duplicate, unknown}',
 			category: 'Option: filter'
 		}
 		threads: {
