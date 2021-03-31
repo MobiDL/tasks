@@ -353,10 +353,14 @@
 			<td>0.0.1</td>
 		</tr>
 		<tr>
-			<td>Star</td>
-			<td>2.7.5c</td>
+			<td rowspan="2">Star</td>
+			<td rowspan="2">2.7.5c</td>
 			<td>genomeGenerate</td>
 			<td>0.0.1</td>
+		</tr>
+		<tr>
+			<td>alignReads</td>
+			<td>0.0.2</td>
 		</tr>
 		<tr>
 			<td>Tabix</td>

@@ -197,8 +197,8 @@ task alignReads {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2021-03-12"
+		version: "0.0.2"
+		date: "2021-03-31"
 	}
 
 	input {
@@ -255,7 +255,6 @@ task alignReads {
 		Boolean outReadsUnmapped = false
 
 		# Output: SAM and BAM
-		Boolean outBam = true
 		Boolean sorted = true
 		Boolean outSAMmodeQuality = true
 		Boolean outSAMstrandFieldIntron = true
@@ -341,7 +340,7 @@ task alignReads {
 		Int alignEndsProtrudeMax = 0
 		Boolean alignEndsProtrudeConc = true
 		Boolean alignSoftClipAtReferenceEnds = true
-		Int alignInsertionFlushRight = false
+		Boolean alignInsertionFlushRight = false
 
 		# Paired-End reads
 		Int peOverlapNbasesMin = 0
@@ -356,7 +355,7 @@ task alignReads {
 		# Quantification of Annotations
 		Boolean quantModeSAM = true
 		Int quantTranscriptomeBAMcompression = -1
-		Int quantTranscriptomeBanSingleend = false
+		Boolean quantTranscriptomeBanSingleend = false
 
 		# 2-pass Mapping
 		Boolean twopassMode = true
@@ -377,12 +376,12 @@ task alignReads {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else sub(basename(fastqR1),subString,subStringReplace)
-	String outputRep = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+	String outputPrefix = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
 	command <<<
 
-		if [[ ! -d ~{outputRep} ]]; then
-			mkdir -p ~{outputRep}
+		if [[ ! -d ~{outputPrefix} ]]; then
+			mkdir -p ~{outputPrefix}
 		fi
 
 		~{path_exe} --runMode alignReads \
@@ -416,7 +415,7 @@ task alignReads {
 			--limitSjdbInsertNsj ~{limitSjdbInsertNsj} \
 			--limitNreadsSoft ~{limitNreadsSoft} \
 			~{true="--outReadsUnmapped" false="" outReadsUnmapped} \
-			--outSAMtype ~{true="BAM" false="SAM" outBam} ~{true="SortedByCoordinate" false="Unsorted" sorted} \
+			--outSAMtype BAM ~{true="SortedByCoordinate" false="Unsorted" sorted} \
 			--outSAMmode ~{true="Full" false="NoQS" outSAMmodeQuality} \
 			--outSAMstrandField ~{true="IntronMotif" false="None" outSAMstrandFieldIntron} \
 			--outSAMattributes ~{sep=" " outSAMattributes} \
@@ -486,10 +485,18 @@ task alignReads {
 			--twopassMode ~{true="Basic" false="None" twopassMode} \
 			--twopass1readsN ~{twopass1readsN} \
 			~{true="--waspOutputMode SAMtag" false="" waspOutputMode} \
-			--outFileNamePrefix ~{outputRep} \
+			--outFileNamePrefix ~{outputPrefix} \
 			--readFilesCommand ~{readFilesCommand}
 
 	>>>
+
+	output {
+		File bam = ~{outputPrefix} + "Aligned." + ~{true="sortedByCoordinate" false="unsorted" sorted} + ".out.bam"
+		File logFinal = outputPrefix + "Log.final.out"
+		File log = outputPrefix + "Log.out"
+		File? log = outputPrefix + "ReadsPerGene.out.tab"
+		File? log = outputPrefix + "SJ.out.tab"
+	}
 
 	runtime {
 		cpu: "~{threads}"
@@ -644,10 +651,6 @@ task alignReads {
 		outReadsUnmapped: {
 			description: 'Output of unmapped and partially mapped (i.e. mapped only one mate of a paired end read) reads in separate file(s).',
 			category: 'Output: general'
-		}
-		outBam: {
-			description: 'Output in bam or sam file',
-			category: 'Output: SAM and BAM'
 		}
 		sorted: {
 			description: 'Sorted output file.',
