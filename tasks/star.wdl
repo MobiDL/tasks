@@ -197,7 +197,7 @@ task alignReads {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.2"
+		version: "0.0.3"
 		date: "2021-03-31"
 	}
 
@@ -378,6 +378,7 @@ task alignReads {
 	String baseName = if defined(name) then name else sub(basename(fastqR1),subString,subStringReplace)
 	String outputPrefix = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
+	String outputBam = if (sorted) then "~{outputPrefix}Aligned.sortedByCoordinate.out.bam" else "~{outputPrefix}Aligned.unsorted.out.bam"
 	command <<<
 
 		if [[ ! -d ~{outputPrefix} ]]; then
@@ -491,11 +492,11 @@ task alignReads {
 	>>>
 
 	output {
-		File bam = ~{outputPrefix} + "Aligned." + ~{true="sortedByCoordinate" false="unsorted" sorted} + ".out.bam"
+		File bam = outputBam
 		File logFinal = outputPrefix + "Log.final.out"
 		File log = outputPrefix + "Log.out"
-		File? log = outputPrefix + "ReadsPerGene.out.tab"
-		File? log = outputPrefix + "SJ.out.tab"
+		File? countTab = outputPrefix + "ReadsPerGene.out.tab"
+		File? SJTab = outputPrefix + "SJ.out.tab"
 	}
 
 	runtime {
