@@ -299,8 +299,8 @@ task sort {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-07-31"
+		version: "0.0.2"
+		date: "2021-03-31"
 	}
 
 	input {
@@ -353,7 +353,8 @@ task sort {
 	>>>
 
 	output {
-		File outputFile = outputFile
+		File outputBam = outputFile
+		File outputBai = outputFile + ".bai"
 	}
 
 	runtime {
