@@ -141,8 +141,8 @@
 			<td>0.0.1</td>
 		</tr>
 		<tr>
-			<td rowspan="20">GATK4</td>
-			<td rowspan="20">v4.1.8.1</td>
+			<td rowspan="21">GATK4</td>
+			<td rowspan="21">v4.1.8.1</td>
 			<td>ApplyBQSR</td>
 			<td>0.0.2</td>
 		</tr>
@@ -220,6 +220,10 @@
 		</tr>
 		<tr>
 			<td>SamToFastq</td>
+			<td>0.0.1</td>
+		</tr>
+		<tr>
+			<td>MarkDuplicates</td>
 			<td>0.0.1</td>
 		</tr>
 		<tr>

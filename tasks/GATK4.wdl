@@ -2974,3 +2974,115 @@ task samToFastq {
 		}
 	}
 }
+
+task markDuplicates {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2021-03-31"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		File in
+		String? outputPath
+		String? name
+		String subString = "(\.sam|\.bam|\.cram)$"
+		String subStringReplace = ".markduplicates.bam"
+
+		Boolean createIndex = true
+		String validationStringency = "SILENT"
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String baseNameMetrics = sub(baseName,"\.(bam|sam|cram)",".metrics.txt")
+	String baseNameIndex = sub(baseName,"m$","i")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+	String outputFileMetrics = if defined(outputPath) then "~{outputPath}/~{baseNameMetrics}" else "~{baseNameMetrics}"
+	String outputFileIndex = if defined(outputPath) then "~{outputPath}/~{baseNameIndex}" else "~{baseNameIndex}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} MarkDuplicates \
+			--VALIDATION_STRINGENCY ~{validationStringency} \
+			--CREATE_INDEX ~{createIndex} \
+			--INPUT ~{in} \
+			--OUTPUT ~{outputFile} \
+			--METRICS_FILE ~{outputFileMetrics}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+		File outputFileMetrics = outputFileMetrics
+		File? outputFileIndex = outputFileIndex
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'System'
+		}
+		in: {
+			description: 'Input file bam.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where sorted bam/sam will be written.',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(in),subString,"")].',
+			category: 'Output path/name option'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "(\.sam|\.bam|\.cram)$"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ".spliNcigar.bam"]',
+			category: 'Output path/name option'
+		}
+		validationStringency: {
+			description: 'Validation stringency for all SAM files read by this program. Setting stringency to SILENT can improve performance when processing a BAM file in which variable-length data (read, qualities, tags) do not otherwise need to be decoded. [Default: "SILENT"]',
+			category: 'Option: GATK common'
+		}
+		createIndex: {
+			description: 'Whether to create a BAM index when writing a coordinate-sorted BAM file. [Default: true]',
+			category: 'Option: GATK common'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
