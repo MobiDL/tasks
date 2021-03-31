@@ -197,7 +197,7 @@ task alignReads {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.3"
+		version: "0.0.4"
 		date: "2021-03-31"
 	}
 
@@ -420,6 +420,7 @@ task alignReads {
 			--outSAMmode ~{true="Full" false="NoQS" outSAMmodeQuality} \
 			--outSAMstrandField ~{true="IntronMotif" false="None" outSAMstrandFieldIntron} \
 			--outSAMattributes ~{sep=" " outSAMattributes} \
+			--outSAMattrRGline ID:~{name} \
 			~{true="--bamRemoveDuplicatesType UniqueIdenticalNotMulti" false="" markDup} \
 			--bamRemoveDuplicatesMate2basesN ~{bamRemoveDuplicatesMate2basesN} \
 			--outFilterType ~{true="BySJout" false="Normal" outFilterBySJ} \
