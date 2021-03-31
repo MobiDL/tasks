@@ -2825,7 +2825,7 @@ task revertSam {
 			category: 'Required'
 		}
 		outputPath: {
-			description: 'Output path where sorted vcf will be written.',
+			description: 'Output path where bam/sam will be written.',
 			category: 'Output path/name option'
 		}
 		name: {
@@ -2923,6 +2923,7 @@ task samToFastq {
 
 	output {
 		File fastqR1 = outputFileR1
+		File? fastqR2 = outputFileR2
 	}
 
 	runtime {
@@ -2940,7 +2941,7 @@ task samToFastq {
 			category: 'Required'
 		}
 		outputPath: {
-			description: 'Output path where sorted vcf will be written.',
+			description: 'Output path where fastqs will be written.',
 			category: 'Output path/name option'
 		}
 		name: {

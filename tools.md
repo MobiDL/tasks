@@ -215,11 +215,11 @@
 			<td>0.0.1</td>
 		</tr>
 		<tr>
-			<td>revertSam</td>
+			<td>RevertSam</td>
 			<td>0.0.1</td>
 		</tr>
 		<tr>
-			<td>samToFastq</td>
+			<td>SamToFastq</td>
 			<td>0.0.1</td>
 		</tr>
 		<tr>
