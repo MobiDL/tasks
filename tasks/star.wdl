@@ -197,8 +197,8 @@ task alignReads {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.4"
-		date: "2021-03-31"
+		version: "0.0.5"
+		date: "2021-04-01"
 	}
 
 	input {
@@ -211,6 +211,7 @@ task alignReads {
 		String? name
 		String subString = "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"
 		String subStringReplace = ""
+		String platformReads = "ILLUMINA"
 
 		# Genome Parameters
 		File genomeDir
@@ -259,6 +260,7 @@ task alignReads {
 		Boolean outSAMmodeQuality = true
 		Boolean outSAMstrandFieldIntron = true
 		Array[String] outSAMattributes = ["NH","HI","AS","nM"]
+		Int outSAMmapqUnique = 60
 
 		# BAM processing
 		Boolean markDup = true
@@ -420,7 +422,8 @@ task alignReads {
 			--outSAMmode ~{true="Full" false="NoQS" outSAMmodeQuality} \
 			--outSAMstrandField ~{true="IntronMotif" false="None" outSAMstrandFieldIntron} \
 			--outSAMattributes ~{sep=" " outSAMattributes} \
-			--outSAMattrRGline ID:~{name} \
+			--outSAMattrRGline ID:~{baseName} "SM:~{baseName}" "PL:~{platformReads}" \
+			--outSAMmapqUnique ~{outSAMmapqUnique} \
 			~{true="--bamRemoveDuplicatesType UniqueIdenticalNotMulti" false="" markDup} \
 			--bamRemoveDuplicatesMate2basesN ~{bamRemoveDuplicatesMate2basesN} \
 			--outFilterType ~{true="BySJout" false="Normal" outFilterBySJ} \
@@ -525,6 +528,10 @@ task alignReads {
 		subStringReplace: {
 			description: 'subString replace by this string [default: ""]',
 			category: 'Output path/name option'
+		}
+		platformReads: {
+			description: 'Type of plateform that produce reads [default: ILLUMINA]',
+			category: 'Tool option'
 		}
 		fastqR1: {
 			description: 'Input file with reads 1 (fastq, fastq.gz, fq, fq.gz).',
@@ -668,6 +675,10 @@ task alignReads {
 		}
 		outSAMattributes: {
 			description: 'Desired SAM attributes, in the order desired for the output SAM.',
+			category: 'Output: SAM and BAM'
+		}
+		outSAMmapqUnique: {
+			description: 'The MAPQ value for unique mappers [Default: 60]',
 			category: 'Output: SAM and BAM'
 		}
 		markDup: {
