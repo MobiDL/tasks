@@ -160,7 +160,7 @@
 		</tr>
 		<tr>
 			<td>HaplotypeCaller</td>
-			<td>0.0.5</td>
+			<td>0.0.6</td>
 		</tr>
 		<tr>
 			<td>CollectMultipleMetrics</td>

@@ -1770,8 +1770,8 @@ task haplotypeCaller {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.5"
-		date: "2021-03-29"
+		version: "0.0.6"
+		date: "2021-04-01"
 	}
 
 	input {
@@ -1783,6 +1783,8 @@ task haplotypeCaller {
 		String? name
 		String subString = "\.(sam|bam|cram)$"
 		String subStringReplace = ".haplotypeCaller.vcf"
+		String subStringIntervals = "([0-9]+)-scattered.interval_list$"
+		String subStringReplaceIntervals = ".$1"
 
 		File refFasta
 		File refFai
@@ -1852,9 +1854,10 @@ task haplotypeCaller {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseNameIntervals = if defined(intervals) then intervals else ""
-	String subStringReplaceWithIntervals = if defined(intervals) then sub(basename(baseNameIntervals),"([0-9]+)-scattered.interval_list","\.$1" + subStringReplace) else subStringReplace
 
-	String baseName = if defined(name) then name + subStringReplaceWithIntervals else sub(basename(in),subString,subStringReplaceWithIntervals)
+	String getIntervalsBase = if defined(intervals) then sub(basename(baseNameIntervals),subStringIntervals,subStringReplaceIntervals) else ""
+
+	String baseName = if defined(name) then name else sub(basename(in),subString,getIntervalsBase + subStringReplace)
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
 	command <<<
@@ -1913,7 +1916,7 @@ task haplotypeCaller {
 			category: 'Output path/name option'
 		}
 		name: {
-			description: 'Output file base name [default: sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")].',
+			description: 'Output file name [default: base on the input file].',
 			category: 'Output path/name option'
 		}
 		subString: {
@@ -1922,6 +1925,14 @@ task haplotypeCaller {
 		}
 		subStringReplace: {
 			description: 'Substring used to replace (e.g. add a suffix) [default: ".haplotypeCaller.vcf"]',
+			category: 'Output path/name option'
+		}
+		subStringIntervals: {
+			description: 'Substring to replace for interval file (e.g. remove extension) [default: "([0-9]+)-scattered.interval_list$"]',
+			category: 'Output path/name option'
+		}
+		subStringReplaceIntervals: {
+			description: 'Substring used to replace for interval file (e.g. add a suffix) [default: ".$1"]',
 			category: 'Output path/name option'
 		}
 		refFasta: {
