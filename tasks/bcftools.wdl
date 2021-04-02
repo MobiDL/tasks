@@ -790,16 +790,6 @@ task stats {
 	}
 }
 
-/* workflow test {
-	call view {
-		input :
-			in = "/path/to/vcf",
-			index = "/path/to/index",
-			region = "chrX:38143815-38147784",
-			includeExp = "AF>0.5"
-	}
-} */
-
 task view {
 	meta {
 		author: "Charles VAN GOETHEM"

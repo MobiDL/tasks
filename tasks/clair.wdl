@@ -32,7 +32,6 @@ task callVarBam {
 		String subString = "(\.bam)"
 		String subStringReplace = ""
 
-
 		String modelPath
 		File refGenome
 		File refGenomeIndex
@@ -52,7 +51,7 @@ task callVarBam {
 		Boolean stopConsiderLeftEdge = false
 		Int dcov = 250
 		String samtools = "samtools"
-		String pypy = "pypy3"
+		String pypy = "pypy"
 		Boolean delay = false
 		Boolean debug = false
 		Boolean pysamForAllIndelBases = false
@@ -86,7 +85,7 @@ task callVarBam {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		~{path_exe} callVarBamParallel \
+		~{path_exe} callVarBam \
 			--chkpnt_fn ~{modelPath} \
 			--ref_fn ~{refGenome} \
 			--bed_fn ~{bedRegions} \
