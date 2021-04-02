@@ -39,6 +39,8 @@ workflow variantCallingONT {
 		String modelPath
 
 		Int qual = 748
+		String? region
+		String? includeFilter
 
 		String? name
 	}
@@ -55,7 +57,7 @@ workflow variantCallingONT {
 	call bash.concatenateFiles as ConcFQ {
 		input :
 			in = FF.files,
-			name = sampleName,
+			name = sampleName + ".fastq",
 			outputPath = outputRep + "/fastq_concatenate/"
 	}
 	call minimap2.mapOnt as align {
@@ -67,7 +69,7 @@ workflow variantCallingONT {
 	}
 	call sambamba.index as idxBam {
 		input :
-			in = ConcFQ.outputFile,
+			in = align.outputFile,
 			outputPath = outputRep + "/Alignment/"
 	}
 	call clair.callVarBam {
@@ -81,10 +83,17 @@ workflow variantCallingONT {
 			qual = qual,
 			outputPath = outputRep + "/Variant-Calling/"
 	}
-	call bcftools.view {
+	/* call bgzip.compress{
 		input :
 
 	}
+	call tabix.index{
+		input :
+	}
+	call bcftools.view {
+		input :
+			bcftools
+	} */
 
 ################################################################################
 
