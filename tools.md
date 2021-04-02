@@ -267,9 +267,13 @@
 			<td>0.0.1</td>
 		</tr>
 		<tr>
-			<td rowspan="1">RTG tools</td>
-			<td rowspan="1">3.12</td>
+			<td rowspan="2">RTG tools</td>
+			<td rowspan="2">3.12</td>
 			<td>fasta2sdf</td>
+			<td>0.0.1</td>
+		</tr>
+		<tr>
+			<td>vcfeval</td>
 			<td>0.0.1</td>
 		</tr>
 		<tr>
