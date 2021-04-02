@@ -21,13 +21,12 @@ task callVarBam {
 	meta {
 		author: "David BAUX"
 		email: "d-baux(at)chu-montpellier.fr"
-		version: "0.0.3"
+		version: "0.0.4"
 		date: "2021-03-22"
 	}
 
 	input {
-		String python3
-		String path_exe
+		String path_exe = "clair.py"
 		String outputPath
 		String? name
 		String subString = "(\.bam)"
@@ -70,6 +69,7 @@ task callVarBam {
 		Int memoryByThreads = 768
 		String? memory
 	}
+
 	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
 	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
 	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
@@ -79,50 +79,48 @@ task callVarBam {
 	String baseName = if defined(name) then name else sub(basename(bamFile),subString,subStringReplace)
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.clair.vcf" else "~{baseName}.clair.vcf"
 
-
-
 	command <<<
 
 		if [[ ! -d $(dirname ~{outputFile}) ]]; then
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		~{python3} ~{path_exe} \
-		--chkpnt_fn ~{modelPath} \
-		--ref_fn ~{refGenome} \
-		--bed_fn ~{bedRegions} \
-		--bam_fn ~{bamFile} \
-		--call_fn ~{outputFile} \
-		--vcf_fn ~{candidateVcf} \
-		--threshold ~{threshold} \
-		--minCoverage ~{minCoverage} \
-		--qual ~{qual} \
-		--sampleName ~{sampleName} \
-		--ctgName ~{contigName} \
-		--ctgStart ~{ctgStart} \
-		--ctgEnd ~{ctgEnd} \
-		--stop_consider_left_edge ~{stopConsiderLeftEdge} \
-		--dcov ~{dcov} \
-		--samtools ~{samtools} \
-		--pypy ~{pypy} \
-		--delay ~{delay} \
-		--debug ~{debug} \
-		--pysam_for_all_indel_bases ~{pysamForAllIndelBases} \
-		--haploid_precision ~{haploidPrecision} \
-		--haploid_sensitive ~{haploidSensitive} \
-		--activation_only ~{activation_only} \
-		--max_plot ~{maxPlot} \
-		--log_path ~{logPath} \
-		--parallel_level ~{parallelLevel} \
-		--fast_plotting ~{fastPlotting} \
-		--workers ~{workers} \
-		--output_for_ensemble ~{outputForEnsemble} \
-		--threads ~{threads}
+		~{path_exe} callVarBamParallel \
+			--chkpnt_fn ~{modelPath} \
+			--ref_fn ~{refGenome} \
+			--bed_fn ~{bedRegions} \
+			--bam_fn ~{bamFile} \
+			--call_fn ~{outputFile} \
+			--vcf_fn ~{candidateVcf} \
+			--threshold ~{threshold} \
+			--minCoverage ~{minCoverage} \
+			--qual ~{qual} \
+			--sampleName ~{sampleName} \
+			--ctgName ~{contigName} \
+			--ctgStart ~{ctgStart} \
+			--ctgEnd ~{ctgEnd} \
+			--stop_consider_left_edge ~{stopConsiderLeftEdge} \
+			--dcov ~{dcov} \
+			--samtools ~{samtools} \
+			--pypy ~{pypy} \
+			--delay ~{delay} \
+			--debug ~{debug} \
+			--pysam_for_all_indel_bases ~{pysamForAllIndelBases} \
+			--haploid_precision ~{haploidPrecision} \
+			--haploid_sensitive ~{haploidSensitive} \
+			--activation_only ~{activation_only} \
+			--max_plot ~{maxPlot} \
+			--log_path ~{logPath} \
+			--parallel_level ~{parallelLevel} \
+			--fast_plotting ~{fastPlotting} \
+			--workers ~{workers} \
+			--output_for_ensemble ~{outputForEnsemble} \
+			--threads ~{threads}
 
 	>>>
 
 	output {
-		File output = "~{outputFile}"
+		File outputFile = "~{outputFile}"
 	}
 
 	runtime {
@@ -133,7 +131,7 @@ task callVarBam {
 	# generate documentation
 	parameter_meta {
 		path_exe: {
-			description: 'Path to CLAIR python script',
+			description: 'Path to CLAIR python script [default: "clair.py"]',
 			category: 'System'
 		}
 		outputPath: {
@@ -151,10 +149,6 @@ task callVarBam {
 		subStringReplace: {
 			description: 'subString replace by this string [default: ""]',
 			category: 'Output path/name option'
-		}
-		python3: {
-			description: 'python interpreter to run CLAIR',
-			category: 'System'
 		}
 		modelPath: {
 			description: 'Path to the model folder',
@@ -289,3 +283,4 @@ task callVarBam {
 			category: 'System'
 		}
 	}
+}
