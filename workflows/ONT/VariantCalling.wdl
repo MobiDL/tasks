@@ -38,6 +38,8 @@ workflow variantCallingONT {
 
 		String modelPath
 
+		Int qual = 748
+
 		String? name
 	}
 
@@ -76,7 +78,12 @@ workflow variantCallingONT {
 			bamFile = align.outputFile,
 			bamFileIndex = idxBam.outputFile,
 			sampleName = sampleName,
+			qual = qual,
 			outputPath = outputRep + "/Variant-Calling/"
+	}
+	call bcftools.view {
+		input :
+
 	}
 
 ################################################################################
