@@ -21,7 +21,7 @@ task callVarBam {
 	meta {
 		author: "David BAUX"
 		email: "d-baux(at)chu-montpellier.fr"
-		version: "0.0.5"
+		version: "0.0.6"
 		date: "2021-04-02"
 	}
 
@@ -52,14 +52,14 @@ task callVarBam {
 		Int dcov = 250
 		String samtools = "samtools"
 		String pypy = "pypy"
-		Boolean delay = false
+		Int? delay
 		Boolean debug = false
 		Boolean pysamForAllIndelBases = false
 		Boolean haploidPrecision = false
 		Boolean haploidSensitive = false
 		Boolean activation_only = false
 		Int maxPlot = 10
-		Boolean logPath = false
+		String? logPath
 		Int parallelLevel = 2
 		Boolean fastPlotting = false
 		Int workers = 8
@@ -88,33 +88,33 @@ task callVarBam {
 		~{path_exe} callVarBam \
 			--chkpnt_fn ~{modelPath} \
 			--ref_fn ~{refGenome} \
-			--bed_fn ~{bedRegions} \
+			~{default="" "--bed_fn " +bedRegions} \
 			--bam_fn ~{bamFile} \
 			--call_fn ~{outputFile} \
-			--vcf_fn ~{candidateVcf} \
+			~{default="" "--vcf_fn " + candidateVcf} \
 			--threshold ~{threshold} \
 			--minCoverage ~{minCoverage} \
-			--qual ~{qual} \
+			~{default="" "--qual " + qual} \
 			--sampleName ~{sampleName} \
-			--ctgName ~{contigName} \
-			--ctgStart ~{ctgStart} \
-			--ctgEnd ~{ctgEnd} \
-			--stop_consider_left_edge ~{stopConsiderLeftEdge} \
+			~{default="" "--ctgName " + contigName} \
+			~{default="" "--ctgStart " + ctgStart} \
+			~{default="" "--ctgEnd " + ctgEnd} \
+			~{true="--stop_consider_left_edge" false="" stopConsiderLeftEdge} \
 			--dcov ~{dcov} \
 			--samtools ~{samtools} \
 			--pypy ~{pypy} \
-			--delay ~{delay} \
-			--debug ~{debug} \
-			--pysam_for_all_indel_bases ~{pysamForAllIndelBases} \
-			--haploid_precision ~{haploidPrecision} \
-			--haploid_sensitive ~{haploidSensitive} \
-			--activation_only ~{activation_only} \
+			~{default="" "--delay " + delay} \
+			~{true="--debug" false="" debug} \
+			~{true="--pysam_for_all_indel_bases" false="" pysamForAllIndelBases} \
+			~{true="--haploid_precision" false="" haploidPrecision} \
+			~{true="--haploid_sensitive" false="" haploidSensitive} \
+			~{true="--activation_only" false="" activation_only} \
 			--max_plot ~{maxPlot} \
-			--log_path ~{logPath} \
+			~{default="" "--log_path " + logPath} \
 			--parallel_level ~{parallelLevel} \
-			--fast_plotting ~{fastPlotting} \
+			~{true="--fast_plotting" false="" fastPlotting} \
 			--workers ~{workers} \
-			--output_for_ensemble ~{outputForEnsemble} \
+			~{true="--output_for_ensemble" false="" outputForEnsemble} \
 			--threads ~{threads}
 
 	>>>

@@ -110,7 +110,7 @@
 			<td rowspan="1">CLAIR</td>
 			<td rowspan="1"></td>
 			<td>callVarBam</td>
-			<td>0.0.5</td>
+			<td>0.0.6</td>
 		</tr>
 		<tr>
 			<td rowspan="3">Cutadapt</td>
