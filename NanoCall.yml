@@ -1,0 +1,10 @@
+name: NanoCall
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - clair==2.1.1
+  - cromwell==53.1
+  - sambamba==0.7.1
+  - minimap2==2.17
