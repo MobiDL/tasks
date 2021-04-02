@@ -884,7 +884,7 @@ task awkNanoVar2Bed {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else sub(basename(inputNanovar),subString,subStringReplace)
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+	String outputFile = if defined(outputPath) then "~{outputPath}/hsblast4igv/~{baseName}" else "~{baseName}"
 
 	command <<<
 
