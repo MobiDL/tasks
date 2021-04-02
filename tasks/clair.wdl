@@ -21,30 +21,31 @@ task callVarBam {
 	meta {
 		author: "David BAUX"
 		email: "d-baux(at)chu-montpellier.fr"
-		version: "0.0.4"
-		date: "2021-03-22"
+		version: "0.0.5"
+		date: "2021-04-02"
 	}
 
 	input {
 		String path_exe = "clair.py"
-		String outputPath
+		String? outputPath
 		String? name
 		String subString = "(\.bam)"
 		String subStringReplace = ""
 
 
 		String modelPath
-		File refGenome = "ref.fa"
+		File refGenome
 		File refGenomeIndex
-		File? bedRegions
-		File bamFile = "bam.bam"
+		File bamFile
 		File bamFileIndex
+		String sampleName = "sample"
+
+		File? bedRegions
 		File? candidateVcf
 
 		Float threshold = 0.125000
 		Int minCoverage = 4
 		Int? qual
-		String sampleName
 		String? contigName
 		Int? ctgStart
 		Int? ctgEnd
@@ -167,7 +168,7 @@ task callVarBam {
 			category: 'Option'
 		}
 		bamFile: {
-			description: 'BAM file input, [default: bam.bam]',
+			description: 'BAM file input',
 			category: 'input'
 		}
 		bamFileIndex: {
