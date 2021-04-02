@@ -136,7 +136,7 @@ task longshot {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else sub(basename(bamFile),subString,subStringReplace)
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.vcf" else "~{baseName}.vcf"
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.longshot.vcf" else "~{baseName}.longshot.vcf"
 
 	command <<<
 
@@ -225,7 +225,7 @@ task longshot {
 			category: 'input'
 		}
 		refGenomeIndex: {
-			description: 'Index of th FASTA reference.',
+			description: 'Index of the FASTA reference.',
 			category: 'input'
 		}
 		potentialVariants: {
