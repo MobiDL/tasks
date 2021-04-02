@@ -107,6 +107,12 @@
 			<td>0.0.1</td>
 		</tr>
 		<tr>
+			<td rowspan="1">CLAIR</td>
+			<td rowspan="1"></td>
+			<td>callVarBam</td>
+			<td>0.0.1</td>
+		</tr>
+		<tr>
 			<td rowspan="3">Cutadapt</td>
 			<td rowspan="3">2.10</td>
 			<td>adaptersTrimming</td>
