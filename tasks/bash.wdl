@@ -857,12 +857,12 @@ task fai2bed {
 	}
 }
 
-task awkNanoVar2Bed {
+task nanoVar2Bed {
 	meta {
 		author: "Thomas GUIGNARD"
 		email: "t-guignard(at)chu-montpellier.fr"
-		version: "0.0.2"
-		date: "2021-03-28"
+		version: "0.0.3"
+		date: "2021-04-06"
 	}
 
 	input {
@@ -884,12 +884,12 @@ task awkNanoVar2Bed {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else sub(basename(inputNanovar),subString,subStringReplace)
-	String outputFile = if defined(outputPath) then "~{outputPath}/hsblast4igv/~{baseName}" else "~{baseName}"
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
 	command <<<
 
-		if [[ ! -d ~{outputPath}/hsblast4igv/ ]]; then
-			mkdir -p ~{outputPath}/hsblast4igv/
+		if [[ ! -d ~{outputPath} ]]; then
+			mkdir -p ~{outputPath}
 		fi
 
 		awk 'BEGIN{OFS="\t"}{print $1,$2,$2+$3,$5,$12,$8,$2,$2+$3}' ~{inputNanovar} |
