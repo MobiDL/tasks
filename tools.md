@@ -11,8 +11,8 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td rowspan="9">Utilities</td>
-			<td rowspan="9">NA</td>
+			<td rowspan="10">Utilities</td>
+			<td rowspan="10">NA</td>
 			<td>findFiles</td>
 			<td>0.0.1</td>
 		</tr>
@@ -47,6 +47,10 @@
 		<tr>
 			<td>nanoVar2Bed</td>
 			<td>0.0.4</td>
+		</tr>
+		<tr>
+			<td>bed2Array</td>
+			<td>0.0.1</td>
 		</tr>
 		<tr>
 			<td rowspan="3">bedtools</td>
