@@ -16,12 +16,11 @@ version 1.0
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-
 task callVarBam {
 	meta {
 		author: "David BAUX"
 		email: "d-baux(at)chu-montpellier.fr"
-		version: "0.0.6"
+		version: "0.0.7"
 		date: "2021-04-02"
 	}
 
@@ -45,7 +44,7 @@ task callVarBam {
 		Float threshold = 0.125000
 		Int minCoverage = 4
 		Int? qual
-		String? contigName
+		String contigName
 		Int? ctgStart
 		Int? ctgEnd
 		Boolean stopConsiderLeftEdge = false
@@ -96,7 +95,7 @@ task callVarBam {
 			--minCoverage ~{minCoverage} \
 			~{default="" "--qual " + qual} \
 			--sampleName ~{sampleName} \
-			~{default="" "--ctgName " + contigName} \
+			--ctgName ~{contigName} \
 			~{default="" "--ctgStart " + ctgStart} \
 			~{default="" "--ctgEnd " + ctgEnd} \
 			~{true="--stop_consider_left_edge" false="" stopConsiderLeftEdge} \
