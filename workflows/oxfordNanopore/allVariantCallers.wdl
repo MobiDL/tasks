@@ -17,7 +17,7 @@ version 1.0
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import "../../tasks/nanovar.wdl" as nanovar
-import "../../tasks/bash.wdl" as awkNanovar
+import "../../tasks/utilities.wdl" as utlities
 import "../../tasks/minimap2.wdl" as minimap2
 import "../../tasks/sambamba.wdl" as sambamba
 import "../../tasks/clair.wdl" as clair
@@ -56,13 +56,13 @@ workflow allVariantCalling {
 		String GapGenomeBuild
 
 	}
-	call bash.findFiles as FF {
+	call utilities.findFiles as FF {
 		input :
 			path = fastqPath,
 			regexpName = "*.fastq",
 			maxDepth = 1
 	}
-	call bash.concatenateFiles as ConcFQ {
+	call utilities.concatenateFiles as ConcFQ {
 		input :
 			in = FF.files,
 			name = sampleName + ".fastq",
@@ -94,7 +94,7 @@ workflow allVariantCalling {
 				genomeBuild = GenomeBuild,
 				refGenomeIndex = RefGenomeIndex
 		}
-		call awkNanovar.awkNanoVar2Bed {
+		call utilities.nanoVar2Bed {
 			input :
 
 

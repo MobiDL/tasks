@@ -18,7 +18,7 @@ version 1.0
 
 import "../../tasks/rsync.wdl" as rsync
 import "../../tasks/bwa.wdl" as bwa
-import "../../tasks/bash.wdl" as bash
+import "../../tasks/utilities.wdl" as utilities
 import "../../tasks/samtools.wdl" as samtools
 
 workflow getGenomeDir {
@@ -36,13 +36,13 @@ workflow getGenomeDir {
 
 ################################################################################
 
-	call bash.wget as getFasta {
+	call utilities.wget as getFasta {
 		input :
 			in = linkFa,
 			outputPath = outputPath
 	}
 
-	call bash.gzip as gunzipFasta {
+	call utilities.gzip as gunzipFasta {
 		input :
 			in = getFasta.outputFile,
 			outputPath = outputPath,

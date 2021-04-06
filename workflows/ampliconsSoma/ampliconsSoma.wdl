@@ -16,7 +16,7 @@ version 1.0
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import "../../tasks/bash.wdl" as bash
+import "../../tasks/utilities.wdl" as utilities
 import "../../tasks/GATK4.wdl" as GATK4
 
 import "../subworkflows/alignmentShortReadsDNA.wdl" as alignment
@@ -75,14 +75,14 @@ workflow ampliconsSoma {
 ################################################################################
 ## Preprocessing
 
-	call bash.fai2bed as bedGenome {
+	call utilities.fai2bed as bedGenome {
 		input :
 			in = refFai
 	}
 
 	File bed2use = select_first([intervalBedFile,bedGenome.outputFile])
 
-	call bash.convertBedToIntervals as Bed2Intervals {
+	call utilities.convertBedToIntervals as Bed2Intervals {
 		input :
 			in = bed2use,
 			outputPath = outputPath + "/regionOfInterest/"

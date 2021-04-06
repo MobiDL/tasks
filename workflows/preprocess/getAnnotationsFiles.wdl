@@ -17,7 +17,7 @@ version 1.0
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import "../../tasks/rsync.wdl" as rsync
-import "../../tasks/bash.wdl" as bash
+import "../../tasks/utilities.wdl" as utilities
 import "../../tasks/bgzip.wdl" as bgzip
 import "../../tasks/tabix.wdl" as tabix
 import "../../tasks/snpEff.wdl" as snpEff
@@ -40,13 +40,13 @@ workflow getAnnotationsFiles {
 
 ################################################################################
 
-	call bash.wget as getGTF {
+	call utilities.wget as getGTF {
 		input :
 			in = linkGTF,
 			outputPath = outputPath
 	}
 
-	call bash.gzip as gunzipGTF {
+	call utilities.gzip as gunzipGTF {
 		input :
 			in = getGTF.outputFile,
 			outputPath = outputPath,
@@ -62,7 +62,7 @@ workflow getAnnotationsFiles {
 			expression1 = "^chr"
 	}
 
-	call bash.sortgtf as sortGTF {
+	call utilities.sortgtf as sortGTF {
 		input :
 			in = removeChrGTF.outputFile,
 			outputPath = outputPath
@@ -85,14 +85,14 @@ workflow getAnnotationsFiles {
 ################################################################################
 
 	scatter (vcfs in select_all(vcfs_bundle_broad)) {
-		call bash.wget as getVCF_bundle {
+		call utilities.wget as getVCF_bundle {
 			input :
 				in = vcfs,
 				user = "gsapubftp-anonymous",
 				outputPath = outputPath
 		}
 
-		call bash.gzip as gunzipVCF_bundle {
+		call utilities.gzip as gunzipVCF_bundle {
 			input :
 				in = getVCF_bundle.outputFile,
 				decompress = true,

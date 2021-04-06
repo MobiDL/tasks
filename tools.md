@@ -11,7 +11,7 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td rowspan="9">bash</td>
+			<td rowspan="9">Utilities</td>
 			<td rowspan="9">NA</td>
 			<td>findFiles</td>
 			<td>0.0.1</td>

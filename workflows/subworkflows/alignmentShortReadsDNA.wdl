@@ -17,7 +17,7 @@ version 1.0
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import "../../tasks/bwa.wdl" as bwa
-import "../../tasks/bash.wdl" as bash
+import "../../tasks/utilities.wdl" as utilities
 import "../../tasks/crumble.wdl" as crumble
 import "../../tasks/GATK4.wdl" as GATK4
 import "../../tasks/sambamba.wdl" as sambamba
@@ -127,13 +127,13 @@ workflow alignDNA {
 ################################################################################
 ## Base recalibrator & LeftAlign
 
-	call bash.fai2bed as bedGenome {
+	call utilities.fai2bed as bedGenome {
 		input :
 			in = refFai,
 			outputPath = outputPath + "/regionOfInterest/"
 	}
 
-	call bash.convertBedToIntervals as Bed2Intervals {
+	call utilities.convertBedToIntervals as Bed2Intervals {
 		input :
 			in = bedGenome.outputFile,
 			outputPath = outputPath + "/regionOfInterest/"

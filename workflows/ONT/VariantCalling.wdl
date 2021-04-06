@@ -16,7 +16,7 @@ version 1.0
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import "../../tasks/bash.wdl" as bash
+import "../../tasks/utilities.wdl" as utilities
 import "../../tasks/minimap2.wdl" as minimap2
 import "../../tasks/sambamba.wdl" as sambamba
 import "../../tasks/clair.wdl" as clair
@@ -48,13 +48,13 @@ workflow variantCallingONT {
 	String sampleName = if defined(name) then "~{name}" else "sample"
 
 ################################################################################
-	call bash.findFiles as FF {
+	call utilities.findFiles as FF {
 		input :
 			path = fastqPath,
 			regexpName = "*.fastq",
 			maxDepth = 1
 	}
-	call bash.concatenateFiles as ConcFQ {
+	call utilities.concatenateFiles as ConcFQ {
 		input :
 			in = FF.files,
 			name = sampleName + ".fastq",
