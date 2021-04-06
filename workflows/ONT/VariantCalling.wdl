@@ -39,7 +39,7 @@ workflow variantCallingONT {
 		String modelPath
 
 		Int qual = 748
-		String? region
+		File? bedRegions
 		String? includeFilter
 
 		String? name
@@ -72,30 +72,32 @@ workflow variantCallingONT {
 			in = align.outputFile,
 			outputPath = outputRep + "/Alignment/"
 	}
-	call clair.callVarBam {
-		input :
-			modelPath = modelPath,
-			refGenome = refFa,
-			refGenomeIndex = refFai,
-			bamFile = align.outputFile,
-			bamFileIndex = idxBam.outputFile,
-			sampleName = sampleName,
-			qual = qual,
-			outputPath = outputRep + "/Variant-Calling/"
-	}
-	/* call bgzip.compress{
-		input :
 
-	}
-	call tabix.index{
+	call utilities.fai2bed as F2B {
 		input :
+			in = refFai
 	}
-	call bcftools.view {
+	call utilities.bed2Array as B2A {
 		input :
-			bcftools
-	} */
+			bed = select_first([bedRegions,F2B.outputFile])
+	}
 
-################################################################################
+	scatter (region in B2A.bedObj) {
+		call clair.callVarBam {
+			input :
+				modelPath = modelPath,
+				refGenome = refFa,
+				refGenomeIndex = refFai,
+				bamFile = align.outputFile,
+				bamFileIndex = idxBam.outputFile,
+				sampleName = sampleName,
+				qual = qual,
+				outputPath = outputRep + "/Variant-Calling/",
+				contigName = region["chrom"],
+				ctgStart = region["start"],
+				ctgEnd = region["end"]
+		}
+	}
 
 ################################################################################
 
