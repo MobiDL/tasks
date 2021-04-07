@@ -2657,8 +2657,8 @@ task splitNCigarReads {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2021-03-26"
+		version: "0.0.2"
+		date: "2021-04-07"
 	}
 
 	input {
@@ -2702,7 +2702,8 @@ task splitNCigarReads {
 	>>>
 
 	output {
-		File outputFile = outputFile
+		File outputBam = outputFile
+		File outputIdx = sub(outputFile,"m$", "i")
 	}
 
 	runtime {
