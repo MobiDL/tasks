@@ -2235,7 +2235,7 @@ task variantFiltration {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.5"
+		version: "0.0.6"
 		date: "2021-04-07"
 	}
 
@@ -2265,7 +2265,6 @@ task variantFiltration {
 		Float? LowMappingQuality
 		Float? LowMappingQualityRankSum
 
-		Boolean createVCFIdx = true
 		Boolean createVCFMD5 = true
 
 		Int threads = 1
@@ -2301,7 +2300,7 @@ task variantFiltration {
 			~{default="" "--filter-name \"SORStrandBias\" --filter-expression \"SOR > " + SORStrandBias}~{true="\"" false="" defined(SORStrandBias)} \
 			~{default="" "--filter-name \"HomopolymerRegion\" --filter-expression \"POLYX > " + HomopolymerRegion}~{true="\"" false="" defined(HomopolymerRegion)} \
 			~{default="" "--filter-name \"LowCoverage\" --filter-expression \"DP < " + LowCoverage}~{true="\"" false="" defined(LowCoverage)} \
-			~{true="--create-output-variant-index" false="" createVCFIdx} \
+			--create-output-variant-index \
 			~{true="--create-output-variant-md5" false="" createVCFMD5} \
 			--variant ~{in} \
 			--output ~{outputFile}
@@ -2310,7 +2309,7 @@ task variantFiltration {
 
 	output {
 		File outputFile = outputFile
-		File? outputFileIdx = outputFile + extIdx
+		File outputFileIdx = outputFile + extIdx
 		File? outputFileMD5 = outputFile + ".md5"
 	}
 
@@ -2399,10 +2398,6 @@ task variantFiltration {
 		LowCoverage: {
 			description: 'Threshold below which DP the variant will be tagged as LowCoverage',
 			category: 'Option: filter (predefined)'
-		}
-		createVCFIdx: {
-			description: 'If true, create a VCF index when writing a coordinate-sorted VCF file. [Default: true]',
-			category: 'Tool option'
 		}
 		createVCFMD5: {
 			description: 'If true, create a a MD5 digest any VCF file created. [Default: true]',
