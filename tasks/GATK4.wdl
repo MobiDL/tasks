@@ -1131,8 +1131,8 @@ task gatherBamFiles {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.2"
-		date: "2020-12-10"
+		version: "0.0.3"
+		date: "2021-04-07"
 	}
 
 	input {
@@ -1147,7 +1147,6 @@ task gatherBamFiles {
 		String subStringReplace = ""
 
 		Int compressionLevel = 6
-		Boolean bamIndex = true
 		Boolean bamMD5 = true
 
 		Int maxRecordsInRam = 500000
@@ -1179,7 +1178,7 @@ task gatherBamFiles {
 			--INPUT ~{sep=" --INPUT " in} \
 			--COMPRESSION_LEVEL ~{compressionLevel} \
 			--MAX_RECORDS_IN_RAM ~{maxRecordsInRam} \
-			~{true="--CREATE_INDEX" false="" bamIndex} \
+			--CREATE_INDEX \
 			~{true="--CREATE_MD5_FILE" false="" bamMD5} \
 			--OUTPUT ~{outputBamFile}
 
@@ -1187,7 +1186,7 @@ task gatherBamFiles {
 
 	output {
 		File outputBam = outputBamFile
-		File? outputBai = outputBaiFile
+		File outputBai = outputBaiFile
 		File? outputMD5 = outputBamFile + ".md5"
 	}
 
@@ -1231,10 +1230,6 @@ task gatherBamFiles {
 		}
 		maxRecordsInRam: {
 			description: 'When writing files that need to be sorted, this will specify the number of records stored in RAM before spilling to disk. Increasing this number reduces the number of file handles needed to sort the file, and increases the amount of RAM needed. [Default: 500000]',
-			category: 'Tool option'
-		}
-		bamIndex: {
-			description: 'Create a BAM/CRAM index when writing a coordinate-sorted BAM/CRAM file [default: true]',
 			category: 'Tool option'
 		}
 		bamMD5: {
