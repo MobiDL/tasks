@@ -2235,8 +2235,8 @@ task variantFiltration {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.4"
-		date: "2021-03-29"
+		version: "0.0.5"
+		date: "2021-04-07"
 	}
 
 	input {
@@ -2279,16 +2279,7 @@ task variantFiltration {
 	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
-	Boolean BoolLowQualByDepth = defined(LowQualByDepth)
-	Boolean BoolFSStrandBias = defined(FSStrandBias)
-	Boolean BoolLowMappingQuality = defined(LowMappingQuality)
-	Boolean BoolLowMappingQualityRankSum = defined(LowMappingQualityRankSum)
-	Boolean BoolLowReadPosRankSum = defined(LowReadPosRankSum)
-	Boolean BoolSORStrandBias = defined(SORStrandBias)
-	Boolean BoolHomopolymerRegion = defined(HomopolymerRegion)
-	Boolean BoolLowCoverage = defined(LowCoverage)
-
-	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String baseName = if defined(name) then name + subStringReplace else sub(basename(in),subString,subStringReplace)
 	String extIdx = if sub(baseName,"(.*\.)(.gz)$","$2") == ".gz" then ".tbi" else ".idx"
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
@@ -2302,18 +2293,19 @@ task variantFiltration {
 			~{default="" "--sequence-dictionary " + refDict} \
 			--cluster-size ~{clusterSize} \
 			--cluster-window-size ~{clusterWindow} \
-			~{true="--filter-expression \"QD < " false="" BoolLowQualByDepth}~{LowQualByDepth}~{true="\" --filter-name \"LowQualByDepth\"" false="" BoolLowQualByDepth} \
-			~{true="--filter-expression \"FS > " false="" BoolFSStrandBias}~{FSStrandBias}~{true="\" --filter-name \"FSStrandBias\"" false="" BoolFSStrandBias} \
-			~{true="--filter-expression \"MQ < " false="" BoolLowMappingQuality}~{LowMappingQuality}~{true="\" --filter-name \"LowMappingQuality\"" false="" BoolLowMappingQuality} \
-			~{true="--filter-expression \"MQRankSum < " false="" BoolLowMappingQualityRankSum}~{LowMappingQualityRankSum}~{true="\" --filter-name \"LowMappingQualityRankSum\"" false="" BoolLowMappingQualityRankSum} \
-			~{true="--filter-expression \"ReadPosRankSum < " false="" BoolLowReadPosRankSum}~{LowReadPosRankSum}~{true="\" --filter-name \"LowReadPosRankSum\"" false="" BoolLowReadPosRankSum} \
-			~{true="--filter-expression \"SOR > " false="" BoolSORStrandBias}~{SORStrandBias}~{true="\" --filter-name \"SORStrandBias\"" false="" BoolSORStrandBias} \
-			~{true="--filter-expression \"POLYX > " false="" BoolHomopolymerRegion}~{HomopolymerRegion}~{true="\" --filter-name \"HomopolymerRegion\"" false="" BoolHomopolymerRegion} \
-			~{true="--filter-expression \"DP < " false="" BoolLowCoverage}~{LowCoverage}~{true="\" --filter-name \"LowCoverage\"" false="" BoolLowCoverage} \
+			~{default="" "--filter-name \"LowQualByDepth\" --filter-expression \"QD < " + LowQualByDepth}~{true="\"" false="" defined(LowQualByDepth)} \
+			~{default="" "--filter-name \"FSStrandBias\" --filter-expression \"FS > " + FSStrandBias}~{true="\"" false="" defined(FSStrandBias)} \
+			~{default="" "--filter-name \"LowMappingQuality\" --filter-expression \"MQ < " + LowMappingQuality}~{true="\"" false="" defined(LowMappingQuality)} \
+			~{default="" "--filter-name \"LowMappingQualityRankSum\" --filter-expression \"MQRankSum < " + LowMappingQualityRankSum}~{true="\"" false="" defined(LowMappingQualityRankSum)} \
+			~{default="" "--filter-name \"LowReadPosRankSum\" --filter-expression \"ReadPosRankSum < " + LowReadPosRankSum}~{true="\"" false="" defined(LowReadPosRankSum)} \
+			~{default="" "--filter-name \"SORStrandBias\" --filter-expression \"SOR > " + SORStrandBias}~{true="\"" false="" defined(SORStrandBias)} \
+			~{default="" "--filter-name \"HomopolymerRegion\" --filter-expression \"POLYX > " + HomopolymerRegion}~{true="\"" false="" defined(HomopolymerRegion)} \
+			~{default="" "--filter-name \"LowCoverage\" --filter-expression \"DP < " + LowCoverage}~{true="\"" false="" defined(LowCoverage)} \
 			~{true="--create-output-variant-index" false="" createVCFIdx} \
 			~{true="--create-output-variant-md5" false="" createVCFMD5} \
 			--variant ~{in} \
 			--output ~{outputFile}
+
 	>>>
 
 	output {
