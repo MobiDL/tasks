@@ -1765,8 +1765,8 @@ task haplotypeCaller {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.6"
-		date: "2021-04-01"
+		version: "0.0.7"
+		date: "2021-04-07"
 	}
 
 	input {
@@ -1852,7 +1852,7 @@ task haplotypeCaller {
 
 	String getIntervalsBase = if defined(intervals) then sub(basename(baseNameIntervals),subStringIntervals,subStringReplaceIntervals) else ""
 
-	String baseName = if defined(name) then name else sub(basename(in),subString,getIntervalsBase + subStringReplace)
+	String baseName = if defined(name) then name + getIntervalsBase + subStringReplace else sub(basename(in),subString,getIntervalsBase + subStringReplace)
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
 	command <<<
