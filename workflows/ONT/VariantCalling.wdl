@@ -20,6 +20,7 @@ import "../../tasks/utilities.wdl" as utilities
 import "../../tasks/minimap2.wdl" as minimap2
 import "../../tasks/sambamba.wdl" as sambamba
 import "../../tasks/clair.wdl" as clair
+import "../../tasks/GATK4.wdl" as GATK4
 
 workflow variantCallingONT {
 	meta {
@@ -31,7 +32,7 @@ workflow variantCallingONT {
 
 	input {
 		String fastqPath
-		String outputRep
+		String outputPath
 
 		File refFa
 		File refFai
@@ -48,57 +49,88 @@ workflow variantCallingONT {
 	String sampleName = if defined(name) then "~{name}" else "sample"
 
 ################################################################################
+## Alignment
+
 	call utilities.findFiles as FF {
 		input :
 			path = fastqPath,
 			regexpName = "*.fastq",
 			maxDepth = 1
 	}
+
 	call utilities.concatenateFiles as ConcFQ {
 		input :
 			in = FF.files,
 			name = sampleName + ".fastq",
-			outputPath = outputRep + "/fastq_concatenate/"
+			outputPath = outputPath + "/fastq_concatenate/"
 	}
+
 	call minimap2.mapOnt as align {
 		input :
 			fastq = ConcFQ.outputFile,
 			refFasta = refFa,
 			sample = sampleName,
-			outputPath = outputRep + "/Alignment/"
+			outputPath = outputPath + "/Alignment/"
 	}
+
 	call sambamba.index as idxBam {
 		input :
 			in = align.outputFile,
-			outputPath = outputRep + "/Alignment/"
+			outputPath = outputPath + "/Alignment/"
 	}
+
+################################################################################
+
+################################################################################
+## Variant Calling
 
 	call utilities.fai2bed as F2B {
 		input :
 			in = refFai
 	}
+
 	call utilities.bed2Array as B2A {
 		input :
 			bed = select_first([bedRegions,F2B.outputFile])
 	}
 
 	scatter (region in B2A.bedObj) {
-		call clair.callVarBam {
+		call clair.callVarBam as CALLVARBAM {
 			input :
 				modelPath = modelPath,
 				refGenome = refFa,
 				refGenomeIndex = refFai,
 				bamFile = align.outputFile,
 				bamFileIndex = idxBam.outputFile,
+				name = "~{sampleName}-~{region['chrom']}_~{region['start']}_~{region['end']}",
 				sampleName = sampleName,
 				qual = qual,
-				outputPath = outputRep + "/Variant-Calling/",
+				outputPath = "~{outputPath}/Variant-Calling/clair/scatter/",
 				contigName = region["chrom"],
 				ctgStart = region["start"],
-				ctgEnd = region["end"]
+				ctgEnd = region["end"],
+				delay = 10
 		}
+	}
+
+	call GATK4.gatherVcfFiles as GATHERVCFFILES {
+		input :
+			in = CALLVARBAM.outputFile,
+			outputPath = outputPath + "/Variant-Calling/clair/",
+			subString = "-(chr)?[0-9WXYMT]+_[0-9]+_[0-9]+\.clair\.vcf$"
 	}
 
 ################################################################################
 
+################################################################################
+## Outputs
+
+	output {
+		File bam = align.outputFile
+		File bai = idxBam.outputFile
+		File vcf = GATHERVCFFILES.outputFile
+		File vcfIdx = GATHERVCFFILES.outputFileIdx
+	}
+
+################################################################################
 }
