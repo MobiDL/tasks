@@ -27,7 +27,7 @@ workflow variantCallingONT {
 		author: "MoBiDiC"
 		email: "c-vangoethem(at)chu-montpellier.fr"
 		version: "0.0.1"
-		date: "2021-04-02"
+		date: "2021-04-08"
 	}
 
 	input {
@@ -51,31 +51,31 @@ workflow variantCallingONT {
 ################################################################################
 ## Alignment
 
-	call utilities.findFiles as FF {
+	call utilities.findFiles as FINDFILES {
 		input :
 			path = fastqPath,
 			regexpName = "*.fastq",
 			maxDepth = 1
 	}
 
-	call utilities.concatenateFiles as ConcFQ {
+	call utilities.concatenateFiles as CONCATENATEFILES {
 		input :
-			in = FF.files,
+			in = FINDFILES.files,
 			name = sampleName + ".fastq",
 			outputPath = outputPath + "/fastq_concatenate/"
 	}
 
-	call minimap2.mapOnt as align {
+	call minimap2.mapOnt as MAPONT {
 		input :
-			fastq = ConcFQ.outputFile,
+			fastq = CONCATENATEFILES.outputFile,
 			refFasta = refFa,
 			sample = sampleName,
 			outputPath = outputPath + "/Alignment/"
 	}
 
-	call sambamba.index as idxBam {
+	call sambamba.index as INDEX {
 		input :
-			in = align.outputFile,
+			in = MAPONT.outputFile,
 			outputPath = outputPath + "/Alignment/"
 	}
 
@@ -84,24 +84,24 @@ workflow variantCallingONT {
 ################################################################################
 ## Variant Calling
 
-	call utilities.fai2bed as F2B {
+	call utilities.fai2bed as FAI2BED {
 		input :
 			in = refFai
 	}
 
-	call utilities.bed2Array as B2A {
+	call utilities.bed2Array as BED2ARRAY {
 		input :
-			bed = select_first([bedRegions,F2B.outputFile])
+			bed = select_first([bedRegions,FAI2BED.outputFile])
 	}
 
-	scatter (region in B2A.bedObj) {
+	scatter (region in BED2ARRAY.bedObj) {
 		call clair.callVarBam as CALLVARBAM {
 			input :
 				modelPath = modelPath,
 				refGenome = refFa,
 				refGenomeIndex = refFai,
-				bamFile = align.outputFile,
-				bamFileIndex = idxBam.outputFile,
+				bamFile = MAPONT.outputFile,
+				bamFileIndex = INDEX.outputFile,
 				name = "~{sampleName}-~{region['chrom']}_~{region['start']}_~{region['end']}",
 				sampleName = sampleName,
 				qual = qual,
@@ -126,8 +126,8 @@ workflow variantCallingONT {
 ## Outputs
 
 	output {
-		File bam = align.outputFile
-		File bai = idxBam.outputFile
+		File bam = MAPONT.outputFile
+		File bai = INDEX.outputFile
 		File vcf = GATHERVCFFILES.outputFile
 		File vcfIdx = GATHERVCFFILES.outputFileIdx
 	}
