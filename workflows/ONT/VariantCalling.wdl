@@ -41,7 +41,6 @@ workflow variantCallingONT {
 
 		Int qual = 748
 		File? bedRegions
-		String? includeFilter
 
 		String? name
 	}
