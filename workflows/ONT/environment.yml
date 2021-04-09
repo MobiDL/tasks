@@ -1,4 +1,4 @@
-name: NanoCall
+name: ONT-VariantCalling
 channels:
   - conda-forge
   - bioconda
