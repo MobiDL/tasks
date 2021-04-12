@@ -24,8 +24,8 @@
 		</tr>
 		<tr>
 			<td rowspan="2">Subworkflow</td>
-			<td>alignmentShortReadsDNA</td>
-			<td>0.0.3</td>
+			<td>postProcessAlignment</td>
+			<td>0.0.4</td>
 		</tr>
 		<tr>
 			<td>postProcessVCF</td>
@@ -34,7 +34,7 @@
 		<tr>
 			<td rowspan="1">Panel capture</td>
 			<td>panelCaptureSolo</td>
-			<td>0.0.3</td>
+			<td>0.0.4</td>
 		</tr>
 	</tbody>
 </table>

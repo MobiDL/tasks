@@ -35,7 +35,7 @@ This repo include an easy install by conda ([check the installation guide for co
 
 ### Subworkflows
 
-- alignmentShortReadsDNA
-  - align DNA short reads (Illumina®) against a reference (germline or somatic)
+- postProcessAlignment
+  - treatment of alignment files (sort, markdup, baseRecalibrator, compression)
 - postProcessVCF
   - process a VCF to apply filter and normalization

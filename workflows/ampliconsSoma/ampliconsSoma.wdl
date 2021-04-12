@@ -26,8 +26,8 @@ workflow ampliconsSoma {
 	meta {
 		author: "MoBiDiC"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2021-02-17"
+		version: "0.0.2"
+		date: "2021-04-12"
 	}
 
 	input {
