@@ -16,11 +16,12 @@ version 1.0
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import "../../tasks/bwa.wdl" as bwa
 import "../../tasks/utilities.wdl" as utilities
 import "../../tasks/GATK4.wdl" as GATK4
 import "../../tasks/vep.wdl" as vep
 
-import "../subworkflows/alignmentShortReadsDNA.wdl" as alignment
+import "../subworkflows/postProcessAlignment.wdl" as postProcessAlignment
 import "../subworkflows/postProcessVCF.wdl" as postProcessVCF
 
 workflow panelCaptureSolo {
@@ -59,13 +60,11 @@ workflow panelCaptureSolo {
 		String? name
 
 		## primary systems options
-		Int BWAThreads = 1
 		Int SortThreads = 1
 		Int MarkdupThreads = 1
 		Int IndexThreads = 1
 		Int ViewThreads = 1
 
-		String BWAMemory = "4G"
 		String SortMemory = "1G"
 		String MarkdupMemory = "4G"
 		String IndexMemory = "1G"
@@ -105,34 +104,39 @@ workflow panelCaptureSolo {
 			scatterCount = scatterCount
 	}
 
-	scatter (intervals in SplitIntervals.splittedIntervals) {
-		call GATK4.intervalListToBed as IL2B {
-			input :
-				in = intervals,
-				outputPath = outputPath + "regionOfInterest/split-bed/"
-		}
-	}
-
 ################################################################################
 
 ################################################################################
 ## Alignement
 
-	call alignment.alignDNA as primary {
+	call bwa.mem as Alignment {
 		input :
 			fastqR1 = fastqR1,
 			fastqR2 = fastqR2,
+
+			subString = subString,
+			sample = sampleName,
+
+			refFasta = refFasta,
+			refFai = refFai,
+			refAmb = refAmb,
+			refAnn = refAnn,
+			refBwt = refBwt,
+			refPac = refPac,
+			refSa = refSa,
+
+			outputPath = outputPath
+	}
+
+	call postProcessAlignment.postProcessAlignment as POSTPROCESSALIGNMENT {
+		input :
+			inBam = Alignment.outputFile,
 
 			splittedIntervals = SplitIntervals.splittedIntervals,
 
 			refFasta = refFasta,
 			refFai = refFai,
 			refDict = refDict,
-			refAmb = refAmb,
-			refAnn = refAnn,
-			refBwt = refBwt,
-			refPac = refPac,
-			refSa = refSa,
 
 			knownSites = flatten([select_all(knownSites), [dbsnp]]),
 			knownSitesIdx = flatten([select_all(knownSitesIdx), [dbsnpIdx]]),
@@ -140,13 +144,11 @@ workflow panelCaptureSolo {
 			name = sampleName,
 			outputPath = outputPath + "/alignment/",
 
-			BWAThreads = BWAThreads,
 			SortThreads = SortThreads,
 			MarkdupThreads = MarkdupThreads,
 			IndexThreads = IndexThreads,
 			ViewThreads = ViewThreads,
 
-			BWAMemory = BWAMemory,
 			SortMemory = SortMemory,
 			MarkdupMemory = MarkdupMemory,
 			IndexMemory = IndexMemory,
@@ -162,8 +164,8 @@ workflow panelCaptureSolo {
 	scatter (intervals in SplitIntervals.splittedIntervals) {
 		call GATK4.haplotypeCaller as GHC {
 			input :
-				in = primary.cram,
-				idx = primary.idx,
+				in = POSTPROCESSALIGNMENT.cram,
+				idx = POSTPROCESSALIGNMENT.crai,
 
 				refFasta = refFasta,
 				refFai = refFai,
@@ -291,10 +293,6 @@ workflow panelCaptureSolo {
 			description: 'The name used as sampleName',
 			category: 'Option'
 		}
-		BWAThreads : {
-			description : 'Number of threads for "BWA" step [default : 1]',
-			category : 'System'
-		}
 		SortThreads : {
 			description : 'Number of threads for "Sort" step [default : 1]',
 			category : 'System'
@@ -309,10 +307,6 @@ workflow panelCaptureSolo {
 		}
 		ViewThreads : {
 			description : 'Number of threads for "View" step [default : 1]',
-			category : 'System'
-		}
-		BWAMemory : {
-			description : 'Memory allocated for "BWA" step [default : "4G"]',
 			category : 'System'
 		}
 		SortMemory : {

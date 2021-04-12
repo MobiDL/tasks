@@ -16,131 +16,98 @@ version 1.0
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import "../../tasks/bwa.wdl" as bwa
 import "../../tasks/utilities.wdl" as utilities
 import "../../tasks/crumble.wdl" as crumble
 import "../../tasks/GATK4.wdl" as GATK4
 import "../../tasks/sambamba.wdl" as sambamba
 
-workflow alignDNA {
+workflow postProcessAlignment {
 	meta {
 		author: "MoBiDiC"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.3"
-		date: "2021-02-25"
+		version: "0.0.4"
+		date: "2021-04-12"
 	}
 
 	input {
-		File fastqR1
-		File? fastqR2
+		File inBam
 
-		Array[File]? splittedIntervals
+		Array[File] splittedIntervals
 
 		File refFasta
 		File refFai
 		File refDict
-		File refAmb
-		File refAnn
-		File refBwt
-		File refPac
-		File refSa
 
 		Array[File] knownSites
 		Array[File] knownSitesIdx
 
 		Boolean amplicons = false
+		Boolean rna = false
 
 		String outputPath = "./"
-		String subString = "(_S[0-9][0-9])?(_L[0-9][0-9][0-9])?([\._]?R[12])?(_[0-9]+)?.(fastq|fq)(.gz)?"
+		String subString = "\.bam?"
 		String? name
 
-		Int BWAThreads = 1
 		Int SortThreads = 1
 		Int MarkdupThreads = 1
 		Int IndexThreads = 1
 		Int ViewThreads = 1
 
-		String BWAMemory = "4G"
 		String SortMemory = "1G"
-		String MarkdupMemory = "4G"
+		String MarkdupMemory = "1G"
 		String IndexMemory = "1G"
 		String ViewMemory = "1G"
 	}
 
-	String sampleName = if defined(name) then "~{name}" else sub(basename(fastqR1),subString,"")
-
-################################################################################
-## Alignment with BWA
-
-	call bwa.mem as Alignment {
-		input :
-			fastqR1 = fastqR1,
-			fastqR2 = fastqR2,
-			subString = subString,
-			sample = sampleName,
-
-			refFasta = refFasta,
-			refFai = refFai,
-			refAmb = refAmb,
-			refAnn = refAnn,
-			refBwt = refBwt,
-			refPac = refPac,
-			refSa = refSa,
-
-			outputPath = outputPath,
-
-			threads = BWAThreads,
-			memory = BWAMemory
-	}
+	String sampleName = if defined(name) then "~{name}" else sub(basename(inBam),subString,"")
 
 ################################################################################
 
 ################################################################################
 ## Markduplicate or index if amplicons
 
+	call sambamba.sort as SORT {
+		input :
+			in = inBam,
+			outputPath = outputPath,
+
+			threads = SortThreads,
+			memory = SortMemory
+	}
+
 	if (! amplicons) {
 		call sambamba.markdup as Markdup {
 			input :
-				in = Alignment.outputFile,
+				in = SORT.outputBam,
 				outputPath = outputPath,
 
 				threads = MarkdupThreads,
 				memory = MarkdupMemory
 		}
 	}
-	if (amplicons) {
-		call sambamba.index as bamIndex {
-			input :
-				in = Alignment.outputFile,
-				outputPath = outputPath,
 
-				threads = IndexThreads,
-				memory = IndexMemory
+	if (rna) {
+		call GATK4.splitNCigarReads as SPLITNCIGARREADS {
+			input :
+				in = select_first([Markdup.outputBam, SORT.outputBam]),
+
+				refFasta = refFasta,
+				refFai = refFai,
+				refDict = refDict,
+
+				outputPath = outputPath + "/Alignment/"
 		}
 	}
 
-	File bamUsed = select_first([Markdup.outputBam, Alignment.outputFile])
-	File baiUsed = select_first([Markdup.outputBai, bamIndex.outputFile])
+	File bamUsed = select_first([SPLITNCIGARREADS.outputBam, Markdup.outputBam, SORT.outputBam])
+	File baiUsed = select_first([SPLITNCIGARREADS.outputIdx, Markdup.outputBai, SORT.outputBai])
 
 ################################################################################
 
 ################################################################################
 ## Base recalibrator & LeftAlign
 
-	call utilities.fai2bed as bedGenome {
-		input :
-			in = refFai,
-			outputPath = outputPath + "/regionOfInterest/"
-	}
-
-	call utilities.convertBedToIntervals as Bed2Intervals {
-		input :
-			in = bedGenome.outputFile,
-			outputPath = outputPath + "/regionOfInterest/"
-	}
-	Array[File] intervals2use = if defined(splittedIntervals) then flatten(select_all([splittedIntervals])) else Bed2Intervals.outputFile
-
-	scatter (intervals in intervals2use) {
+	scatter (intervals in splittedIntervals) {
 		call GATK4.baseRecalibrator as BR {
 			input :
 				in = bamUsed,
@@ -165,7 +132,7 @@ workflow alignDNA {
 			outputPath = outputPath + "/BQSR"
 	}
 
-	scatter (intervals in intervals2use) {
+	scatter (intervals in splittedIntervals) {
 		call GATK4.applyBQSR as ABR {
 			input :
 				in = bamUsed,
@@ -216,18 +183,9 @@ workflow alignDNA {
 			memory = SortMemory
 	}
 
-	call sambamba.index as IdxBamGatherSort {
-		input :
-			in = SortBamProcessed.outputFile,
-			outputPath = outputPath,
-
-			threads = IndexThreads,
-			memory = IndexMemory
-	}
-
 	call sambamba.view as Bam2Cram{
 		input :
-			in = SortBamProcessed.outputFile,
+			in = SortBamProcessed.outputBam,
 			refFasta = refFasta,
 			refFai = refFai,
 			cram = true,
@@ -265,23 +223,17 @@ workflow alignDNA {
 
 	output {
 		File cram = Bam2Cram.outputFile
-		File idx = CramIdx.outputFile
+		File crai = CramIdx.outputFile
+		File bam = SortBamProcessed.outputBam
+		File bai = SortBamProcessed.outputBai
 	}
 
 ################################################################################
 
 	parameter_meta {
-		fastqR1 : {
-			description: 'Input file with reads 1 (fastq, fastq.gz, fq, fq.gz).',
+		inBam: {
+			description: 'Input BAM.',
 			category: 'Input (required)'
-		}
-		fastqR2 : {
-			description: 'Input file with reads 2 (fastq, fastq.gz, fq, fq.gz).',
-			category: 'Input (optional)'
-		}
-		splittedIntervals : {
-			description: 'Splitted intervals to process bam. (default: use genome to create intervals)',
-			category: 'Option'
 		}
 		refFasta: {
 			description: 'Path to the reference file (format: fasta)',
@@ -293,26 +245,6 @@ workflow alignDNA {
 		}
 		refDict: {
 			description: 'Path to the reference file dict (format: dict)',
-			category: 'Input (required)'
-		}
-		refAmb : {
-			description: 'Path to the reference Amb file (generate by BWA index)',
-			category: 'Input (required)'
-		}
-		refAnn : {
-			description: 'Path to the reference Ann file (generate by BWA index)',
-			category: 'Input (required)'
-		}
-		refBwt : {
-			description: 'Path to the reference Bwt file (generate by BWA index)',
-			category: 'Input (required)'
-		}
-		refPac : {
-			description: 'Path to the reference Pac file (generate by BWA index)',
-			category: 'Input (required)'
-		}
-		refSa : {
-			description: 'Path to the reference Sa file (generate by BWA index)',
 			category: 'Input (required)'
 		}
 		knownSites : {
@@ -339,10 +271,6 @@ workflow alignDNA {
 			description: 'The name used as sampleName',
 			category: 'Output (optional)'
 		}
-		BWAThreads : {
-			description : 'Number of threads for "BWA" step [default : 1]',
-			category : 'System'
-		}
 		SortThreads : {
 			description : 'Number of threads for "Sort" step [default : 1]',
 			category : 'System'
@@ -359,16 +287,12 @@ workflow alignDNA {
 			description : 'Number of threads for "View" step [default : 1]',
 			category : 'System'
 		}
-		BWAMemory : {
-			description : 'Memory allocated for "BWA" step [default : "4G"]',
-			category : 'System'
-		}
 		SortMemory : {
 			description : 'Memory allocated for "Sort" step [default : "1G"]',
 			category : 'System'
 		}
 		MarkdupMemory : {
-			description : 'Memory allocated for "Markdup" step [default : "4G"]',
+			description : 'Memory allocated for "Markdup" step [default : "1G"]',
 			category : 'System'
 		}
 		IndexMemory : {
