@@ -315,16 +315,20 @@ task concatenateFiles {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-08-19"
+		version: "0.0.2"
+		date: "2021-04-13"
 	}
 
 	input {
+		String? exe
 		Array[File] in
+
+		Boolean gzip = false
 
 		String? outputPath
 		String? name
 		String subString = "^[0-9]+\-"
+		String subStringReplace = ""
 
 		Int threads = 1
 		Int memoryByThreads = 768
@@ -337,8 +341,10 @@ task concatenateFiles {
 	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
-	String baseName = if defined(name) then name else sub(basename(in[0]),subString,"")
+	String baseName = if defined(name) then name else sub(basename(in[0]),subString,subStringReplace)
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+
+	String cmd_exe = if defined(exe) then exe else if gzip then "zcat" else "cat"
 
 	command <<<
 
@@ -346,7 +352,7 @@ task concatenateFiles {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		cat ~{sep=" " in} > ~{outputFile}
+		~{cmd_exe} ~{sep=" " in} > ~{outputFile}
 
 	>>>
 
@@ -360,8 +366,16 @@ task concatenateFiles {
 	}
 
 	parameter_meta {
+		exe: {
+			description: 'Executable to launch [Default: cat or zcat].',
+			category: 'Required'
+		}
 		in: {
 			description: 'Array of files.',
+			category: 'Required'
+		}
+		gzip: {
+			description: 'Switch to the use of zcat (i.e. compressed files on input) [Default: false]',
 			category: 'Required'
 		}
 		outputPath: {
@@ -374,6 +388,10 @@ task concatenateFiles {
 		}
 		subString: {
 			description: 'Substring to remove to create name file [default: "^[0-9]+\-"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ""]',
 			category: 'Output path/name option'
 		}
 		threads: {
