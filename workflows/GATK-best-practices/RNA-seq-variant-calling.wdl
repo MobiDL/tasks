@@ -257,4 +257,71 @@ workflow RNASeqShortVariantDiscovery {
 	}
 
 ################################################################################
+
+	parameter_meta {
+		fastqR1 : {
+			description: 'Input file with reads 1 (fastq, fastq.gz, fq, fq.gz).',
+			category: 'Required'
+		}
+		fastqR2 : {
+			description: 'Input file with reads 2 (fastq, fastq.gz, fq, fq.gz).',
+			category: 'Required'
+		}
+		refFasta: {
+			description: 'Path to the reference file (format: fasta)',
+			category: 'Required'
+		}
+		refFai: {
+			description: 'Path to the reference file index (format: fai)',
+			category: 'Required'
+		}
+		refDict: {
+			description: 'Path to the reference file dict (format: dict)',
+			category: 'Required'
+		}
+		genomeDir: {
+			description: 'Path to the directory where genome files are stored',
+			category: 'Required'
+		}
+		regionOfInterest: {
+			description: "Input bed of ROI (default: whole genome)",
+			category: "Option"
+		}
+		knownSites : {
+			description: 'Path to the knownSites vcf files (format: vcf.gz)',
+			category: 'Required'
+		}
+		knownSitesIdx : {
+			description: 'Path to the knownSites vcf indexes (format: vcf.gz.tbi)',
+			category: 'Required'
+		}
+		dbsnp : {
+			description: 'Path to the dbsnp vcf file (format: vcf.gz)',
+			category: 'Required'
+		}
+		dbsnpIdx : {
+			description: 'Path to the dbsnp vcf index (format: vcf.gz.tbi)',
+			category: 'Required'
+		}
+		outputPath : {
+			description: 'Path where the output repository will be created [default: ./]',
+			category: 'Output path/name option'
+		}
+		subString : {
+			description: 'The regexp substring to remove from fastq R1 file to create sampleName, and used by bwa-mem [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ""]',
+			category: 'Output path/name option'
+		}
+		name : {
+			description: 'The name used as sampleName',
+			category: 'Output path/name option'
+		}
+		scatterCount: {
+			description: 'Scatter count: number of output interval files to split into [default: 1]',
+			category: 'Parralelisation ption'
+		}
+	}
 }
