@@ -22,7 +22,7 @@ import "../../tasks/sambamba.wdl" as sambamba
 import "../../tasks/clair.wdl" as clair
 import "../../tasks/GATK4.wdl" as GATK4
 
-workflow variantCallingONT {
+workflow ONT_VariantCalling {
 	meta {
 		author: "MoBiDiC"
 		email: "c-vangoethem(at)chu-montpellier.fr"
@@ -46,6 +46,7 @@ workflow variantCallingONT {
 	}
 
 	String sampleName = if defined(name) then "~{name}" else "sample"
+
 
 ################################################################################
 ## Alignment

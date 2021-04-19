@@ -1,4 +1,4 @@
-# Workflow : ONT - VariantCalling
+# Workflow : ONT-VariantCalling
 
 This workflow do VariantCalling on Oxford Nanopore Technologies data.
 
@@ -28,11 +28,11 @@ You can create your input file replacing editing the template or creating your o
 
 ```json
 {
-	"variantCallingONT.fastqPath": "String",
-	"variantCallingONT.refFa": "File",
-	"variantCallingONT.refFai": "File",
-	"variantCallingONT.modelPath": "String",
-	"variantCallingONT.outputPath": "String",
+	"ONT_VariantCalling.fastqPath": "String",
+	"ONT_VariantCalling.refFa": "File",
+	"ONT_VariantCalling.refFai": "File",
+	"ONT_VariantCalling.modelPath": "String",
+	"ONT_VariantCalling.outputPath": "String",
 }
 ```
 
