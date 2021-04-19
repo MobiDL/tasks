@@ -21,7 +21,7 @@ import "../../tasks/GATK4.wdl" as GATK4
 import "../../tasks/sambamba.wdl" as sambamba
 import "../../tasks/star.wdl" as star
 
-workflow RNASeqShortVariantDiscovery {
+workflow GATK_best_practices_RNA {
 	meta {
 		author: "MoBiDiC"
 		email: "c-vangoethem(at)chu-montpellier.fr"
