@@ -11,6 +11,7 @@
 
 	"ONT_VariantCalling.BED2ARRAY.memoryByThreads": 768,
 	"ONT_VariantCalling.BED2ARRAY.threads": 1,
+	"ONT_VariantCalling.CALLVARBAM.path_exe": "clair.py",
 	"ONT_VariantCalling.CALLVARBAM.activation_only": false,
 	"ONT_VariantCalling.CALLVARBAM.dcov": 250,
 	"ONT_VariantCalling.CALLVARBAM.debug": false,
@@ -21,7 +22,6 @@
 	"ONT_VariantCalling.CALLVARBAM.minCoverage": 4,
 	"ONT_VariantCalling.CALLVARBAM.outputForEnsemble": false,
 	"ONT_VariantCalling.CALLVARBAM.parallelLevel": 2,
-	"ONT_VariantCalling.CALLVARBAM.path_exe": "clair.py",
 	"ONT_VariantCalling.CALLVARBAM.pypy": "pypy",
 	"ONT_VariantCalling.CALLVARBAM.pysamForAllIndelBases": false,
 	"ONT_VariantCalling.CALLVARBAM.samtools": "samtools",

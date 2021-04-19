@@ -56,7 +56,7 @@ conda activate ONT-VariantCalling
 cromwell run \
 	-Dconfig.file=${PATH_MOBIDL2}/backends.conf/local.conf \
 	--inputs /path/to/inputs.json \
-	${PATH_MOBIDL2}/workflows/ONT/VariantCalling.wdl
+	${PATH_MOBIDL2}/workflows/ONT-VariantCalling/ONT-VariantCalling.wdl
 ```
 
 ### Cluster
