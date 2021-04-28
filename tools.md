@@ -259,9 +259,13 @@
 			<td>0.0.1</td>
 		</tr>
 		<tr>
-			<td>NanoPlot</td>
-			<td>1.36.2</td>
+			<td rowspan="2">NanoPlot</td>
+			<td rowspan="2">1.36.2</td>
 			<td>nanoplot_summary</td>
+			<td>0.0.1</td>
+		</tr>
+		<tr>
+			<td>nanoplot_fastq</td>
 			<td>0.0.1</td>
 		</tr>
 		<tr>

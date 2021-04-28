@@ -164,3 +164,97 @@ task nanoplot_summary {
 		}
 	}
 }
+
+task nanoplot_fastq {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-10-07"
+	}
+
+	input {
+		String path_exe = "NanoPlot"
+
+		File in
+		String? name
+		String? outputPath
+
+		Boolean N50 = true
+		Int? dpi
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} \
+			--threads ~{threads} \
+			~{true="--N50" false="--no-N50" N50} \
+			~{default="" "--dpi " + dpi} \
+			--outdir ~{outputPath} \
+			~{default="" "--prefix " + name} \
+			--fastq ~{in}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "mpa"]',
+			category: 'System'
+		}
+		outputPath: {
+			description: 'Output path where files were generated. [default: pwd()]',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Name to use for output file name [default: sub(basename(in),subString,subStringReplace)]',
+			category: 'Output path/name option'
+		}
+		in: {
+			description: 'Input fastq file.',
+			category: 'Required'
+		}
+		N50: {
+			description: 'Show the N50 mark in the read length histogram (default: true)',
+			category: 'Option'
+		}
+		dpi: {
+			description: 'Set the dpi for saving images',
+			category: 'Option'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
