@@ -329,8 +329,8 @@ task coverage {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-07-29"
+		version: "0.0.2"
+		date: "2021-04-28"
 	}
 
 	input {
@@ -373,7 +373,9 @@ task coverage {
 		fi
 
 		~{path_exe} intersect \
-			~{default="" true="-r" false="-e" reciprocal} ~{default="" true="-s" false="-S" strandness} \
+			~{default="" true="-r" false="-e" reciprocal} \
+			~{default="" true="-s" false="-S" strandness} \
+			~{true="-d" false="" d} \
 			~{default="" "-f " + f} \
 			~{default="" "-F " + F} \
 			-a ~{bedA} \
@@ -406,6 +408,10 @@ task coverage {
 		bedB: {
 			description: 'BAM/BED/GFF/VCF file "B".',
 			category: 'Required'
+		}
+		d: {
+			description: 'Report the depth at each position in each A feature. (default: false)',
+			category: 'Tool option'
 		}
 		f: {
 			description: 'Minimum overlap required as a fraction of A (e.g 0.1). (default: null = 1bp)',
