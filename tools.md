@@ -259,6 +259,12 @@
 			<td>0.0.1</td>
 		</tr>
 		<tr>
+			<td>NanoPlot</td>
+			<td>1.36.2</td>
+			<td>nanoplot_summary</td>
+			<td>0.0.1</td>
+		</tr>
+		<tr>
 			<td>Qualimap</td>
 			<td>v.2.2.2-dev</td>
 			<td>bamqc</td>
