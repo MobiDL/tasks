@@ -26,8 +26,8 @@ workflow ONT_VariantCalling {
 	meta {
 		author: "MoBiDiC"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2021-04-08"
+		version: "0.0.2"
+		date: "2021-04-28"
 	}
 
 	input {
@@ -36,6 +36,10 @@ workflow ONT_VariantCalling {
 
 		File refFa
 		File refFai
+
+		String extFq = "*.fastq"
+		Int maxDepth = 1
+		Boolean gzip = false
 
 		String modelPath
 
@@ -54,14 +58,17 @@ workflow ONT_VariantCalling {
 	call utilities.findFiles as FINDFILES {
 		input :
 			path = fastqPath,
-			regexpName = "*.fastq",
-			maxDepth = 1
+			regexpName = extFq,
+			maxDepth = maxDepth
 	}
+
+	String extConc = if gzip then ".fastq.gz" else ".fastq"
 
 	call utilities.concatenateFiles as CONCATENATEFILES {
 		input :
 			in = FINDFILES.files,
-			name = sampleName + ".fastq",
+			name = sampleName + extConc,
+			gzip = gzip,
 			outputPath = outputPath + "/fastq_concatenate/"
 	}
 

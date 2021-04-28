@@ -5,6 +5,9 @@
 	"ONT_VariantCalling.modelPath": "String",
 	"ONT_VariantCalling.outputPath": "String",
 
+	"ONT_VariantCalling.extFq" = "*.fastq",
+	"ONT_VariantCalling.maxDepth" = 1,
+	"ONT_VariantCalling.gzip" = false,
 	"ONT_VariantCalling.qual": 748,
 	"ONT_VariantCalling.bedRegions": "File? (optional)",
 	"ONT_VariantCalling.name": "String? (optional)",
