@@ -14,7 +14,7 @@
 			<td rowspan="10">Utilities</td>
 			<td rowspan="10">NA</td>
 			<td>findFiles</td>
-			<td>0.0.1</td>
+			<td>0.0.2</td>
 		</tr>
 		<tr>
 			<td>convertBedToIntervals</td>

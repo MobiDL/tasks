@@ -20,8 +20,8 @@ task findFiles {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-07-24"
+		version: "0.0.2"
+		date: "2021-04-28"
 	}
 
 	input {
@@ -36,9 +36,9 @@ task findFiles {
 		Int? uid
 		Int? gid
 
-		Boolean? readable
-		Boolean? writable
-		Boolean? executable
+		Boolean readable = false
+		Boolean writable = false
+		Boolean executable = false
 
 		Int threads = 1
 		Int memoryByThreads = 768
@@ -54,24 +54,23 @@ task findFiles {
 	String regexpNameOpt = if defined(regexpName) then "-name \"~{regexpName}\" " else ""
 	String regexpPathOpt = if defined(regexpPath) then "-path \"~{regexpPath}\" " else ""
 
-	String maxDepthOpt = if defined(maxDepth) then "-maxdepth ~{maxDepth} " else ""
-	String minDepthOpt = if defined(minDepth) then "-mindepth ~{minDepth} " else ""
-
-	String uidOpt = if defined(uid) then "-uid ~{uid} " else ""
-	String gidOpt = if defined(gid) then "-gid ~{gid} " else ""
-
-	String readableOpt = if (defined(readable) && readable) then "-readable " else ""
-	String writableOpt = if (defined(writable) && writable) then "-writable " else ""
-	String executableOpt = if (defined(executable) && executable) then "-executable " else ""
-
 	command <<<
 
-		find ~{path} ~{maxDepthOpt}~{minDepthOpt}~{uidOpt}~{gidOpt}~{readableOpt}~{writableOpt}~{executableOpt}~{regexpPathOpt}~{regexpNameOpt}-fprint files.txt
+		find ~{path} \
+			~{default="" "-maxdepth " + maxDepth} \
+			~{default="" "-mindepth " + minDepth} \
+			~{default="" "-uid " + uid} \
+			~{default="" "-gid " + gid} \
+			~{true="-readable" false="" readable} \
+			~{true="-writable" false="" writable} \
+			~{true="-executable" false="" executable} \
+			~{regexpPathOpt} \
+			~{regexpNameOpt}
 
 	>>>
 
 	output {
-		Array[File] files = read_lines("files.txt")
+		Array[File] files = read_lines(stdout())
 	}
 
 	runtime {
