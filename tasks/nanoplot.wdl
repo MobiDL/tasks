@@ -53,7 +53,7 @@ task get_version {
 
 	parameter_meta {
 		path_exe: {
-			description: 'Path used as executable [default: "mpa"]',
+			description: 'Path used as executable [default: "NanoPlot"]',
 			category: 'System'
 		}
 		threads: {
@@ -127,7 +127,7 @@ task nanoplot_summary {
 
 	parameter_meta {
 		path_exe: {
-			description: 'Path used as executable [default: "mpa"]',
+			description: 'Path used as executable [default: "NanoPlot"]',
 			category: 'System'
 		}
 		outputPath: {
@@ -221,7 +221,7 @@ task nanoplot_fastq {
 
 	parameter_meta {
 		path_exe: {
-			description: 'Path used as executable [default: "mpa"]',
+			description: 'Path used as executable [default: "NanoPlot"]',
 			category: 'System'
 		}
 		outputPath: {
