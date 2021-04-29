@@ -96,14 +96,14 @@ task sedReplace {
 		String? memory
 	}
 
-	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
-
 	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
 	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
 	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
 	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
 	command <<<
 
