@@ -11,8 +11,8 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td rowspan="10">Utilities</td>
-			<td rowspan="10">NA</td>
+			<td rowspan="11">Utilities</td>
+			<td rowspan="11">NA</td>
 			<td>findFiles</td>
 			<td>0.0.2</td>
 		</tr>
@@ -50,6 +50,10 @@
 		</tr>
 		<tr>
 			<td>bed2Array</td>
+			<td>0.0.1</td>
+		</tr>
+		<tr>
+			<td>bedPrimer2woutPrimer</td>
 			<td>0.0.1</td>
 		</tr>
 		<tr>

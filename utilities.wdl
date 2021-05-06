@@ -1048,3 +1048,58 @@ task bed2Array {
 		}
 	}
 }
+
+task bedPrimer2woutPrimer {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2021-04-06"
+	}
+
+	input {
+		File bed
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	command <<<
+		awk 'BEGIN{OFS="\t"}{print $1,$7,$8,$4,$5,$6}' ~{bed}
+	>>>
+
+	output {
+		File bedWoutPrimer = stdout()
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		bed: {
+			description: 'Path to the input bed',
+			category: 'Required'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
