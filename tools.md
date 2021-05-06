@@ -124,7 +124,7 @@
 			<td rowspan="3">Cutadapt</td>
 			<td rowspan="3">2.10</td>
 			<td>adaptersTrimming</td>
-			<td>0.0.1</td>
+			<td>0.0.2</td>
 		</tr>
 		<tr>
 			<td>qualityTrimming</td>

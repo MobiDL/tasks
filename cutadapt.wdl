@@ -76,8 +76,8 @@ task adaptersTrimming {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-09-24"
+		version: "0.0.2"
+		date: "2021-05-06"
 	}
 
 	input {
@@ -87,7 +87,7 @@ task adaptersTrimming {
 		String? outputPath
 		String? name
 		String suffix = ".adaptersTrim"
-		String subString = "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"
+		String subString = ".(fastq|fq)(.gz)?"
 		String subStringReplace = ""
 
 		String type = "a"
