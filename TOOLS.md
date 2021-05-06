@@ -323,8 +323,8 @@
 			<td>0.0.2</td>
 		</tr>
 		<tr>
-			<td rowspan="11">Samtools</td>
-			<td rowspan="11">1.10</td>
+			<td rowspan="12">Samtools</td>
+			<td rowspan="12">1.10</td>
 			<td>bedcov</td>
 			<td>0.0.1</td>
 		</tr>
@@ -366,6 +366,10 @@
 		</tr>
 		<tr>
 			<td>merge</td>
+			<td>0.0.1</td>
+		</tr>
+		<tr>
+			<td>depth</td>
 			<td>0.0.1</td>
 		</tr>
 		<tr>

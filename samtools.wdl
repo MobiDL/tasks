@@ -1267,3 +1267,172 @@ task merge {
 		}
 	}
 }
+
+task depth {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2021-05-06"
+	}
+
+	input {
+		String path_exe = "samtools"
+
+		File in
+		File idx
+		String? outputPath
+		String? name
+		String subString = ".bam"
+		String subStringReplace = ""
+		String ext = ".depth.txt"
+
+		Boolean includeZero = false
+		Boolean includeAll = false
+
+		File? bed
+		Boolean header = false
+
+		Int minReadLen = 0
+		Int maxDepth = 8000
+		Int baseQualityMin = 0
+		Int mappingQualityMin = 0
+		Array[Int] includeFlag = [0]
+		Array[String] excludeFlag = ["UNMAP","SECONDARY","QCFAIL","DUP"]
+
+		File? refFasta
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} depth \
+			~{true="-a " false ="" includeZero} \
+			~{true="-aa " false ="" includeAll} \
+			~{default="" "-b " bed} \
+			~{true="-H " false="" header} \
+			-l ~{minReadLen} \
+			-d ~{maxDepth} \
+			-q ~{baseQualityMin} \
+			-Q ~{mappingQualityMin} \
+			-g ~{default="" sep="," includeFlag} \
+			-G ~{default="" sep="," excludeFlag} \
+			~{default="" "--reference " refFasta} \
+			-o ~{outputFile} \
+			-X ~{idx} \
+			~{in}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "samtools"]',
+			category: 'System'
+		}
+		in: {
+			description: "File used as input",
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Output name',
+			category: 'Output path/name option'
+		}
+		subString: {
+			description: 'Substring to edit from input file to create output [default: ".bam"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'Substring used to edit input file [default: ""]',
+			category: 'Output path/name option'
+		}
+		ext: {
+			description: 'Specify output extension [default: ".depth.txt"]',
+			category: 'Tool option'
+		}
+		includeZero: {
+			description: 'Output all positions (including zero depth) [default: false]',
+			category: 'Tool option'
+		}
+		includeAll: {
+			description: 'Output absolutely all positions, including unused ref. sequences [default: false]',
+			category: 'Tool option'
+		}
+		bed: {
+			description: 'List of positions or regions',
+			category: 'Tool option'
+		}
+		header: {
+			description: 'Print a file header [default: false]',
+			category: ''
+		}
+		minReadLen: {
+			description: 'Read length threshold (ignore reads shorter than <int>) [default: 0]',
+			category: 'Tool option'
+		}
+		maxDepth: {
+			description: 'Maximum coverage depth . If 0, depth is set to the maximum. [default: 8000]',
+			category: 'Tool option'
+		}
+		baseQualityMin: {
+			description: 'Base quality threshold [default: 0]',
+			category: 'Tool option'
+		}
+		mappingQualityMin: {
+			description: 'Mapping quality threshold [default: 0]',
+			category: 'Tool option'
+		}
+		includeFlag: {
+			description: 'Include reads that have any of the specified flags set [default: 0]',
+			category: 'Tool option'
+		}
+		excludeFlag: {
+			description: 'Filter out reads that have any of the specified flags set [default: UNMAP,SECONDARY,QCFAIL,DUP]',
+			category: 'Tool option'
+		}
+		refFasta: {
+			description: 'Reference sequence FASTA FILE',
+			category: 'Tool option'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
