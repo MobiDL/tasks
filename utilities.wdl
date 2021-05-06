@@ -1103,3 +1103,88 @@ task bedPrimer2woutPrimer {
 		}
 	}
 }
+
+task getColumn {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2021-04-06"
+	}
+
+	input {
+		File file
+
+		String ofs = "\\t"
+		String fs = "\\t"
+		Array[Int] column = [1]
+		String? skip
+		Boolean uniq = false
+
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	command <<<
+		awk -v re='~{default="\\!." skip}' 'BEGIN{FS="~{fs}";OFS="~{ofs}"}{
+			if ($0 ~ re) { next };
+			print $~{sep=",$" column};
+		}' ~{file} ~{true="| uniq" false="" uniq}
+	>>>
+
+	output {
+		Array[String] columns = read_lines(stdout())
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		file: {
+			description: 'Path to the input bed',
+			category: 'Required'
+		}
+		ofs: {
+			description: 'Output field separator [default: tabulation (\\t)]',
+			category: 'Tool option'
+		}
+		ofs: {
+			description: 'Field separator [default: tabulation (\\t)]',
+			category: 'Tool option'
+		}
+		column: {
+			description: 'Column(s) to get [default: 1]',
+			category: 'Tool option'
+		}
+		skip: {
+			description: 'Skip lines with this regexp [default: none]',
+			category: 'Tool option'
+		}
+		uniq: {
+			description: 'Get uniq value only [default: false]',
+			category: 'Tool option'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}

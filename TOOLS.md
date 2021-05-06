@@ -57,6 +57,10 @@
 			<td>0.0.1</td>
 		</tr>
 		<tr>
+			<td>getColumn</td>
+			<td>0.0.1</td>
+		</tr>
+		<tr>
 			<td rowspan="3">bedtools</td>
 			<td rowspan="3">v2.29.2</td>
 			<td>intersect</td>
