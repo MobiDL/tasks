@@ -11,8 +11,8 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td rowspan="11">Utilities</td>
-			<td rowspan="11">NA</td>
+			<td rowspan="12">Utilities</td>
+			<td rowspan="12">NA</td>
 			<td>findFiles</td>
 			<td>0.0.2</td>
 		</tr>
