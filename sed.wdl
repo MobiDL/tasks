@@ -202,10 +202,6 @@ task getExpressionFromString {
 
 	command <<<
 
-		if [[ ! -d $(dirname ~{outputFile}) ]]; then
-			mkdir -p $(dirname ~{outputFile})
-		fi
-
 		~{path_exe} 's/~{regexp}/\1/' <<< ~{in}
 
 	>>>
