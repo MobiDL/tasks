@@ -75,7 +75,7 @@ task compress {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
+		version: "0.0.2"
 		date: "2020-12-03"
 	}
 
@@ -116,8 +116,8 @@ task compress {
 			--stdout \
 			~{optIdx} \
 			--compress-level ~{levelCompression} \
-			~{in} \
-			--threads ~{threads} > ~{outputFile}
+			--threads ~{threads} \
+			~{in} > ~{outputFile}
 
 	>>>
 
@@ -179,7 +179,7 @@ task decompress {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
+		version: "0.0.2"
 		date: "2020-12-03"
 	}
 
@@ -214,8 +214,8 @@ task decompress {
 		~{path_exe} \
 			--decompress \
 			--stdout \
-			~{in} \
-			--threads ~{threads} > ~{outputFile}
+			--threads ~{threads} \
+			~{in} > ~{outputFile}
 
 	>>>
 
