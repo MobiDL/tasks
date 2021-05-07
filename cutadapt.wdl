@@ -378,8 +378,8 @@ task hardTrimming {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-09-25"
+		version: "0.0.2"
+		date: "2021-05-07"
 	}
 
 	input {
@@ -396,6 +396,9 @@ task hardTrimming {
 		Int hardTrimEnd = 0
 
 		Int? finalLength
+
+		Boolean minimalReport = false
+		Boolean lowComp = false
 
 		Int threads = 1
 		Int memoryByThreads = 768
