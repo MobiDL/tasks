@@ -178,7 +178,7 @@ task getExpressionFromString {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
+		version: "0.0.2"
 		date: "2021-05-07"
 	}
 
@@ -187,7 +187,7 @@ task getExpressionFromString {
 
 		String in
 
-		String regexp = ".*\.\(.*\)"
+		String regexp = ".*\\.\\(.*\\)"
 
 		Int threads = 1
 		Int memoryByThreads = 768

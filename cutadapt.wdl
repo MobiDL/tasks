@@ -242,7 +242,7 @@ task qualityTrimming {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
+		version: "0.0.2"
 		date: "2020-09-25"
 	}
 
@@ -252,9 +252,8 @@ task qualityTrimming {
 		File in
 		String? outputPath
 		String? name
-		String suffix = ".qualityTrim"
 		String subString = "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"
-		String subStringReplace = ""
+		String subStringReplace = ".qualityTrim.fastq.gz"
 
 		Int qualityTrim3 = 30
 		Int? qualityTrim5
@@ -276,8 +275,8 @@ task qualityTrimming {
 	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
-	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.~{ext}" else "~{baseName}~{suffix}.~{ext}"
+	String baseName = if defined(name) then "~{name}~{subStringReplace}" else sub(basename(in),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 	String qualityTrim = if biColorChem then "~{qualityTrim3}" else if defined(qualityTrim5) then "~{qualityTrim5},~{qualityTrim3}" else "~{qualityTrim3}"
 
 	command <<<
@@ -323,16 +322,12 @@ task qualityTrimming {
 			description: 'Input reads (format: fastq, fastq.gz)',
 			category: 'Required'
 		}
-		suffix: {
-			description: 'Suffix to add to the output [default: .qualityTrim]',
-			category: 'Output path/name option'
-		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
 			category: 'Output path/name option'
 		}
 		subStringReplace: {
-			description: 'subString replace by this string [default: ""]',
+			description: 'subString replace by this string [default: ".qualityTrim.fastq.gz"]',
 			category: 'Output path/name option'
 		}
 		qualityTrim3: {
@@ -378,7 +373,7 @@ task hardTrimming {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.2"
+		version: "0.0.3"
 		date: "2021-05-07"
 	}
 
@@ -388,9 +383,8 @@ task hardTrimming {
 		File in
 		String? outputPath
 		String? name
-		String suffix = ".hardTrim"
 		String subString = "\.(fastq|fq)(.gz)?"
-		String subStringReplace = ""
+		String subStringReplace = ".hardTrim.fastq.gz"
 
 		Int hardTrimStart = 0
 		Int hardTrimEnd = 0
@@ -411,8 +405,8 @@ task hardTrimming {
 	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
-	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.~{ext}" else "~{baseName}~{suffix}.~{ext}"
+	String baseName = if defined(name) then "~{name}~{subStringReplace}" else sub(basename(in),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
 	command <<<
 
@@ -458,16 +452,12 @@ task hardTrimming {
 			description: 'Input reads (format: fastq, fastq.gz)',
 			category: 'Required'
 		}
-		suffix: {
-			description: 'Suffix to add to the output [default: .qualityTrim]',
-			category: 'Output path/name option'
-		}
 		subString: {
 			description: 'Extension to remove from the input file [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
 			category: 'Output path/name option'
 		}
 		subStringReplace: {
-			description: 'subString replace by this string [default: ""]',
+			description: 'subString replace by this string [default: ".qualityTrim.fastq.gz"]',
 			category: 'Output path/name option'
 		}
 		hardTrimStart: {
