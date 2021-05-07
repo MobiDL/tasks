@@ -381,9 +381,13 @@
 			<td>0.0.1</td>
 		</tr>
 		<tr>
-			<td>Sed</td>
-			<td>4.8</td>
+			<td rowspan="2">Sed</td>
+			<td rowspan="2">4.8</td>
 			<td>sedReplace</td>
+			<td>0.0.1</td>
+		</tr>
+		<tr>
+			<td>getExpressionFromString</td>
 			<td>0.0.1</td>
 		</tr>
 		<tr>
