@@ -1206,3 +1206,83 @@ task getColumn {
 		}
 	}
 }
+
+task filterBEDOnName {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2021-05-10"
+	}
+
+	input {
+		File in
+
+		Array[String] names
+		Int? nbCol
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	command <<<
+		python <<CODE
+		retained_regions = ["~{sep='","' names}"]
+		nb_col = ~{default="None" nbCol}
+
+		with open("~{in}") as FH_in:
+			for line in FH_in:
+				if line.startswith("browser ") or line.startswith("track ") or line.startswith("#"):
+					print(line)
+				else:
+					fields = [field.strip() for field in line.split("\t")]
+					if fields[3] in retained_regions:
+						if nb_col is not None:
+							line = "\t".join(fields[:nb_col]) + "\n"
+						print(line)
+		CODE
+	>>>
+
+	output {
+		File columns = stdout()
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		in: {
+			description: 'Path to the input file',
+			category: 'Required'
+		}
+		names: {
+			description: 'List of names of the retained regions.',
+			category: 'Required'
+		}
+		nbCol: {
+			description: 'Number of columns in output.',
+			category: 'Tool Option'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}

@@ -11,8 +11,8 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td rowspan="12">Utilities</td>
-			<td rowspan="12">NA</td>
+			<td rowspan="13">Utilities</td>
+			<td rowspan="13">NA</td>
 			<td>findFiles</td>
 			<td>0.0.2</td>
 		</tr>
@@ -59,6 +59,10 @@
 		<tr>
 			<td>getColumn</td>
 			<td>0.0.2</td>
+		</tr>
+		<tr>
+			<td>filterBEDOnName</td>
+			<td>0.0.1</td>
 		</tr>
 		<tr>
 			<td rowspan="3">bedtools</td>
