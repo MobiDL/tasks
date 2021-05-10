@@ -1143,7 +1143,7 @@ task getColumn {
 			if ($~{default="0" columnSkip} ~ reskip) { next };
 			if ($~{default="0" columnKept} ~ rekept) { print $~{sep=",$" column}; };
 
-		}' ~{file} ~{true="| uniq" false="" uniq}
+		}' ~{in} ~{true="| uniq" false="" uniq}
 	>>>
 
 	output {
