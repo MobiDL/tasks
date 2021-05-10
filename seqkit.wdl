@@ -75,8 +75,8 @@ task seq_filter {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2021-04-29"
+		version: "0.0.2"
+		date: "2021-05-10"
 	}
 
 	input {
@@ -88,10 +88,10 @@ task seq_filter {
 		String subString = ".fastq"
 		String subStringReplace = ".filter.fastq"
 
-		Int maxLen = -1
-		Int maxQual = -1
-		Int minLen = -1
-		Int minQual = -1
+		Int? maxLen
+		Int? maxQual
+		Int? minLen
+		Int? minQual
 
 		String idRegexp = "^(\\S+)\\s?"
 		String seqType = "auto"
@@ -117,10 +117,10 @@ task seq_filter {
 		fi
 
 		~{path_exe} seq \
-			--max-len ~{maxLen} \
-			--max-qual ~{maxQual} \
-			--min-len ~{minLen} \
-			--min-qual ~{minQual} \
+			--max-len ~{default="-1" maxLen} \
+			--max-qual ~{default="-1" maxQual} \
+			--min-len ~{default="-1" minLen} \
+			--min-qual ~{default="-1" minQual} \
 			--out-file ~{outputFile} \
 			--threads ~{threads} \
 			~{in}
@@ -162,19 +162,19 @@ task seq_filter {
 			category: 'Output path/name option'
 		}
 		maxLen: {
-			description: 'Only print sequences shorter than the maximum length (-1 for no limit) [default: -1]',
+			description: 'Only print sequences shorter than the maximum length (-1 for no limit)',
 			category: 'Option filter'
 		}
 		maxQual: {
-			description: 'Only print sequences with average quality less than this limit (-1 for no limit) [default: -1]',
+			description: 'Only print sequences with average quality less than this limit (-1 for no limit)',
 			category: 'Option filter'
 		}
 		minLen: {
-			description: 'Only print sequences longer than the minimum length (-1 for no limit) [default: -1]',
+			description: 'Only print sequences longer than the minimum length (-1 for no limit)',
 			category: 'Option filter'
 		}
 		minQual: {
-			description: 'Only print sequences with average quality greater or equal than this limit (-1 for no limit) [default: -1]',
+			description: 'Only print sequences with average quality greater or equal than this limit (-1 for no limit)',
 			category: 'Option filter'
 		}
 		idRegexp: {
