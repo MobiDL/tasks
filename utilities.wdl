@@ -1108,18 +1108,22 @@ task getColumn {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2021-04-06"
+		version: "0.0.2"
+		date: "2021-05-10"
 	}
 
 	input {
-		File file
+		File in
 
 		String ofs = "\\t"
 		String fs = "\\t"
 		Array[Int] column = [1]
-		String? skip
 		Boolean uniq = false
+
+		String? reSkip
+		String? reKept
+		Int? columnSkip
+		Int? columnKept
 
 
 		Int threads = 1
@@ -1134,9 +1138,11 @@ task getColumn {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	command <<<
-		awk -v re='~{default="\\!." skip}' 'BEGIN{FS="~{fs}";OFS="~{ofs}"}{
-			if ($0 ~ re) { next };
-			print $~{sep=",$" column};
+		awk -v reskip='~{default="\\!." reSkip}' -v rekept='~{default="." reKept}' \
+			'BEGIN{FS="~{fs}";OFS="~{ofs}"}{
+			if ($~{default="0" columnSkip} ~ reskip) { next };
+			if ($~{default="0" columnKept} ~ rekept) { print $~{sep=",$" column}; };
+
 		}' ~{file} ~{true="| uniq" false="" uniq}
 	>>>
 
@@ -1150,8 +1156,8 @@ task getColumn {
 	}
 
 	parameter_meta {
-		file: {
-			description: 'Path to the input bed',
+		in: {
+			description: 'Path to the input file',
 			category: 'Required'
 		}
 		ofs: {
@@ -1166,8 +1172,20 @@ task getColumn {
 			description: 'Column(s) to get [default: 1]',
 			category: 'Tool option'
 		}
-		skip: {
-			description: 'Skip lines with this regexp [default: none]',
+		reSkip: {
+			description: 'Skip lines with this regexp on columnSkip [default: none]',
+			category: 'Tool option'
+		}
+		reKept: {
+			description: 'Kept only lines with this regexp on columnKept [default: all]',
+			category: 'Tool option'
+		}
+		columnSkip: {
+			description: 'Column where regexp reSkip is tested [default: 0 - i.E. test on full line]',
+			category: 'Tool option'
+		}
+		columnKept: {
+			description: 'Column where regexp reKept is tested [default: 0 - i.E. test on full line]',
 			category: 'Tool option'
 		}
 		uniq: {
