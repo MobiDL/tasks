@@ -394,7 +394,7 @@
 			<td>SeqKit</td>
 			<td>0.16.0</td>
 			<td>seq_filter</td>
-			<td>0.0.2</td>
+			<td>0.0.1</td>
 		</tr>
 		<tr>
 			<td>snpEff</td>
@@ -426,7 +426,7 @@
 		</tr>
 		<tr>
 			<td>teststrandbias</td>
-			<td>0.0.1</td>
+			<td>0.0.2</td>
 		</tr>
 		<tr>
 			<td>var2vcf_valid</td>

@@ -443,21 +443,18 @@ task teststrandbias {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-10-01"
+		version: "0.0.2"
+		date: "2021-05-10"
 	}
 
 	input {
 		String path_exe = "teststrandbias.R"
 
 		File in
-		File index
 		String? outputPath
 		String? name
-		String ext = ".txt"
-		String suffix = ".strandbias"
 		String subString = ".txt"
-		String subStringReplace = ""
+		String subStringReplace = ".strandbias.txt"
 
 		Int threads = 1
 		Int memoryByThreads = 768
@@ -471,7 +468,7 @@ task teststrandbias {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{ext}" else "~{baseName}~{suffix}~{ext}"
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
 	command <<<
 
@@ -506,19 +503,15 @@ task teststrandbias {
 			category: 'Output path/name option'
 		}
 		in: {
-			description: 'Input reads (format: fastq, fastq.gz)',
+			description: 'Output of vardict-java.',
 			category: 'Required'
 		}
-		suffix: {
-			description: 'Suffix to add to the output [default: .adaptersTrim]',
-			category: 'Output path/name option'
-		}
 		subString: {
-			description: 'Extension to remove from the input file [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
+			description: 'Extension to remove from the input file [default: ".txt"]',
 			category: 'Output path/name option'
 		}
 		subStringReplace: {
-			description: 'subString replace by this string [default: ""]',
+			description: 'subString replace by this string [default: ".strandbias.txt"]',
 			category: 'Output path/name option'
 		}
 		threads: {
