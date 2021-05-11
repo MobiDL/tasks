@@ -371,7 +371,7 @@ task splitBAMByRG {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
+		version: "0.0.2"
 		date: "2021-05-11"
 	}
 
@@ -379,7 +379,7 @@ task splitBAMByRG {
 		String path_exe = "splitBAMByRG.py"
 
 		File in
-		File bed
+		File readGroup
 		String? outputPath
 		String? name
 		String subString = ".bam"
@@ -413,7 +413,7 @@ task splitBAMByRG {
 			~{true="--remove-RG" false="" remove} \
 			--RG-tag ~{tag} \
 			--input-aln ~{in} \
-			--input-panel ~{bed} \
+			--input-design ~{readGroup} \
 			--output-pattern ~{outputFile}
 
 	>>>
@@ -444,8 +444,8 @@ task splitBAMByRG {
 			description: 'Alignement file used as input (bam).',
 			category: 'Required'
 		}
-		bed: {
-			description: 'Bed file with panel.',
+		readGroup: {
+			description: 'The path to the file describing RG in each new group (format: TSV).',
 			category: 'Required'
 		}
 		subString: {
