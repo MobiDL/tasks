@@ -533,8 +533,8 @@ task var2vcf_valid {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-10-02"
+		version: "0.0.2"
+		date: "2021-05-11"
 	}
 
 	input {
@@ -585,8 +585,6 @@ task var2vcf_valid {
 
 	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}~{ext}" else "~{baseName}~{suffix}~{ext}"
-
-	Boolean defAdaptors = defined(adaptors)
 
 	command <<<
 

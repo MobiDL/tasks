@@ -456,7 +456,7 @@
 		</tr>
 		<tr>
 			<td>var2vcf_valid</td>
-			<td>0.0.1</td>
+			<td>0.0.2</td>
 		</tr>
 		<tr>
 			<td rowspan="2">VEP</td>
