@@ -20,8 +20,8 @@ task vardictSoloAmplicons {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-10-01"
+		version: "0.0.2"
+		date: "2021-05-11"
 	}
 
 	input {
@@ -50,7 +50,7 @@ task vardictSoloAmplicons {
 		String delimiter = "\t"
 		Boolean zeroBased = false
 
-		Boolean 3primeIndels = false
+		Boolean threePrimeIndels = false
 		Int ampMaxEdges = 10
 		Float ampMinOverlapPercent = 0.95
 		Int STD = 4
@@ -132,7 +132,7 @@ task vardictSoloAmplicons {
 			-d ~{delimiter} \
 			-z ~{true="1" false="0" zeroBased} \
 			-N ~{baseName} \
-			~{true="-3" false="" 3primeIndels} \
+			~{true="-3" false="" threePrimeIndels} \
 			--amplicon ~{ampMaxEdges}:~{ampMinOverlapPercent} \
 			-A ~{STD} \
 			-B ~{minReadsSB} \
@@ -260,7 +260,7 @@ task vardictSoloAmplicons {
 			description: 'Indicate whether coordinates are zero-based, as IGV uses. [default: false]',
 			category: 'Tool option'
 		}
-		3primeIndels: {
+		threePrimeIndels: {
 			description: 'Indicate to move indels to 3-prime if alternative alignment can be achieved. [default: false]',
 			category: 'Tool option'
 		}
