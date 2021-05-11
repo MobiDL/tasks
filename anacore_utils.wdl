@@ -85,7 +85,7 @@ task nonOverlappingDesign {
 			category: 'Output path/name option'
 		}
 		in: {
-			description: 'Alignement file used as input (sam, bam or cram).',
+			description: 'Bed file with panel.',
 			category: 'Required'
 		}
 		subString: {
