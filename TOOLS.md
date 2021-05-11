@@ -404,7 +404,7 @@
 		</tr>
 		<tr>
 			<td>depth</td>
-			<td>0.0.2</td>
+			<td>0.0.3</td>
 		</tr>
 		<tr>
 			<td rowspan="2">Sed</td>

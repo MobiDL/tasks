@@ -1272,8 +1272,8 @@ task depth {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.2"
-		date: "2021-05-10"
+		version: "0.0.3"
+		date: "2021-05-11"
 	}
 
 	input {
@@ -1333,7 +1333,7 @@ task depth {
 			-Q ~{mappingQualityMin} \
 			-g ~{default="" sep="," includeFlag} \
 			-G ~{default="" sep="," excludeFlag} \
-			~{default="" "--reference " refFasta} \
+			~{default="" "--reference " + refFasta} \
 			-o ~{outputFile} \
 			-X ~{idx} \
 			~{in}
