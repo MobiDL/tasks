@@ -1272,8 +1272,8 @@ task depth {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2021-05-06"
+		version: "0.0.2"
+		date: "2021-05-10"
 	}
 
 	input {
@@ -1325,7 +1325,7 @@ task depth {
 		~{path_exe} depth \
 			~{true="-a " false ="" includeZero} \
 			~{true="-aa " false ="" includeAll} \
-			~{default="" "-b " bed} \
+			~{default="" "-b " + bed} \
 			~{true="-H " false="" header} \
 			-l ~{minReadLen} \
 			-d ~{maxDepth} \
