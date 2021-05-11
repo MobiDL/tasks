@@ -55,7 +55,7 @@ task nonOverlappingDesign {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		${path_exe} \
+		~{path_exe} \
 			~{default="" "--margin " + margin} \
 			--input-panel ~{in} \
 			--output-design ~{outputFile}
@@ -164,7 +164,7 @@ task addAmpliRG {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		${path_exe} \
+		~{path_exe} \
 			--summary-format ~{true="tsv" false="json" summaryTSV} \
 			~{true="--check-strand" false="" checkStrand} \
 			~{true="--single-mode" false="" singleEnd} \
@@ -298,7 +298,7 @@ task areaCoverage {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		${path_exe} \
+		~{path_exe} \
 			--percentile ~{percentile} \
 			--inputs-depths ~{sep=" " in} \
 			--input-regions ~{bed} \
@@ -409,7 +409,7 @@ task splitBAMByRG {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		${path_exe} \
+		~{path_exe} \
 			~{true="--remove-RG" false="" remove} \
 			--RG-tag ~{tag} \
 			--input-aln ~{in} \
@@ -519,7 +519,7 @@ task filterVCFPrimer {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		${path_exe} \
+		~{path_exe} \
 			--input-variants ~{in} \
 			--input-regions ~{bed} \
 			--input-sequences ~{refFasta} \
