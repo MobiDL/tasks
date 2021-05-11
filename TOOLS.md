@@ -65,9 +65,13 @@
 			<td>0.0.1</td>
 		</tr>
 		<tr>
-			<td rowspan="1">Anacore Utils</td>
-			<td rowspan="1">3.3.0</td>
+			<td rowspan="2">Anacore Utils</td>
+			<td rowspan="2">3.3.0</td>
 			<td>nonOverlappingDesign</td>
+			<td>0.0.1</td>
+		</tr>
+		<tr>
+			<td>addAmpliRG</td>
 			<td>0.0.1</td>
 		</tr>
 		<tr>
