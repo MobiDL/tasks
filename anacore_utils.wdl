@@ -205,36 +205,40 @@ task addAmpliRG {
 			description: 'Alignement file used as input (bam).',
 			category: 'Required'
 		}
+		bed: {
+			description: 'Bed file with panel.',
+			category: 'Required'
+		}
 		subString: {
 			description: 'Extension to remove from the input file [default: ".bam"]',
 			category: 'Output path/name option'
 		}
 		subStringReplace: {
-			description: 'subString replace by this string to create basename output files [default: ".RG."]',
+			description: 'subString replace by this string to create basename output files [default: ".RG"]',
 			category: 'Output path/name option'
 		}
 		summaryTSV: {
-			description: '[default: false]',
+			description: 'Ouput format is tsv (false for json) [default: true]',
 			category: 'Tool option'
 		}
 		checkStrand: {
-			description: '[default: false]',
+			description: 'With this option the strand of amplicons is checked. [default: false]',
 			category: 'Tool option'
 		}
 		singleEnd: {
-			description: '[default: false]',
+			description: 'Process single-end alignments. [default: false]',
 			category: 'Tool option'
 		}
 		anchorOffset: {
-			description: '[default: false]',
+			description: ' The alignment of the read can start at N nucleotids after the start of the primer. [default: 4]',
 			category: 'Tool option'
 		}
 		minZOI: {
-			description: '[default: false]',
+			description: 'The minimum cumulative length of reads pair in zone of interest.[default: 10]',
 			category: 'Tool option'
 		}
 		tag: {
-			description: '[default: false]',
+			description: 'RG tag used to store the area ID. [default: "LB"]',
 			category: 'Tool option'
 		}
 		threads: {
