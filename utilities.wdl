@@ -1251,7 +1251,7 @@ task filterBEDOnName {
 	>>>
 
 	output {
-		File columns = stdout()
+		File outputFile = stdout()
 	}
 
 	runtime {
