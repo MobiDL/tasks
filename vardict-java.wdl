@@ -20,8 +20,8 @@ task vardictSoloAmplicons {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.2"
-		date: "2021-05-11"
+		version: "0.0.3"
+		date: "2021-05-12"
 	}
 
 	input {
@@ -47,7 +47,7 @@ task vardictSoloAmplicons {
 		Int columnEnd = 3
 		Int? columnSegEnd
 		Int columnAnn = 4
-		String delimiter = "\t"
+		String delimiter = "\"\\t\""
 		Boolean zeroBased = false
 
 		Boolean threePrimeIndels = false
