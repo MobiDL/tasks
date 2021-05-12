@@ -371,8 +371,8 @@ task splitBAMByRG {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.2"
-		date: "2021-05-11"
+		version: "0.0.3"
+		date: "2021-05-12"
 	}
 
 	input {
@@ -401,7 +401,7 @@ task splitBAMByRG {
 
 	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
 	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
-	String outputGlob = sub(basename(in),"\{GP\}",".*")
+	String outputGlob = sub(outputFile,"\\{GP\\}","*")
 
 	command <<<
 
@@ -419,7 +419,7 @@ task splitBAMByRG {
 	>>>
 
 	output {
-		Array[File] outputFile = glob(outputPath + "/" + outputGlob)
+		Array[File] outputFiles = glob(outputGlob)
 	}
 
 	runtime {
