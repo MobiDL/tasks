@@ -479,22 +479,22 @@ task splitBAMByRG {
 	}
 }
 
-task filterVCFPrimer {
+task filterVCFPrimers {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2021-05-11"
+		version: "0.0.2"
+		date: "2021-05-14"
 	}
 
 	input {
-		String path_exe = "filterVCFPrimer.py"
+		String path_exe = "filterVCFPrimers.py"
 
 		File in
 		String? outputPath
 		String? name
 		String subString = ".vcf"
-		String subStringReplace = ".filterPrimer.vcf"
+		String subStringReplace = ".filterPrimers.vcf"
 
 		File bed
 		File refFasta
@@ -538,7 +538,7 @@ task filterVCFPrimer {
 
 	parameter_meta {
 		path_exe: {
-			description: 'Path used as executable [default: "filterVCFPrimer.py"]',
+			description: 'Path used as executable [default: "filterVCFPrimers.py"]',
 			category: 'System'
 		}
 		outputPath: {
@@ -550,7 +550,7 @@ task filterVCFPrimer {
 			category: 'Output path/name option'
 		}
 		in: {
-			description: 'Bed file with panel.',
+			description: 'VCF file.',
 			category: 'Required'
 		}
 		subString: {
