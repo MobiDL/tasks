@@ -452,7 +452,7 @@
 			<td rowspan="3">Vardict-java</td>
 			<td rowspan="3">1.8.2</td>
 			<td>vardictSoloAmplicons</td>
-			<td>0.0.3</td>
+			<td>0.0.4</td>
 		</tr>
 		<tr>
 			<td>teststrandbias</td>

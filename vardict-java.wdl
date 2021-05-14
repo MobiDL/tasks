@@ -20,8 +20,8 @@ task vardictSoloAmplicons {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.3"
-		date: "2021-05-12"
+		version: "0.0.4"
+		date: "2021-05-14"
 	}
 
 	input {
@@ -173,8 +173,7 @@ task vardictSoloAmplicons {
 			~{true="-p" false="" pileup} \
 			~{default="" "-Z " + downsampling} \
 			-th ~{threads} \
-			~{target} \
-			> ~{outputFile}
+			~{target} > ~{outputFile}
 
 	>>>
 
