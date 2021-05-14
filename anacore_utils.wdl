@@ -583,3 +583,122 @@ task filterVCFPrimers {
 		}
 	}
 }
+
+task addRGOnBAM {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2021-05-14"
+	}
+
+	input {
+		String path_exe = "addRGOnBAM.py"
+
+		File in
+		String? outputPath
+		String? name
+		String subString = ".bam"
+		String subStringReplace = ".addRG.bam"
+
+		String? id
+		String? center
+		String? description
+		String? date
+		String? flowOrder
+		String? keySequence
+		String? library
+		String? programs
+		String? predictedMedianInsertSize
+		String? platform
+		String? platformModel
+		String? platformUnit
+		String? sample
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(in),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} \
+			~{default="" "--id " + id} \
+			~{default="" "--cn " + center} \
+			~{default="" "--ds " + description} \
+			~{default="" "--dt " + date} \
+			~{default="" "--fo " + flowOrder} \
+			~{default="" "--ks " + keySequence} \
+			~{default="" "--lb " + library} \
+			~{default="" "--pg " + programs} \
+			~{default="" "--pi " + predictedMedianInsertSize} \
+			~{default="" "--pl " + platform} \
+			~{default="" "--pm " + platformModel} \
+			~{default="" "--pu " + platformUnit} \
+			~{default="" "--sm " + sample} \
+			--input-aln ~{in} \
+			--output-aln ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "addRGOnBAM.py"]',
+			category: 'System'
+		}
+		outputPath: {
+			description: 'Output path where files were generated. [default: pwd()]',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Name to use for output file name [default: sub(basename(in),subString,subStringReplace)]',
+			category: 'Output path/name option'
+		}
+		in: {
+			description: 'Bam file.',
+			category: 'Required'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: ".bam"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ".addRG.bam"]',
+			category: 'Output path/name option'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
