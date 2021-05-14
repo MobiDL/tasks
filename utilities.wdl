@@ -1211,8 +1211,8 @@ task filterBEDOnName {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2021-05-10"
+		version: "0.0.2"
+		date: "2021-05-14"
 	}
 
 	input {
@@ -1240,13 +1240,13 @@ task filterBEDOnName {
 		with open("~{in}") as FH_in:
 			for line in FH_in:
 				if line.startswith("browser ") or line.startswith("track ") or line.startswith("#"):
-					print(line)
+					print(line.rstrip())
 				else:
 					fields = [field.strip() for field in line.split("\t")]
 					if fields[3] in retained_regions:
 						if nb_col is not None:
-							line = "\t".join(fields[:nb_col]) + "\n"
-						print(line)
+							line = "\t".join(fields[:nb_col])
+						print(line.rstrip())
 		CODE
 	>>>
 
