@@ -65,8 +65,8 @@
 			<td>0.0.2</td>
 		</tr>
 		<tr>
-			<td rowspan="6">Anacore Utils</td>
-			<td rowspan="6">3.3.0</td>
+			<td rowspan="7">Anacore Utils</td>
+			<td rowspan="7">3.3.0</td>
 			<td>nonOverlappingDesign</td>
 			<td>0.0.1</td>
 		</tr>
@@ -89,6 +89,10 @@
 		<tr>
 			<td>addRGOnBAM</td>
 			<td>0.0.2</td>
+		</tr>
+		<tr>
+			<td>mergeVCFAmpli</td>
+			<td>0.0.1</td>
 		</tr>
 		<tr>
 			<td rowspan="3">bedtools</td>
