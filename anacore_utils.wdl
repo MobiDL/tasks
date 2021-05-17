@@ -969,3 +969,102 @@ task meltVCFSamples {
 		}
 	}
 }
+
+task fixVCallerVCF {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2021-05-17"
+	}
+
+	input {
+		String path_exe = "fixVCallerVCF.py"
+
+		File vcf
+		String? outputPath
+		String? name
+		String subString = "^([^\.]*)\..*.vcf"
+		String subStringReplace = "$1.fix.vcf"
+
+		String variantCaller = "vardict"
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(vcf),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} \
+			--variant-caller ~{variantCaller} \
+			--input-variants ~{sep=" " vcf} \
+			--output-variants ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "fixVCallerVCF.py"]',
+			category: 'System'
+		}
+		outputPath: {
+			description: 'Output path where files were generated. [default: pwd()]',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Name to use for output file name [default: sub(basename(in),subString,subStringReplace)]',
+			category: 'Output path/name option'
+		}
+		vcf: {
+			description: 'VCF files.',
+			category: 'Required'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "(.*).vcf"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: "$1.melt.vcf"]',
+			category: 'Output path/name option'
+		}
+		variantCaller: {
+			description: 'The variant caller used to produce the VCF to fix. [Default: vardict]',
+			category: 'Tool Option'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
