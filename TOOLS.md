@@ -65,8 +65,8 @@
 			<td>0.0.2</td>
 		</tr>
 		<tr>
-			<td rowspan="7">Anacore Utils</td>
-			<td rowspan="7">3.3.0</td>
+			<td rowspan="8">Anacore Utils</td>
+			<td rowspan="8">3.3.0</td>
 			<td>nonOverlappingDesign</td>
 			<td>0.0.1</td>
 		</tr>
@@ -92,6 +92,10 @@
 		</tr>
 		<tr>
 			<td>mergeVCFAmpli</td>
+			<td>0.0.1</td>
+		</tr>
+		<tr>
+			<td>meltVCFSamples</td>
 			<td>0.0.1</td>
 		</tr>
 		<tr>
