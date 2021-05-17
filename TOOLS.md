@@ -88,7 +88,7 @@
 		</tr>
 		<tr>
 			<td>addRGOnBAM</td>
-			<td>0.0.1</td>
+			<td>0.0.2</td>
 		</tr>
 		<tr>
 			<td rowspan="3">bedtools</td>

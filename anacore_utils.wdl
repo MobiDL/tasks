@@ -588,7 +588,7 @@ task addRGOnBAM {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
+		version: "0.0.2"
 		date: "2021-05-14"
 	}
 
@@ -679,6 +679,174 @@ task addRGOnBAM {
 		in: {
 			description: 'Bam file.',
 			category: 'Required'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: ".bam"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: ".addRG.bam"]',
+			category: 'Output path/name option'
+		}
+		id: {
+			description: 'Add "id" (tag : "ID") to RG.',
+			categpory: 'Tool Option'
+		}
+		center: {
+			description: 'Add "center" (tag : "CN") to RG.',
+			categpory: 'Tool Option'
+		}
+		description: {
+			description: 'Add "description" (tag : "DS") to RG.',
+			categpory: 'Tool Option'
+		}
+		date: {
+			description: 'Add "date" (tag : "DT") to RG.',
+			categpory: 'Tool Option'
+		}
+		flowOrder: {
+			description: 'Add "flowOrder" (tag : "FO") to RG.',
+			categpory: 'Tool Option'
+		}
+		keySequence: {
+			description: 'Add "keySequence" (tag : "KS") to RG.',
+			categpory: 'Tool Option'
+		}
+		library: {
+			description: 'Add "library" (tag : "LB") to RG.',
+			categpory: 'Tool Option'
+		}
+		programs: {
+			description: 'Add "programs" (tag : "PG") to RG.',
+			categpory: 'Tool Option'
+		}
+		predictedMedianInsertSize: {
+			description: 'Add "predictedMedianInsertSize" (tag : "PI") to RG.',
+			categpory: 'Tool Option'
+		}
+		platform: {
+			description: 'Add "platform" (tag : "PL") to RG.',
+			categpory: 'Tool Option'
+		}
+		platformModel: {
+			description: 'Add "platformModel" (tag : "PM") to RG.',
+			categpory: 'Tool Option'
+		}
+		platformUnit: {
+			description: 'Add "platformUnit" (tag : "PU") to RG.',
+			categpory: 'Tool Option'
+		}
+		sample: {
+			description: 'Add "sample" (tag : "SM") to RG.',
+			categpory: 'Tool Option'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
+
+task mergeVCFAmpli {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2021-05-17"
+	}
+
+	input {
+		String path_exe = "mergeVCFAmpli.py"
+
+		Array[File] vcf
+		Array[File] bam
+		Array[File] bai
+		Array[File] bed
+		String? outputPath
+		String? name
+		String subString = "^([^\.]*)\..*.vcf"
+		String subStringReplace = "$1.vcf"
+
+		String tag = "LB"
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(vcf[0]),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} \
+			--RG-tag ~{tag} \
+			--input-designs ~{sep=" " bed} \
+			--input-variants ~{sep=" " vcf} \
+			--input-aln ~{sep=" " bam} \
+			--output-variants ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "mergeVCFAmpli.py"]',
+			category: 'System'
+		}
+		outputPath: {
+			description: 'Output path where files were generated. [default: pwd()]',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Name to use for output file name [default: sub(basename(in),subString,subStringReplace)]',
+			category: 'Output path/name option'
+		}
+		vcf: {
+			description: 'VCF files.',
+			category: 'Required'
+		}
+		bam: {
+			description: 'bam files.',
+			category: 'Required'
+		}
+		bai: {
+			description: 'bai files.',
+			category: 'Required'
+		}
+		bed: {
+			description: 'bed files.',
+			category: 'Required'
+		}
+		tag: {
+			description: 'RG tag used to store the area ID. [default: "LB"]',
+			category: 'Tool option'
 		}
 		subString: {
 			description: 'Extension to remove from the input file [default: ".bam"]',
