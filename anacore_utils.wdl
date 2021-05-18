@@ -1068,3 +1068,115 @@ task fixVCallerVCF {
 		}
 	}
 }
+
+task filterVCFOnCount {
+	meta {
+		author: "Charles VAN GOETHEM"
+		email: "c-vangoethem(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2021-05-18"
+	}
+
+	input {
+		String path_exe = "filterVCFOnCount.py"
+
+		File vcf
+		String? outputPath
+		String? name
+		String subString = "^([^\.]*)(\.)?.*.vcf"
+		String subStringReplace = "$1.foc.vcf"
+
+		Float af = 0.02
+		Int depth = 120
+
+		Boolean remove = false
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(vcf),subString,subStringReplace)
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} \
+			--mode ~{true="remove" false="tag" remove} \
+			--AF-threshold ~{af} \
+			--DP-threshold ~{depth} \
+			--input-variants ~{sep=" " vcf} \
+			--output-variants ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "filterVCFOnCount.py"]',
+			category: 'System'
+		}
+		outputPath: {
+			description: 'Output path where files were generated. [default: pwd()]',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Name to use for output file name [default: sub(basename(in),subString,subStringReplace)]',
+			category: 'Output path/name option'
+		}
+		vcf: {
+			description: 'VCF files.',
+			category: 'Required'
+		}
+		subString: {
+			description: 'Extension to remove from the input file [default: "^([^\.]*)(\.)?.*.vcf"]',
+			category: 'Output path/name option'
+		}
+		subStringReplace: {
+			description: 'subString replace by this string [default: "$1.foc.vcf"]',
+			category: 'Output path/name option'
+		}
+		remove: {
+			description: 'In mode "remove" if the variant does not fit criteria it is removed from the output. [Default: false]',
+			category: 'Tool Option'
+		}
+		af: {
+			description: 'The minimum allele frequency to validate the variant. [Default: 0.02]',
+			category: 'Tool Option'
+		}
+		depth: {
+			description: 'The minimum depth in sample to validate the variant. [Default: 120]',
+			category: 'Tool Option'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}

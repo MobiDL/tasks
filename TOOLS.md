@@ -65,8 +65,8 @@
 			<td>0.0.2</td>
 		</tr>
 		<tr>
-			<td rowspan="9">Anacore Utils</td>
-			<td rowspan="9">3.3.0</td>
+			<td rowspan="10">Anacore Utils</td>
+			<td rowspan="10">3.3.0</td>
 			<td>nonOverlappingDesign</td>
 			<td>0.0.1</td>
 		</tr>
@@ -100,6 +100,10 @@
 		</tr>
 		<tr>
 			<td>fixVCallerVCF</td>
+			<td>0.0.1</td>
+		</tr>
+		<tr>
+			<td>filterVCFOnCount</td>
 			<td>0.0.1</td>
 		</tr>
 		<tr>
