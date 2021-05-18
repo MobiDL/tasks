@@ -944,7 +944,7 @@ task meltVCFSamples {
 			category: 'Required'
 		}
 		subString: {
-			description: 'Extension to remove from the input file [default: "(.*).vcf"]',
+			description: 'Extension to remove from the input file [default: "^([^\.]*)\..*.vcf"]',
 			category: 'Output path/name option'
 		}
 		subStringReplace: {
@@ -1043,11 +1043,11 @@ task fixVCallerVCF {
 			category: 'Required'
 		}
 		subString: {
-			description: 'Extension to remove from the input file [default: "(.*).vcf"]',
+			description: 'Extension to remove from the input file [default: "^([^\.]*)\..*.vcf"]',
 			category: 'Output path/name option'
 		}
 		subStringReplace: {
-			description: 'subString replace by this string [default: "$1.melt.vcf"]',
+			description: 'subString replace by this string [default: "$1.fix.vcf"]',
 			category: 'Output path/name option'
 		}
 		variantCaller: {
