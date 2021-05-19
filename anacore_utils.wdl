@@ -1115,7 +1115,7 @@ task filterVCFOnCount {
 			--mode ~{true="remove" false="tag" remove} \
 			--AF-threshold ~{af} \
 			--DP-threshold ~{depth} \
-			--input-variants ~{sep=" " vcf} \
+			--input-variants ~{vcf} \
 			--output-variants ~{outputFile}
 
 	>>>
@@ -1143,7 +1143,7 @@ task filterVCFOnCount {
 			category: 'Output path/name option'
 		}
 		vcf: {
-			description: 'VCF files.',
+			description: 'VCF file.',
 			category: 'Required'
 		}
 		subString: {
