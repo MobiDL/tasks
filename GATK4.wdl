@@ -2017,7 +2017,7 @@ task gatherVcfFiles {
 	meta {
 		author: "Charles VAN GOETHEM"
 		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.2"
+		version: "0.0.3"
 		date: "2020-12-17"
 	}
 
@@ -2027,8 +2027,8 @@ task gatherVcfFiles {
 		Array[File]+ in
 		String? outputPath
 		String? name
-		String subString = "(\.[0-9]+)?\.(vcf)$"
-		String subStringReplace = ".gather"
+		String subString = "(\.[0-9]+)?(\.[a-zA-Z_-]+)?\.(vcf)$"
+		String subStringReplace = "$2.gather.vcf"
 
 		Boolean reorder = true
 
@@ -2045,7 +2045,7 @@ task gatherVcfFiles {
 
 	String firstFile = basename(in[0])
 	String baseName = if defined(name) then name else sub(basename(firstFile),subString,subStringReplace)
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}.vcf" else "~{baseName}.vcf"
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
 
 	command <<<
 
@@ -2088,11 +2088,11 @@ task gatherVcfFiles {
 			category: 'Output path/name option'
 		}
 		subString: {
-			description: 'Substring to replace (e.g. remove extension) [default: "(\.[0-9]+)?\.vcf$"]',
+			description: 'Substring to replace (e.g. remove extension) [default: "(\.[0-9]+)?(\.[a-zA-Z_-]+)?\.(vcf)$"]',
 			category: 'Output path/name option'
 		}
 		subStringReplace: {
-			description: 'Substring used to replace (e.g. add a suffix) [default: ".gather"]',
+			description: 'Substring used to replace (e.g. add a suffix) [default: "$2.gather.vcf"]',
 			category: 'Output path/name option'
 		}
 		reorder: {

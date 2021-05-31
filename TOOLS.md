@@ -248,7 +248,7 @@
 		</tr>
 		<tr>
 			<td>GatherVcfFiles</td>
-			<td>0.0.2</td>
+			<td>0.0.3</td>
 		</tr>
 		<tr>
 			<td>LeftAlignIndels</td>
