@@ -199,6 +199,12 @@
 			<td>0.0.1</td>
 		</tr>
 		<tr>
+			<td rowspan="3">Fastp</td>
+			<td rowspan="3">v0.20.1</td>
+			<td>fastp_pe</td>
+			<td>0.0.1</td>
+		</tr>
+		<tr>
 			<td rowspan="3">FastQC</td>
 			<td rowspan="3">v0.11.9</td>
 			<td>fastqc</td>
@@ -210,12 +216,6 @@
 		</tr>
 		<tr>
 			<td>fastqcCasava</td>
-			<td>0.0.1</td>
-		</tr>
-		<tr>
-			<td rowspan="3">Fastp</td>
-			<td rowspan="3">v0.20.1</td>
-			<td>fastp</td>
 			<td>0.0.1</td>
 		</tr>
 		<tr>
