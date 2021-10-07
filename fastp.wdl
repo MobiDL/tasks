@@ -130,6 +130,8 @@ task fastp_pe {
 	output {
 		Array[File] outHTML = glob(outputPath + "/*.html")
 		Array[File] outZIP = glob(outputPath + "/*.zip")
+		File FastpR1 = "~{outputBase}.R1.fq.gz"
+		File FastpR2 = "~{outputBase}.R2.fq.gz"
 	}
 
 	runtime {
