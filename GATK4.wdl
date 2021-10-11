@@ -3080,3 +3080,98 @@ task markDuplicates {
 		}
 	}
 }
+
+task CollectInsertSizeMetrics {
+	meta {
+		author: "Olivier Ardouin"
+		email: "o-ardouin(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-10-11"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		File in
+		Float MinPct = 0.5
+		String? outputPath
+		String? name
+		String suffix = ".InsertSizeMetrics"
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")
+	String outputBase = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}" else "~{baseName}~{suffix}"
+	String outputHistogram = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}.pdf" else "~{baseName}~{suffix}.pdf"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputBase}) ]]; then
+			mkdir -p $(dirname ~{outputBase})
+		fi
+
+		~{path_exe} CollectInsertSizeMetrics \
+			--INPUT ~{in} \
+			--Histogram_FILE ~{outputHistogram} \
+			--OUTPUT ~{outputBase} \
+			--MINIMUM_PCT ~{MinPct}
+
+	>>>
+
+	output {
+		File insertSizeMetrics = "~{outputBase}"
+		File insertSizeMetricsHistogram = "~{outputHistogram}"
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'System'
+		}
+		in: {
+			description: 'BAM to process.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where bam will be generated.',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
+			category: 'Output path/name option'
+		}
+		suffix: {
+			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".InsertSizeMetrics"]',
+			category: 'Option'
+		}
+		MinPct : {
+			description: 'When generating the Histogram, discard any data categories (out of FR, TANDEM, RF) that have fewer than this percentage of overall reads. (Float; Range: 0 to 1). [default: 0.5]'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
