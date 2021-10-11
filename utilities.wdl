@@ -1286,3 +1286,223 @@ task filterBEDOnName {
 		}
 	}
 }
+
+task computePoorCoverage {
+	meta {
+		author: "Olivier ARDOUIN"
+		email: "o-ardouin(at)chu-montpellier.fr"
+		version: "0.0.2"
+		date: "2021-10-11"
+	}
+
+	input {
+		File BamFile
+		File IntervalBedFile
+		Int BedtoolsLowCoverage = 30
+		Int BedToolsSmallInterval = 20
+		String GenomeVersion = "hg19"
+
+		String? outputPath
+		String? name
+
+		String ext = ".LowCoverage.tsv"
+
+		String BedToolsExe = "bedtools"
+		String AwkExe = "awk"
+		String SortExe = "sort"
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(BamFile),"(.*)\.(sam|bam|cram)$","$1")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
+
+	command <<<
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{BedToolsExe} genomecov -ibam ~{BamFile} -bga \
+		| ~{AwkExe} -v low_coverage="~{BedtoolsLowCoverage}" '$4<low_coverage' \
+		| ~{BedToolsExe} intersect -a ~{IntervalBedFile} -b - \
+		| ~{SortExe} -k1,1 -k2,2n -k3,3n \
+		| ~{BedToolsExe} merge -c 4 -o distinct -i - \
+		| ~{AwkExe} -v small_intervall="~{BedToolsSmallInterval}" \
+		'BEGIN {OFS="\t";print "#chr","start","end","region","size bp","type","UCSC link"} {a=($3-$2+1);if(a<small_intervall) {b="SMALL_INTERVAL"} else {b="OTHER"};url="http://genome-euro.ucsc.edu/cgi-bin/hgTracks?db='~{GenomeVersion}'&position="$1":"$2-10"-"$3+10"&highlight='~{GenomeVersion}'."$1":"$2"-"$3;print $0, a, b, url}' > "~{outputFile}"
+	>>>
+
+	output {
+		File poorCoverageFile = "~{outputFile}"
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+}
+
+task computeCoverage {
+	meta {
+		author: "Olivier ARDOUIN"
+		email: "o-ardouin(at)chu-montpellier.fr"
+		version: "0.0.2"
+		date: "2021-10-11"
+	}
+
+	input {
+
+		File BedCovFile
+
+		String? outputPath
+		String? name
+
+		String ext = ".Coverage.tsv"
+
+		String AwkExe = "awk"
+		String SortExe = "sort"
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(BedCovFile),".bed","$1")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
+
+	command <<<
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{SortExe} -k1,1 -k2,2n -k3,3n ~{BedCovFile} \
+		| ~{AwkExe} 'BEGIN {OFS="\t"}{a=($3-$2+1);b=($7/a);print $1,$2,$3,$4,b,"+","+"}' \
+		> "~{outputFile}"
+	>>>
+	output {
+		File TsvCoverageFile = "~{outputFile}"
+	}
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+}
+
+task computeCoverageClamms {
+	meta {
+		author: "Olivier ARDOUIN"
+		email: "o-ardouin(at)chu-montpellier.fr"
+		version: "0.0.2"
+		date: "2021-10-11"
+	}
+
+	input {
+		File BedCovFile
+
+		String? outputPath
+		String? name
+
+		String ext = ".coverage.bed"
+
+		String AwkExe = "awk"
+		String SortExe = "sort"
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(BedCovFile),".bed","$1")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
+
+	command <<<
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{SortExe} -k1,1 -k2,2n -k3,3n ~{BedCovFile} \
+		| ~{AwkExe} '{ printf "%s\t%d\t%d\t%.6g\n", $1, $2, $3, $NF/($3-$2); }' \
+		> "~{outputFile}"
+	>>>
+	output {
+		File ClammsCoverageFile = "~{outputFile}"
+	}
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+}
+
+task BamReadByChromosomes {
+	meta {
+		author: "Olivier ARDOUIN"
+		email: "o-ardouin(at)chu-montpellier.fr"
+		version: "0.0.2"
+		date: "2021-10-11"
+	}
+
+	input {
+		File in
+
+		String? outputPath
+		String? name
+
+		String ext = ".readByChrom.tsv"
+
+		String samtoolsExe = "samtools"
+		String cutExe = "cut"
+		String uniqExe = "uniq"
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{ext}" else "~{baseName}~{ext}"
+
+	command <<<
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{samtoolsExe} view ~{in} \
+		| ~{cutExe} -f 3 \
+		| ~{uniqExe} -c \
+		> "~{outputFile}"
+	>>>
+
+	output {
+		File ReadCountByChrom = "~{outputFile}"
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+}
