@@ -2249,7 +2249,7 @@ task gatherVcfFiles {
 
 		Array[File]+ in
 		String? outputPath
-		String? name
+		String? name ### Warning if name defined and not suffixed by .vcf ou .vcf.gz ... it will crash
 		String subString = "(\.[0-9]+)?(\.[a-zA-Z_-]+)?\.(vcf)$"
 		String subStringReplace = "$2.gather.vcf"
 
@@ -3383,6 +3383,118 @@ task CollectInsertSizeMetrics {
 		}
 		MinPct : {
 			description: 'When generating the Histogram, discard any data categories (out of FR, TANDEM, RF) that have fewer than this percentage of overall reads. (Float; Range: 0 to 1). [default: 0.5]'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
+
+task CollectHsMetrics {
+	meta {
+		author: "Olivier Ardouin"
+		email: "o-ardouin(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2020-10-14"
+	}
+
+	input {
+		String path_exe = "gatk"
+
+		File in
+		String? outputPath
+		String? name
+		String suffix = ".HSMetrics.txt"
+
+		File refFasta
+		File refFai
+		File targetIntervalList
+		File? baitIntervalList
+
+		Int CoverageCap = 1000
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	File baitList = if defined(baitIntervalList) then baitIntervalList else targetIntervalList
+
+	String baseName = if defined(name) then name else sub(basename(in),"(.*)\.(sam|bam|cram)$","$1")
+	String outputFile = if defined(outputPath) then "~{outputPath}/~{baseName}~{suffix}" else "~{baseName}~{suffix}"
+
+	command <<<
+
+		if [[ ! -d $(dirname ~{outputFile}) ]]; then
+			mkdir -p $(dirname ~{outputFile})
+		fi
+
+		~{path_exe} CollectHsMetrics \
+			--INPUT ~{in} \
+			--REFERENCE_SEQUENCE ~{refFasta} \
+			--TARGET_INTERVALS ~{targetIntervalList} \
+			--BAIT_INTERVALS ~{baitList} \
+			--OUTPUT ~{outputFile} \
+			--COVERAGE_CAP ~{CoverageCap}
+
+	>>>
+
+	output {
+		File HSMetrics = "~{outputFile}"
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "gatk"]',
+			category: 'System'
+		}
+		in: {
+			description: 'BAM to process.',
+			category: 'Required'
+		}
+		outputPath: {
+			description: 'Output path where metrics will be generated.',
+			category: 'Output path/name option'
+		}
+		name: {
+			description: 'Output file base name [default: sub(basename(firstFile),subString,"")].',
+			category: 'Output path/name option'
+		}
+		suffix: {
+			description: 'Suffix to add for the output file (e.g sample.suffix.bam)[default: ".HSMetrics.txt"]',
+			category: 'Option'
+		}
+		refFasta: {
+			description: 'Fasta reference file',
+			category: 'Required'
+		}
+		targetIntervalList: {
+			description: 'target IntervalList file',
+			category: 'Required'
+		}
+		baitIntervalList: {
+			description: 'bait IntervalList file [default = targetIntervalList]',
+			category: 'Optional'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',
