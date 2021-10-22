@@ -19,70 +19,89 @@ version 1.0
 
 
 task annovarForMpa {
+  meta {
+    author: "Thomas Guignard; Olivier Ardouin (modifications)"
+    email: "t-guignard(at)chu-montpellier.fr;o-ardouin(at)chu-montpellier.fr"
+    version : "0.0.2"
+    date: "2021-10-22"
+  }
 
- File CustomXref
- File SortedVcf
- File RefAnnotateVariation
- File RefCodingChange
- File RefConvert2Annovar
- File RefRetrieveSeqFromFasta
- File RefVariantsReduction
- File TableAnnovarExe
- String WorkflowType
- String HumanDb
- String SampleID
- String OutDir
- String PerlPath
- #runtime attributes
- Int CpuHigh
- Int Memory
- #databases
- String Genome
- String Clinvar
- String Dbnsfp
- #String Spidex
- String Dbscsnv
- String GnomadExome
- String GnomadGenome
- String PopFreqMax
- String Intervar
- String SpliceAI
- String Dollar = "$"
- command <<<
-	OPERATION_SUFFIX=',f'
-	COMMA=','
-	POPFREQMAX=',${PopFreqMax}'
-  #REFGENE='refGeneWithVer'
-	if [ ${Genome} == 'hg38' ];then
-		OPERATION_SUFFIX=''
-		COMMA=''
-		POPFREQMAX=''
-		#REFGENE='refGene'
-	fi
-  "${PerlPath}" "${TableAnnovarExe}" \
-  "${SortedVcf}" \
-  "${HumanDb}" \
-  -thread "${CpuHigh}" \
-  -buildver "${Genome}" \
-  -out "${OutDir}${SampleID}/${WorkflowType}/${SampleID}" \
-  -remove \
-	-intronhgvs 80 \
-  -protocol refGeneWithVer,refGeneWithVer,"${Clinvar}","${Dbnsfp}","${Dbscsnv}","${GnomadExome}","${GnomadGenome}","${Intervar}",regsnpintron,"${SpliceAI}""${Dollar}{POPFREQMAX}" \
-	-operation gx,g,f,f,f,f,f,f,f,f"${Dollar}{OPERATION_SUFFIX}" \
-	-nastring . \
-	-vcfinput \
-	-otherinfo \
-	-arg '-splicing 5','-hgvs',,,,,,,,"${Dollar}{COMMA}" \
-  -xref "${CustomXref}"
+  input {
+    File CustomXref
+    File vcf
+    File RefAnnotateVariation
+    File RefCodingChange
+    File RefConvert2Annovar
+    File RefRetrieveSeqFromFasta
+    File RefVariantsReduction
+    File TableAnnovarExe
+    String HumanDb
+    String outputName
+    String OutDir = "/."
+    String perlExe = "perl"
+    #databases
+    String Genome
+    String Clinvar
+    String Dbnsfp
+    #String Spidex
+    String Dbscsnv
+    String GnomadExome
+    String GnomadGenome
+    String PopFreqMax
+    String Intervar
+    String SpliceAI
+    ## run time
+    Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+  }
+
+  String Dollar = "$"
+
+  String outputName = if defined(name) then name else sub(basename(in),".vcf", "")
+	String outputFile = if defined(outputPath) then outputPath + "/" + outputName else outputName
+
+  String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+  Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+  Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+  Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+  Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+  command <<<
+    OPERATION_SUFFIX=',f'
+    COMMA=','
+    POPFREQMAX=',${PopFreqMax}'
+    #REFGENE='refGeneWithVer'
+    if [ ${Genome} == 'hg38' ];then
+    OPERATION_SUFFIX=''
+      COMMA=''
+      POPFREQMAX=''
+      #REFGENE='refGene'
+      fi
+      "~{perlExe}" "${TableAnnovarExe}" \
+        "~{vcf}" \
+        "${HumanDb}" \
+        -thread "~{threads}" \
+        -buildver "${Genome}" \
+        -out "~{outputFile}" \
+        -remove \
+        -intronhgvs 80 \
+        -protocol refGeneWithVer,refGeneWithVer,"${Clinvar}","${Dbnsfp}","${Dbscsnv}","${GnomadExome}","${GnomadGenome}","${Intervar}",regsnpintron,"${SpliceAI}""${Dollar}{POPFREQMAX}" \
+        -operation gx,g,f,f,f,f,f,f,f,f"${Dollar}{OPERATION_SUFFIX}" \
+        -nastring . \
+        -vcfinput \
+        -otherinfo \
+        -arg '-splicing 5','-hgvs',,,,,,,,"${Dollar}{COMMA}" \
+        -xref "${CustomXref}"
  >>>
 
  output {
-  File outAnnotationVcf = "${OutDir}${SampleID}/${WorkflowType}/${SampleID}.${Genome}_multianno.vcf"
-  File outAnnotationAvinput = "${OutDir}${SampleID}/${WorkflowType}/${SampleID}.avinput"
-  File outAnnotationTxt = "${OutDir}${SampleID}/${WorkflowType}/${SampleID}.${Genome}_multianno.txt"
+  File outAnnotationVcf = "~{outputFile}.${Genome}_multianno.vcf"
+  File outAnnotationAvinput = "~{outputFile}.avinput"
+  File outAnnotationTxt = "~{outputFile}.${Genome}_multianno.txt"
  }
  runtime {
-  cpu: "${CpuHigh}"
-  requested_memory_mb_per_core: "${Memory}"
+   cpu: "~{threads}"
+   requested_memory_mb_per_core: "${memoryByThreadsMb}"
  }
 }
