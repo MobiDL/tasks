@@ -27,38 +27,54 @@ task annovarForMpa {
   }
 
   input {
-    File CustomXref
+    ## Sample spécific values
     File vcf
-    File RefAnnotateVariation
-    File RefCodingChange
-    File RefConvert2Annovar
-    File RefRetrieveSeqFromFasta
-    File RefVariantsReduction
-    File TableAnnovarExe
-    String HumanDb
-    String outputName
-    String OutDir = "/."
+    String? name
+    String outputPath = "/."
+
+    ## Path and Exe
     String perlExe = "perl"
-    #databases
-    String Genome
-    String Clinvar
-    String Dbnsfp
-    #String Spidex
-    String Dbscsnv
-    String GnomadExome
-    String GnomadGenome
-    String PopFreqMax
-    String Intervar
-    String SpliceAI
+
+    ## ANNOVAR Paths
+    String AnnovarPath =  "/mnt/Bioinfo/Softs/src/Annovar/annovar"
+
+    File? TableAnnovarExe
+    File? RefRetrieveSeqFromFastaExe
+    File? RefAnnotateVariationExe
+    File? RefVariantsReductionExe
+    File? RefCodingChangeExe
+    File? RefConvert2AnnovarExe
+
+    # Annovar databases
+    File CustomXref = "/mnt/Bioinfo/Softs/src/Annovar/humandb/gene_customfullxref_20200630.txt"
+    String HumanDb = "/mnt/Bioinfo/Softs/src/Annovar/humandb"
+    String Genome = "hg19"
+    String Clinvar = "clinvar_latest"
+    String Dbnsfp = "dbnsfp41a"
+
+    String Dbscsnv = "dbscsnv11"
+    String GnomadExome = "gnomad_exome"
+    String GnomadGenome = "gnomad_genome"
+    String PopFreqMax = "popfreq_max_20150413"
+    String Intervar = "intervar_20180118"
+    String SpliceAI = "spliceai_filtered"
+
     ## run time
     Int threads = 1
 		Int memoryByThreads = 768
 		String? memory
   }
 
+  File TableAnnovar = if defined(TableAnnovarExe) then TableAnnovarExe  else AnnovarPath + "/table_annovar.pl"
+  File RefRetrieveSeqFromFasta = if defined(RefRetrieveSeqFromFastaExe) then RefRetrieveSeqFromFastaExe else AnnovarPath + "/retrieve_seq_from_fasta.pl"
+  File RefAnnotateVariation = if defined(RefAnnotateVariationExe) then RefAnnotateVariationExe else AnnovarPath + "/annotate_variation.pl"
+  File RefVariantsReduction = if defined(RefVariantsReductionExe) then RefVariantsReductionExe else AnnovarPath + "/variants_reduction.pl"
+  File RefCodingChange = if defined(RefCodingChangeExe) then RefCodingChangeExe else AnnovarPath + "/coding_change.pl"
+  File RefConvert2Annovar = if defined(RefConvert2AnnovarExe) then RefConvert2AnnovarExe else AnnovarPath + "/convert2annovar.pl"
+
   String Dollar = "$"
 
-  String outputName = if defined(name) then name else sub(basename(in),".vcf", "")
+  String outputName = if defined(name) then name else sub(basename(vcf),".vcf", "")
 	String outputFile = if defined(outputPath) then outputPath + "/" + outputName else outputName
 
   String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
@@ -70,38 +86,38 @@ task annovarForMpa {
   command <<<
     OPERATION_SUFFIX=',f'
     COMMA=','
-    POPFREQMAX=',${PopFreqMax}'
+    POPFREQMAX=',~{PopFreqMax}'
     #REFGENE='refGeneWithVer'
     if [ ${Genome} == 'hg38' ];then
     OPERATION_SUFFIX=''
       COMMA=''
       POPFREQMAX=''
       #REFGENE='refGene'
-      fi
-      "~{perlExe}" "${TableAnnovarExe}" \
-        "~{vcf}" \
-        "${HumanDb}" \
-        -thread "~{threads}" \
-        -buildver "${Genome}" \
-        -out "~{outputFile}" \
-        -remove \
-        -intronhgvs 80 \
-        -protocol refGeneWithVer,refGeneWithVer,"${Clinvar}","${Dbnsfp}","${Dbscsnv}","${GnomadExome}","${GnomadGenome}","${Intervar}",regsnpintron,"${SpliceAI}""${Dollar}{POPFREQMAX}" \
-        -operation gx,g,f,f,f,f,f,f,f,f"${Dollar}{OPERATION_SUFFIX}" \
-        -nastring . \
-        -vcfinput \
-        -otherinfo \
-        -arg '-splicing 5','-hgvs',,,,,,,,"${Dollar}{COMMA}" \
-        -xref "${CustomXref}"
- >>>
+    fi
+    "~{perlExe}" "~{TableAnnovar}" \
+      "~{vcf}" \
+      "~{HumanDb}" \
+      -thread "~{threads}" \
+      -buildver "~{Genome}" \
+      -out "~{outputFile}" \
+      -remove \
+      -intronhgvs 80 \
+      -protocol refGeneWithVer,refGeneWithVer,"~{Clinvar}","~{Dbnsfp}","~{Dbscsnv}","~{GnomadExome}","~{GnomadGenome}","~{Intervar}",regsnpintron,"~{SpliceAI}""~{Dollar}{POPFREQMAX}" \
+      -operation gx,g,f,f,f,f,f,f,f,f"~{Dollar}{OPERATION_SUFFIX}" \
+      -nastring . \
+      -vcfinput \
+      -otherinfo \
+      -arg '-splicing 5','-hgvs',,,,,,,,"~{Dollar}{COMMA}" \
+      -xref "~{CustomXref}"
+    >>>
 
- output {
-  File outAnnotationVcf = "~{outputFile}.${Genome}_multianno.vcf"
-  File outAnnotationAvinput = "~{outputFile}.avinput"
-  File outAnnotationTxt = "~{outputFile}.${Genome}_multianno.txt"
- }
- runtime {
-   cpu: "~{threads}"
-   requested_memory_mb_per_core: "${memoryByThreadsMb}"
- }
+  output {
+    File outAnnotationVcf = "~{outputFile}.${Genome}_multianno.vcf"
+    File outAnnotationAvinput = "~{outputFile}.avinput"
+    File outAnnotationTxt = "~{outputFile}.${Genome}_multianno.txt"
+  }
+  runtime {
+    cpu: "~{threads}"
+    requested_memory_mb_per_core: "${memoryByThreadsMb}"
+  }
 }
