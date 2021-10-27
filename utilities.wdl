@@ -1506,3 +1506,48 @@ task BamReadByChromosomes {
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
 	}
 }
+
+task printStringtoFile {
+	meta {
+		author: "Olivier ARDOUIN"
+		email: "o-ardouin(at)chu-montpellier.fr"
+		version: "0.0.2"
+		date: "2021-10-27"
+	}
+
+	input {
+		String in
+		String output
+
+		Boolean Append = false
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String to = if Append then ">>" else ">"
+
+	command <<<
+		set exo pipefail
+		if [[ ! -d $(dirname ~{output}) ]]; then
+			mkdir -p $(dirname ~{output})
+		fi
+		echo ~{in} ~{to} ~{output}
+	>>>
+
+	output {
+		File out = "~{output}"
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+}
