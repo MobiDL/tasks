@@ -94,6 +94,9 @@ task achab {
 
   command <<<
   set -exo pipefail
+  if [[ ! -f ~{OutDir} ]]; then
+    mkdir -p ~{OutDir}
+  fi
 
   Pheno=""
   if [[ -f "~{PhenolyzerFile}" ]]; then
