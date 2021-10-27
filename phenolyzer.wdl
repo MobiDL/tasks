@@ -18,6 +18,12 @@ version 1.0
 
 
 task phenolyzer {
+	meta {
+		author: "Olivier Ardouin"
+		email: "o-ardouin(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2021-10-26"
+	}
 	input {
 		String name
     String outputPath = "/."
