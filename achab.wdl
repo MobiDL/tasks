@@ -46,7 +46,7 @@ task achab {
     String? FavouriteGeneRef
     String? FilterCustomVCF
     String? FilterCustomVCFRegex
-    String? PooledSamples
+    Array[String]? PooledSamples
     String? SampleSubset
     Boolean AddCaseDepth = false
     File? IntersectVCF
@@ -76,7 +76,7 @@ task achab {
   String favGenRef = if defined(FavouriteGeneRef) then "--favouriteGeneRef ~{FavouriteGeneRef} " else ""
   String filtCustVcf = if defined(FilterCustomVCF) then "--filterCustomVCF ~{FilterCustomVCF} " else ""
   String filtCustVcfReg = if defined(FilterCustomVCFRegex) then "--filterCustomVCFRegex ~{FilterCustomVCFRegex} " else ""
-  String poolSample = if defined(PooledSamples) then "--pooledSamples \"~{PooledSamples}\" " else ""
+  String poolSample = if defined(PooledSamples) then "--pooledSamples " else ""
   String sampSub = if defined(SampleSubset) then "--sampleSubset ~{SampleSubset} " else ""
   String addCasDep = if AddCaseDepth then "--addCaseDepth " else ""
   String interVcf = if defined(IntersectVCF) then "--intersectVCF ~{IntersectVCF} " else ""
@@ -99,34 +99,39 @@ task achab {
   if [[ -f "~{PhenolyzerFile}" ]]; then
     Pheno="--phenolyzerFile ~{PhenolyzerFile}"
   fi
+  if [[ "~{poolSample}" != "" ]]; then
+    pool="~{poolSample} \"~{sep=',' PooledSamples}\" "
+  else
+    pool=""
+  fi
 
-   ~{PerlExe} ~{AchabExe} \
-  --vcf ~{mpavcf} \
-  --outDir ~{OutDir}/ \
-  --outPrefix ~{SampleID} \
-  --case "~{CaseSample}" \
-  ~{Dad} \
-  ~{Mum} \
-  ~{hope} \
-  ~{candidates} \
-  ~{Dollar}{Pheno} \
-  --popFreqThr "~{AllelicFrequency}" \
-  --filterList "~{FilterList}" \
-  ~{cngGL} \
-  ~{customVcf} \
-  --mozaicRate "~{MozaicRate}" \
-  --mozaicDP "~{MozaicDP}" \
-  ~{customInfoList} \
-  ~{affected} \
-  ~{favGenRef} \
-  ~{filtCustVcf} \
-  ~{filtCustVcfReg} \
-  ~{poolSample} \
-  ~{sampSub} \
-  ~{addCasDep} \
-  ~{interVcf} \
-  ~{poorCov} \
-  ~{SkipCase}
+  ~{PerlExe} ~{AchabExe} \
+    --vcf ~{mpavcf} \
+    --outDir ~{OutDir}/ \
+    --outPrefix ~{SampleID} \
+    --case "~{CaseSample}" \
+    ~{Dad} \
+    ~{Mum} \
+    ~{hope} \
+    ~{candidates} \
+    ~{Dollar}{Pheno} \
+    --popFreqThr "~{AllelicFrequency}" \
+    --filterList "~{FilterList}" \
+    ~{cngGL} \
+    ~{customVcf} \
+    --mozaicRate "~{MozaicRate}" \
+    --mozaicDP "~{MozaicDP}" \
+    ~{customInfoList} \
+    ~{affected} \
+    ~{favGenRef} \
+    ~{filtCustVcf} \
+    ~{filtCustVcfReg} \
+    ~{Dollar}{pool} \
+    ~{sampSub} \
+    ~{addCasDep} \
+    ~{interVcf} \
+    ~{poorCov} \
+    ~{SkipCase}
 
  >>>
 
