@@ -1517,7 +1517,7 @@ task printStringtoFile {
 
 	input {
 		String in
-		String output
+		String outFile
 
 		Boolean Append = false
 
@@ -1536,14 +1536,14 @@ task printStringtoFile {
 
 	command <<<
 		set exo pipefail
-		if [[ ! -d $(dirname ~{output}) ]]; then
-			mkdir -p $(dirname ~{output})
+		if [[ ! -d $(dirname ~{outFile}) ]]; then
+			mkdir -p $(dirname ~{outFile})
 		fi
-		echo ~{in} ~{to} ~{output}
+		echo "~{in}" ~{to} ~{outFile}
 	>>>
 
 	output {
-		File out = "~{output}"
+		File out = "~{outFile}"
 	}
 
 	runtime {
