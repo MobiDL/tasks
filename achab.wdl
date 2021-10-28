@@ -147,3 +147,63 @@ task achab {
    requested_memory_mb_per_core: "${memoryByThreadsMb}"
  }
 }
+
+task get_version {
+  meta {
+    author: "Olivier Ardouin"
+    email: "o-ardouin(at)chu-montpellier.fr"
+    version: "0.0.1"
+    date: "2021-10-28"
+  }
+
+  input {
+    String path_exe = "/mnt/Bioinfo/Softs/src/Captain-ACHAB/achab.pl"
+    String perlExe = "perl"
+
+    Int threads = 1
+    Int memoryByThreads = 768
+    String? memory
+  }
+
+  String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+  Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+  Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+  Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+  Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+  command <<<
+    ~{perlExe} ~{path_exe} --version
+    >>>
+
+    output {
+      String version = read_string(stdout())
+    }
+
+    runtime {
+      cpu: "~{threads}"
+      requested_memory_mb_per_core: "${memoryByThreadsMb}"
+    }
+
+    parameter_meta {
+      path_exe: {
+        description: 'Path used as executable [default: "/mnt/Bioinfo/Softs/src/Captain-ACHAB/achab.pl"]',
+        category: 'System'
+      }
+      perlExe: {
+        description: 'Path used as executable [default: "perl"]',
+        category: 'System'
+      }
+      threads: {
+        description: 'Sets the number of threads [default: 1]',
+        category: 'System'
+      }
+      memory: {
+        description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+        category: 'System'
+      }
+      memoryByThreads: {
+        description: 'Sets the total memory to use (in M) [default: 768]',
+        category: 'System'
+      }
+    }
+}
