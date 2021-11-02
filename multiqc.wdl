@@ -86,6 +86,8 @@ task multiqc {
 		String outputPath = "./"
 		String? name
 		String? comment
+		Array[File]? MetrixFiles
+		Array[Array[File]]? MetrixParentFiles
 
 		Int threads = 1
 		Int memoryByThreads = 768
