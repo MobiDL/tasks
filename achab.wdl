@@ -157,7 +157,7 @@ task get_version {
   }
 
   input {
-    String path_exe = "/mnt/Bioinfo/Softs/src/Captain-ACHAB/achab.pl"
+    String path_exe = "/mnt/Bioinfo/Softs/src/Captain-ACHAB/wwwachab.pl"
     String perlExe = "perl"
 
     Int threads = 1
@@ -186,7 +186,7 @@ task get_version {
 
     parameter_meta {
       path_exe: {
-        description: 'Path used as executable [default: "/mnt/Bioinfo/Softs/src/Captain-ACHAB/achab.pl"]',
+        description: 'Path used as executable [default: "/mnt/Bioinfo/Softs/src/Captain-ACHAB/wwwachab.pl"]',
         category: 'System'
       }
       perlExe: {
