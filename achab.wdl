@@ -193,6 +193,114 @@ task get_version {
         description: 'Path used as executable [default: "perl"]',
         category: 'System'
       }
+      SampleID: {
+        description: 'Name of sample ID',
+        category: 'Required'
+      }
+      OutDir: {
+        description: 'Path of output Directory',
+        category: 'Required'
+      }
+      mpavcf: {
+        description: 'VCF mpa processed to parse',
+        category: 'Required'
+      }
+      CaseSample: {
+        description: 'Name of Case (use for trios)',
+        category: 'Tool option'
+      }
+      FatherSample: {
+        description: 'Name of Father (use for trios)',
+        category: 'Tool option'
+      }
+      MotherSample: {
+        description: 'Name of Mother (use for trios)',
+        category: 'Tool option'
+      }
+      Affected: {
+        description: 'list of Affected individuals (use when multiple sample in mpa processed vcf file)',
+        category: 'Tool option'
+      }
+      PhenolyzerFile: {
+        description: 'phenolyzer output file suffixed by predicted_gene_scores (it will contribute to the final ranking and top50 genes will be added in METADATA tab)',
+        category: 'Tool option'
+      }
+      GenesOfInterest: {
+        description: 'file with end-of-line separated gene symbols of interest (it will create more tabs, if "#myPathology" is present in the file, a myPathology tab will be created)',
+        category: 'Tool option'
+      }
+      AllelicFrequency: {
+        description: 'allelic frequency threshold from 0 to 1 default=0.01 (based on gnomad_genome_ALL)',
+        category: 'Tool option'
+      }
+      FilterList: {
+        description: 'comma separated list of VCF FILTER to output (default= \'PASS\', included automatically to the list)',
+        category: 'Tool option'
+      }
+      CnvGeneList: {
+        description: 'file with gene symbol + annotation (1 tab-separated), involved by parallel CNV calling',
+        category: 'Tool option'
+      }
+      CustomVCF: {
+        description: 'VCF format File with custom annotation (if variant matches then INFO field annotations will be added in new column)',
+        category: 'Tool option'
+      }
+      MozaicRate: {
+        description: 'mozaic rate value from 0 to 1, it will color 0/1 genotype according to this value  (default=0.2 as 20%)',
+        category: 'Tool option'
+      }
+      MozaicDP: {
+        description: 'ALT variant Depth, number of read supporting ALT, it will give darker color to the 0/1 genotype  (default=5)',
+        category: 'Tool option'
+      }
+      NewHope: {
+        description: 'only popFreqThr filter is applied (no more filterList nor MPA_ranking filtering) (default=false)',
+        category: 'Tool option'
+      }
+      CustomInfo: {
+        description: 'comma separated list of vcf annotation INFO name (each of them will be added in a new column)',
+        category: 'Tool option'
+      }
+      FavouriteGeneRef: {
+        description: 'File with transcript references to extract in a new column (1 transcript by line)',
+        category: 'Tool option'
+      }
+      FilterCustomVCF: {
+        description: 'integer value, penalizes variant if its frequency in the customVCF is greater than [value] (default key of info field : found=[value])',
+        category: 'Tool option'
+      }
+      FilterCustomVCFRegex: {
+        description: 'string pattern used as regex to search for a specific field to filter customVCF (default key of info field: \'found=\')',
+        category: 'Tool option'
+      }
+      PooledSamples: {
+        description: 'comma separated list of samples that are pooled (it will convert 0/0 genotype into 0/1 if at least 1 read support ALT base and it will flag cell in yellow, e.g. parents pool in trio context)',
+        category: 'Tool option'
+      }
+      SampleSubset: {
+        description: 'comma separated list of samples only processed by Achab to the output>',
+        category: 'Tool option'
+      }
+      AddCaseDepth: {
+        description: 'case Depth will be added in a new column (default=false)',
+        category: 'Tool option'
+      }
+      IntersectVCF: {
+        description: 'VCF format File for comparison (if variant matches then \'yes\' will be added in a new \'intersectVCF\' column)',
+        category: 'Tool option'
+      }
+      PoorCoverageFile: {
+        description: 'poor Coverage File (it will annotate OMIM genes if present in 4th column -requires OMIM genemap2 File- and create an excel file )',
+        category: 'Tool option'
+      }
+      Genemap2File: {
+        description: 'OMIM genemap2 file (it will help to annotate OMIM genes in poor coverage file)',
+        category: 'Tool option'
+      }
+      skipCaseWT: {
+        description: 'only if trio mode is activated, it will skip variant if case genotype is 0/0',
+        category: 'Tool option'
+      }
       threads: {
         description: 'Sets the number of threads [default: 1]',
         category: 'System'
