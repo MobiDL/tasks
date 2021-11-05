@@ -55,7 +55,7 @@ task achab {
     Boolean skipCaseWT = false
 
     ## sytem spécific
-    File AchabExe = "/mnt/Bioinfo/Softs/src/Captain-ACHAB/achab.pl"
+    File AchabExe = "/mnt/Bioinfo/Softs/src/Captain-ACHAB/wwwachab.pl"
     String PerlExe = "perl"
 ###    String? IDSNP --IDSNP "${IDSNP}" \  <--- missing ????
     ## run time
