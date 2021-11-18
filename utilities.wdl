@@ -1551,3 +1551,69 @@ task printStringtoFile {
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
 	}
 }
+
+task computePoorCoverageExtended {
+	meta {
+		author: "Thomas Guignard"
+		email: "t-guignard(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2021-11-15"
+	}
+
+
+
+	input {
+		String path_exe = "bedtools"
+
+		String bamFile
+		String poorCoverageDir
+		File intervalBedFile
+		File tsvCoverageFile
+		String bedtoolsLowCoverage
+		String bedToolsSmallInterval
+		String genomeVersion
+		String sampleID
+		String workflowType
+		String outputDirSampleID
+		String outDir
+
+		String outputFile =  "~{outDir}~{outputDirSampleID}/~{workflowType}/coverage/~{sampleID}_poor_coverage_extended.tsv"
+
+		String ofs = "\\t"
+		String fs = "\\t"
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	command <<<
+
+		~{path_exe} genomecov -ibam ~{bamFile} -bga \
+		| awk -v low_coverage="~{bedtoolsLowCoverage}" '$4<low_coverage' \
+		| ~{path_exe} intersect -wb -a ~{intervalBedFile} -b - \
+		| sort -k1,1 -k2,2n -k3,3n \
+		| ~{path_exe} merge -d 1 -c 4,8,8 -o distinct,min,max -i - \
+		| ~{path_exe} intersect -loj -c -a -  -b ~{poorCoverageDir}/*tsv  \
+		| ~{path_exe} intersect -wb -loj -a -  -b ~{tsvCoverageFile}  \
+		| awk -v small_intervall="~{bedToolsSmallInterval}" -v genomeVersion="~{genomeVersion}" \
+		'BEGIN {OFS="~{ofs}";print "#chr","start","end","gene","region","region_size","type","MIN_COV","MAX_COV","Occurrence","ROI_MEAN_COV","UCSC link"} {split($4,gene,":");a=($3-$2+1);if(a<small_intervall) {b="SMALL_INTERVAL"} else {b="OTHER"};url="http://genome-euro.ucsc.edu/cgi-bin/hgTracks?db='genomeVersion'&position="$1":"$2-10"-"$3+10"&highlight='genomeVersion'."$1":"$2"-"$3; print $1,$2,$3,gene[1],$4,a, b,$5,$6,$7,$11, url}' \
+		> ~{outputFile}
+
+	>>>
+
+	output {
+		File poorCoverageFile = outputFile
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+}
