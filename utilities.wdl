@@ -1653,7 +1653,8 @@ task printStringtoFile {
 		if [[ ! -d $(dirname ~{outFile}) ]]; then
 			mkdir -p $(dirname ~{outFile})
 		fi
-		echo "~{in}\n" ~{to} ~{outFile}
+		echo "~{in}" ~{to} ~{outFile}
+		echo "----" >> ~{outFile}
 	>>>
 
 	output {
