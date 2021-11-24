@@ -1413,7 +1413,7 @@ task computePoorCoverageExtended {
 	input {
 		String path_exe = "bedtools"
 
-		File bamFile
+		File BamFile
 		File intervalBedFile
 		File PoorCoverageFile
 		File CoverageFile
@@ -1445,13 +1445,13 @@ task computePoorCoverageExtended {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	command <<<
-		
-		~{path_exe} genomecov -ibam ~{bamFile} -bga \
+
+		~{path_exe} genomecov -ibam ~{BamFile} -bga \
 		| awk -v low_coverage="~{bedtoolsLowCoverage}" '$4<low_coverage' \
 		| ~{path_exe} intersect -wb -a ~{intervalBedFile} -b - \
 		| sort -k1,1 -k2,2n -k3,3n \
 		| ~{path_exe} merge -d 1 -c 4,8,8 -o distinct,min,max -i - \
-		| ~{path_exe} intersect -loj -c -a -  -b ~{poorCoverageFile}  \
+		| ~{path_exe} intersect -loj -c -a -  -b ~{PoorCoverageFile}  \
 		| ~{path_exe} intersect -wb -loj -a -  -b ~{CoverageFile}  \
 		| awk -v small_intervall="~{bedToolsSmallInterval}" -v genomeVersion="~{genomeVersion}" \
 		'BEGIN {OFS="~{ofs}";print "#chr","start","end","gene","region","region_size","type","MIN_COV","MAX_COV","Occurrence","ROI_MEAN_COV","UCSC link"} {split($4,gene,":");a=($3-$2+1);if(a<small_intervall) {b="SMALL_INTERVAL"} else {b="OTHER"};url="http://genome-euro.ucsc.edu/cgi-bin/hgTracks?db='genomeVersion'&position="$1":"$2-10"-"$3+10"&highlight='genomeVersion'."$1":"$2"-"$3; print $1,$2,$3,gene[1],$4,a, b,$5,$6,$7,$11, url}' \
@@ -1468,11 +1468,11 @@ task computePoorCoverageExtended {
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
 	}
 	parameter_meta {
-		bedtools: {
+		path_exe: {
 			description: 'Path to the BedTools exe',
 			category: 'Required'
 		}
-		bamFile: {
+		BamFile: {
 			description: 'Bam file to process',
 			category: 'Required'
 		}
