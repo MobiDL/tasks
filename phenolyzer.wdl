@@ -48,7 +48,7 @@ task phenolyzer {
 
 	command <<<
 		if [[ ! -f "~{DiseaseFile}" ]]; then
-			if [[ ! -d $(dirname ~{DiseaseFile})]]; then
+			if [[ ! -d $(dirname ~{DiseaseFile}) ]]; then
 				mkdir -p $(dirname ~{DiseaseFile})
 			fi
 			touch ~{DiseaseFile}
