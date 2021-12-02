@@ -47,9 +47,13 @@ task phenolyzer {
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
 	command <<<
-		if [[ -f "~{DiseaseFile}" ]]; then
-			~{PerlExe} ~{PhenolyzerPath}/disease_annotation.pl ~{DiseaseFile} -f -p -ph -logistic -out ~{outputFile}
+		if [[ ! -f "~{DiseaseFile}" ]]; then
+			if [[ ! -d $(dirname ~{DiseaseFile})]]; then
+				mkdir -p $(dirname ~{DiseaseFile})
+			fi
+			touch ~{DiseaseFile}
 		fi
+			~{PerlExe} ~{PhenolyzerPath}/disease_annotation.pl ~{DiseaseFile} -f -p -ph -logistic -out ~{outputFile}
 	>>>
 
 	output {
