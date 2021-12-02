@@ -135,11 +135,10 @@ task memnosort {
 			-t ~{threads} \
 			~{refFasta} \
 			~{fastqR1} ~{default="" fastqR2} \
-			> ~{outputFile}
 	>>>
 
 	output {
-		File outputFile = outputFile
+		File outputFile = stdout()
 	}
 
 	runtime {
