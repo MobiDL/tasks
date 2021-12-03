@@ -1408,8 +1408,6 @@ task computePoorCoverageExtended {
 		date: "2021-11-15"
 	}
 
-
-
 	input {
 		String path_exe = "bedtools"
 
@@ -1418,7 +1416,7 @@ task computePoorCoverageExtended {
 		File PoorCoverageFile
 		File CoverageFile
 
-		Int bedtoolsLowCoverage = 10
+		Int bedtoolsLowCoverage = 20
 		Int bedToolsSmallInterval = 5
 
 		String genomeVersion = "hg19"
