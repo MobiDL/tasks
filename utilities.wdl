@@ -1448,7 +1448,7 @@ task computePoorCoverageExtended {
 		| awk -v low_coverage="~{BedtoolsLowCoverage}" '$4<low_coverage' \
 		| ~{path_exe} intersect -wb -a ~{intervalBedFile} -b - \
 		| sort -k1,1 -k2,2n -k3,3n \
-		| ~{path_exe} merge -d 1 -c 4,8,8 -o distinct,min,max -i - \
+		| ~{path_exe} merge -d 1 -c 4,10,10 -o distinct,min,max -i - \
 		| ~{path_exe} intersect -loj -c -a -  -b ~{PoorCoverageFile}  \
 		| ~{path_exe} intersect -wb -loj -a -  -b ~{CoverageFile}  \
 		| awk -v small_intervall="~{BedToolsSmallInterval}" -v genomeVersion="~{genomeVersion}" \
