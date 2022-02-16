@@ -1416,7 +1416,7 @@ task computePoorCoverageExtended {
 		File PoorCoverageFile
 		File CoverageFile
 
-		Int BedtoolsLowCoverage = 20
+		Int BedtoolsLowCoverage = 10
 		Int BedToolsSmallInterval = 5
 
 		String genomeVersion = "hg19"

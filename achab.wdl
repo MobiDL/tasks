@@ -25,7 +25,7 @@ task achab {
 		date: "2021-10-26"
 	}
   input {
-    ## sample spécific
+    ## sample specific
     String SampleID
     String OutDir
     String? CaseSample
@@ -46,13 +46,16 @@ task achab {
     String? FavouriteGeneRef
     String? FilterCustomVCF
     String? FilterCustomVCFRegex
+    Boolean AddCustomVCFRegex = false
     Array[String]? PooledSamples
     String? SampleSubset
     Boolean AddCaseDepth = false
+    Boolean AddCaseAB = false
     File? IntersectVCF
     File? PoorCoverageFile
     File? Genemap2File
     Boolean skipCaseWT = false
+    Boolean HideACMG = false
 
     ## sytem spécific
     File AchabExe = "/mnt/Bioinfo/Softs/src/Captain-ACHAB/wwwachab.pl"
@@ -76,13 +79,16 @@ task achab {
   String favGenRef = if defined(FavouriteGeneRef) then "--favouriteGeneRef ~{FavouriteGeneRef} " else ""
   String filtCustVcf = if defined(FilterCustomVCF) then "--filterCustomVCF ~{FilterCustomVCF} " else ""
   String filtCustVcfReg = if defined(FilterCustomVCFRegex) then "--filterCustomVCFRegex ~{FilterCustomVCFRegex} " else ""
+  String AddCustVCFRegex = if AddCustomVCFRegex then "--addCustomVCFRegex " else ""
   String poolSample = if defined(PooledSamples) then "--pooledSamples " else ""
   String sampSub = if defined(SampleSubset) then "--sampleSubset ~{SampleSubset} " else ""
   String addCasDep = if AddCaseDepth then "--addCaseDepth " else ""
+  String addCasab = if AddCaseAB then "--addCaseAB " else ""
   String interVcf = if defined(IntersectVCF) then "--intersectVCF ~{IntersectVCF} " else ""
   String poorCov = if (defined(PoorCoverageFile) && defined(Genemap2File)) then "--poorCoverageFile ~{PoorCoverageFile} --genemap2File ~{Genemap2File} " else ""
   String SkipCase = if skipCaseWT then "--skipCaseWT " else ""
   String Pheno = if defined(PhenolyzerFile) then "--phenolyzerFile ~{PhenolyzerFile} " else ""
+  String HideAcmg = if HideACMG then "--hideACMG " else ""
 
   String Dollar = "$"
 
@@ -103,10 +109,17 @@ task achab {
     Pheno="--phenolyzerFile ~{PhenolyzerFile}"
   fi
 
+  pool=""
   if [[ "~{poolSample}" != "" ]]; then
     pool="~{poolSample} \"~{sep=',' PooledSamples}\" "
-  else
-    pool=""
+  fi
+
+  if [[ "~{SkipCase}" != "" ]]; then
+    if [[ "~{poolSample}" != "" ]]; then
+      pool="~{poolSample} ~{Case},\"~{sep=',' PooledSamples}\" "
+    else
+      pool="--pooledSamples ~{Case} "
+    fi
   fi
 
   if [[ "~{affected}" != "" ]]; then
@@ -119,7 +132,7 @@ task achab {
     --vcf ~{mpavcf} \
     --outDir ~{OutDir}/ \
     --outPrefix ~{SampleID} \
-    --case "~{CaseSample}" \
+    --case "~{Case}" \
     ~{Dad} \
     ~{Mum} \
     ~{hope} \
@@ -135,13 +148,16 @@ task achab {
     ~{favGenRef} \
     ~{filtCustVcf} \
     ~{filtCustVcfReg} \
+    ~{AddCustVCFRegex} \
     ~{Dollar}{pool} \
     ~{Dollar}{affect} \
     ~{sampSub} \
     ~{addCasDep} \
+    ~{addCasab} \
     ~{interVcf} \
     ~{poorCov} \
-    ~{SkipCase}
+    ~{SkipCase} \
+    ~{HideAcmg}
 
  >>>
 
