@@ -111,21 +111,21 @@ task achab {
 
   pool=""
   if [[ "~{poolSample}" != "" ]]; then
-    pool="~{poolSample} \"~{sep=',' PooledSamples}\" "
+    pool="~{poolSample} ~{sep=',' PooledSamples} "
   fi
 
   if [[ "~{SkipCase}" != "" ]]; then
     if [[ "~{poolSample}" != "" ]]; then
-      pool="~{poolSample} ~{Case},\"~{sep=',' PooledSamples}\" "
+      pool="~{poolSample} ~{Case},~{sep=',' PooledSamples} "
     else
       pool="--pooledSamples ~{Case} "
     fi
   fi
 
   if [[ "~{affected}" != "" ]]; then
-    affect="~{affected} \"~{CaseSample},~{sep=',' Affected}\" "
+    affect="~{affected} ~{CaseSample},~{sep=',' Affected} "
   else
-    affect="--affected \"~{CaseSample}\""
+    affect="--affected ~{CaseSample}"
   fi
 
   ~{PerlExe} ~{AchabExe} \
