@@ -70,7 +70,7 @@ task achab {
   String Case = if defined(CaseSample) then CaseSample else SampleID
   String Dad = if defined(FatherSample) then "--dad \"~{FatherSample}\" " else ""
   String Mum = if defined(MotherSample) then "--mum \"~{MotherSample}\" " else ""
-  String affected = if defined(Affected) then "--affected " else ""
+  String affected = if defined(Affected) then "--affected" else ""
   String candidates = if defined(GenesOfInterest) then "--candidates ~{GenesOfInterest} " else ""
   String cngGL = if defined(CnvGeneList) then "--cnvGeneList ~{CnvGeneList} " else ""
   String hope = if NewHope then "--newHope " else ""
@@ -80,7 +80,7 @@ task achab {
   String filtCustVcf = if defined(FilterCustomVCF) then "--filterCustomVCF ~{FilterCustomVCF} " else ""
   String filtCustVcfReg = if defined(FilterCustomVCFRegex) then "--filterCustomVCFRegex ~{FilterCustomVCFRegex} " else ""
   String AddCustVCFRegex = if AddCustomVCFRegex then "--addCustomVCFRegex " else ""
-  String poolSample = if defined(PooledSamples) then "--pooledSamples " else ""
+  String poolSample = if defined(PooledSamples) then "--pooledSamples" else ""
   String sampSub = if defined(SampleSubset) then "--sampleSubset ~{SampleSubset} " else ""
   String addCasDep = if AddCaseDepth then "--addCaseDepth " else ""
   String addCasab = if AddCaseAB then "--addCaseAB " else ""
