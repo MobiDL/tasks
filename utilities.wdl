@@ -1449,7 +1449,7 @@ task computePoorCoverageExtended {
 		| ~{path_exe} intersect -wb -a ~{intervalBedFile} -b - \
 		| sort -k1,1 -k2,2n -k3,3n \
 		| ~{path_exe} merge -d 1 -c 4,10,10 -o distinct,min,max -i - \
-		| ~{path_exe} intersect -loj -c -a -  -b "~{PoorCoverageFileFolder}/*.tsv"  \
+		| ~{path_exe} intersect -loj -c -a -  -b ~{PoorCoverageFileFolder}/*.tsv  \
 		| ~{path_exe} intersect -wb -loj -a -  -b ~{CoverageFile}  \
 		| awk -v small_intervall="~{BedToolsSmallInterval}" -v genomeVersion="~{genomeVersion}" \
 		'BEGIN {OFS="~{ofs}";print "#chr","start","end","gene","region","region_size","type","MIN_COV","MAX_COV","Occurrence","ROI_MEAN_COV","UCSC link"} {split($4,gene,":");a=($3-$2+1);if(a<small_intervall) {b="SMALL_INTERVAL"} else {b="OTHER"};url="http://genome-euro.ucsc.edu/cgi-bin/hgTracks?db='genomeVersion'&position="$1":"$2-10"-"$3+10"&highlight='genomeVersion'."$1":"$2"-"$3; print $1,$2,$3,gene[1],$4,a, b,$5,$6,$7,$12, url}' \
@@ -1478,8 +1478,8 @@ task computePoorCoverageExtended {
 			description: 'Bed file, need to be merged',
 			category: 'Required'
 		}
-		PoorCoverageFile: {
-			description: 'TSV file, output from computePoorCoverage, done with the same BAM and the same intervalBedFile',
+		PoorCoverageFileFolder: {
+			description: 'TSV file directory, output from computePoorCoverage, done with the same BAM and the same intervalBedFile',
 			category: 'Required'
 		}
 		CoverageFile: {
