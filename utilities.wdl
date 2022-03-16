@@ -1664,3 +1664,51 @@ task printStringtoFile {
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
 	}
 }
+
+task printSoftVersion {
+	meta {
+		author: "Olivier ARDOUIN"
+		email: "o-ardouin(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2022-03-16"
+	}
+
+	input {
+		String SoftName
+		String VersionOut
+		String outFile
+
+		Boolean Append = false
+
+		Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String to = if Append then ">>" else ">"
+
+	command <<<
+		set exo pipefail
+		if [[ ! -d $(dirname ~{outFile}) ]]; then
+			mkdir -p $(dirname ~{outFile})
+		fi
+		echo "-- ~{SoftName} --" ~{to} ~{outFile}
+		echo "VersionOut" >> ~{outFile}
+		echo "----" >> ~{outFile}
+	>>>
+
+	output {
+		File out = "~{outFile}"
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+}
