@@ -1669,13 +1669,12 @@ task printSoftVersion {
 	meta {
 		author: "Olivier ARDOUIN"
 		email: "o-ardouin(at)chu-montpellier.fr"
-		version: "0.0.1"
+		version: "0.0.2"
 		date: "2022-03-16"
 	}
 
 	input {
-		String SoftName
-		String VersionOut
+		Array[String] Soft
 		String outFile
 
 		Boolean Append = false
@@ -1698,8 +1697,7 @@ task printSoftVersion {
 		if [[ ! -d $(dirname ~{outFile}) ]]; then
 			mkdir -p $(dirname ~{outFile})
 		fi
-		echo "-- ~{SoftName} --" ~{to} ~{outFile}
-		echo "VersionOut" >> ~{outFile}
+		echo -e "~{sep='\n---\n' Soft}" ~{to} ~{outFile}
 		echo "----" >> ~{outFile}
 	>>>
 
