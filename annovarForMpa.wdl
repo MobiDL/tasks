@@ -46,7 +46,7 @@ task annovarForMpa {
     File? RefConvert2AnnovarExe
 
     # Annovar databases
-    File CustomXref = "/mnt/Bioinfo/Softs/src/Annovar/humandb/gene_customfullxref_20200630.txt"
+    File CustomXref = "/mnt/Bioinfo/Softs/src/Annovar/humandb/gene_customfullxref.txt"
     String HumanDb = "/mnt/Bioinfo/Softs/src/Annovar/humandb"
     String Genome = "hg19"
     String Clinvar = "clinvar_latest"
