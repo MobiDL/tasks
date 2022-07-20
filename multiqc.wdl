@@ -18,14 +18,14 @@ version 1.0
 
 task get_version {
 	meta {
-		author: "Oliver Ardouin"
-		email: "o-ardouin(at)chu-montpellier.fr"
-		version: "0.0.2"
-		date: "2022-03-16"
-	}
+    author: "Olivier Ardouin"
+    email: "o-ardouin(at)chu-montpellier.fr"
+    version: "0.0.1"
+    date: "2021-10-28"
+  }
 
 	input {
-		String path_exe = "fastp"
+		String path_exe = "multiqc"
 
 		Int threads = 1
 		Int memoryByThreads = 768
@@ -43,7 +43,7 @@ task get_version {
 	>>>
 
 	output {
-		String version = read_string(stderr())
+		String version = read_string(stdout())
 	}
 
 	runtime {
@@ -53,7 +53,7 @@ task get_version {
 
 	parameter_meta {
 		path_exe: {
-			description: 'Path used as executable [default: "fastp"]',
+			description: 'Path used as executable [default: "mpa"]',
 			category: 'System'
 		}
 		threads: {
@@ -71,27 +71,23 @@ task get_version {
 	}
 }
 
-task fastp_pe {
+task multiqc {
 	meta {
-		author: "Charles VAN GOETHEM"
-		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-07-29"
-	}
+    author: "Olivier Ardouin"
+    email: "o-ardouin(at)chu-montpellier.fr"
+    version: "0.0.1"
+    date: "2021-10-28"
+  }
 
 	input {
-		String path_exe = "fastp"
+		String path_exe = "multiqc"
+		String path_to_check
 
-		String? outputPath
-		String? sample
-		String subString = "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"
-		String subStringReplace = ""
-
-		File fastqR1
-		File fastqR2
-
-		Boolean unpaired1 = false
-		Boolean unpaired2 = false
+		String outputPath = "./"
+		String? name
+		String? comment
+		Array[File]? MetrixFiles
+		Array[Array[File]]? MetrixParentFiles
 
 		Int threads = 1
 		Int memoryByThreads = 768
@@ -104,34 +100,26 @@ task fastp_pe {
 	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
-	String baseName = if defined(sample) then sample else sub(basename(fastqR1),subString,subStringReplace)
-	String outputBase = if defined(outputPath) then "~{outputPath}/~{baseName}" else "~{baseName}"
+
+	String outdir = "--outdir ~{outputPath} "
+	String title = if defined(name) then "--title ~{name} " else ""
+	String comm = if defined(comment) then "--comment \"~{comment}\" " else ""
+	String FileName = if defined(name) then "--filename ~{name}_multiqc_report " else "--filename multiqc_report"
+
+	String outputFile = if defined(name) then "~{outputPath}/~{name}_multiqc_report.html" else "~{outputPath}/multiqc_report.html"
 
 	command <<<
+		set exo pipefail
 
 		if [[ ! -d ~{outputPath} ]]; then
 			mkdir -p ~{outputPath}
 		fi
 
-		~{path_exe} \
-			--in1 ~{fastqR1} \
-			--in2 ~{fastqR2} \
-			~{true="--unpaired1" false="" unpaired1} \
-			~{true="--unpaired2" false="" unpaired2} \
-			--out1 ~{outputBase}.R1.fq.gz \
-			--out2 ~{outputBase}.R2.fq.gz \
-			--report_title ~{baseName} \
-			--json ~{outputBase}.json \
-			--html ~{outputBase}.html \
-			--thread ~{threads}
-
+		~{path_exe} ~{path_to_check} ~{FileName} ~{title} ~{comm} ~{outdir} -q
 	>>>
 
 	output {
-		File FastpR1 = "~{outputBase}.R1.fq.gz"
-		File FastpR2 = "~{outputBase}.R2.fq.gz"
-		File fastpJson = "~{outputBase}.json"
-		File fastpHtml = "~{outputBase}.html"
+		File outputFile = outputFile
 	}
 
 	runtime {
@@ -141,40 +129,24 @@ task fastp_pe {
 
 	parameter_meta {
 		path_exe: {
-			description: 'Path used as executable [default: "fastqc"]',
+			description: 'Path used as executable [default: "multiqc"]',
 			category: 'System'
 		}
 		outputPath: {
-			description: 'Output path where files will be generated. [default: pwd()]',
+			description: 'Output path where files were generated. [default: pwd()]',
 			category: 'Output path/name option'
 		}
-		sample: {
-			description: 'Sample name to use for output file name [default: sub(basename(fastqR1),subString,"")]',
+		name: {
+			description: 'Name to use for output name in file and repport',
 			category: 'Output path/name option'
 		}
-		subString: {
-			description: 'Substring to remove to get sample name [default: "(_S[0-9]+)?(_L[0-9][0-9][0-9])?(_R[12])?(_[0-9][0-9][0-9])?.(fastq|fq)(.gz)?"]',
+		comment: {
+			description: 'Name to use for output name in file and repport',
 			category: 'Output path/name option'
 		}
-		subStringReplace: {
-			description: 'subString replace by this string [default: ""]',
-			category: 'Output path/name option'
-		}
-		fastqR1: {
-			description: 'Input file with reads 1 (fastq, fastq.gz, fq, fq.gz).',
-			category: 'Input'
-		}
-		fastqR2: {
-			description: 'Input file with reads 2 (fastq, fastq.gz, fq, fq.gz).',
-			category: 'Input'
-		}
-		unpaired1: {
-			description: 'If read1 passed QC but read2 not, it will be written to unpaired1. [default: false]',
-			category: 'Tool options'
-		}
-		unpaired2: {
-			description: 'If read1 passed QC but read2 not, it will be written to unpaired1. [default: false]',
-			category: 'Tool options'
+		path_to_check: {
+			description: 'Input Path for detect QC files',
+			category: 'Required'
 		}
 		threads: {
 			description: 'Sets the number of threads [default: 1]',

@@ -18,25 +18,50 @@ version 1.0
 
 
 task phenolyzer {
-	Boolean IsPrepared
-	String PhenolyzerExe
-	String DiseaseFile
-	String WorkflowType
-	String SampleID
-	String OutDir
-	String PerlPath
-	#runtime attributes
-	Int Cpu
-	Int Memory
+	meta {
+		author: "Olivier Ardouin"
+		email: "o-ardouin(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2021-10-26"
+	}
+	input {
+		String name
+    String outputPath = "/."
+		String DiseaseFile
+
+		String PerlExe = "perl"
+		String PhenolyzerPath = "/phenolyzer"
+
+		## run time
+    Int threads = 1
+		Int memoryByThreads = 768
+		String? memory
+	}
+
+	String outputFile = if defined(outputPath) then outputPath + "/" + name else name
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
 	command <<<
-		cd ${PhenolyzerExe}
-		${PerlPath} disease_annotation.pl ${DiseaseFile} -f -p -ph -logistic -out ../..${OutDir}${SampleID}/${WorkflowType}/disease/${SampleID}
+		if [[ ! -f "~{DiseaseFile}" ]]; then
+			if [[ ! -d $(dirname ~{DiseaseFile}) ]]; then
+				mkdir -p $(dirname ~{DiseaseFile})
+			fi
+			touch ~{DiseaseFile}
+		fi
+			~{PerlExe} ~{PhenolyzerPath}/disease_annotation.pl ~{DiseaseFile} -f -p -ph -logistic -out ~{outputFile}
 	>>>
+
 	output {
-		String? outPhenolyzer = "${OutDir}${SampleID}/${WorkflowType}/disease/${SampleID}.predicted_gene_scores"
+		String? outPhenolyzer = "~{outputFile}.predicted_gene_scores"
 	}
+
 	runtime {
-		cpu: "${Cpu}"
-		requested_memory_mb_per_core: "${Memory}"
-	}
+    cpu: "~{threads}"
+    requested_memory_mb_per_core: "${memoryByThreadsMb}"
+  }
 }
