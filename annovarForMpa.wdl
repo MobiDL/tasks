@@ -36,7 +36,7 @@ task annovarForMpa {
     String perlExe = "perl"
 
     ## ANNOVAR Paths
-    String AnnovarPath =  "/mnt/Bioinfo/Softs/src/Annovar/annovar"
+    String AnnovarPath =  "/annovar"
 
     File? TableAnnovarExe
     File? RefRetrieveSeqFromFastaExe
@@ -46,8 +46,8 @@ task annovarForMpa {
     File? RefConvert2AnnovarExe
 
     # Annovar databases
-    File CustomXref = "/mnt/Bioinfo/Softs/src/Annovar/humandb/gene_customfullxref.txt"
-    String HumanDb = "/mnt/Bioinfo/Softs/src/Annovar/humandb"
+    String HumanDb = "/humandb"
+    String CustomXref_name = "gene_customfullxref.txt"
     String Genome = "hg19"
     String Clinvar = "clinvar_latest"
     String Dbnsfp = "dbnsfp41a"
@@ -71,6 +71,7 @@ task annovarForMpa {
   File RefVariantsReduction = if defined(RefVariantsReductionExe) then RefVariantsReductionExe else AnnovarPath + "/variants_reduction.pl"
   File RefCodingChange = if defined(RefCodingChangeExe) then RefCodingChangeExe else AnnovarPath + "/coding_change.pl"
   File RefConvert2Annovar = if defined(RefConvert2AnnovarExe) then RefConvert2AnnovarExe else AnnovarPath + "/convert2annovar.pl"
+  File CustomXref = HumanDb + "/" + CustomXref_name
 
   String Dollar = "$"
 
@@ -131,12 +132,14 @@ task CustomXrefVersion {
   }
 
   input {
-    File CustomXref = "/mnt/Bioinfo/Softs/src/Annovar/humandb/gene_customfullxref.txt"
+    String HumanDb = "/humandb"
+    String CustomXref_name = "gene_customfullxref.txt"
 
     Int threads = 1
     Int memoryByThreads = 768
     String? memory
   }
+  File CustomXref = HumanDb + "/" + CustomXref_name
 
   String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
   Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
@@ -191,7 +194,7 @@ task ClinvarVersion {
   }
 
   input {
-    String HumanDb = "/mnt/Bioinfo/Softs/src/Annovar/humandb"
+    String HumanDb = "/humandb"
     String Genome = "hg19"
     String Clinvar = "clinvar_latest"
 

@@ -30,7 +30,7 @@ task phenolyzer {
 		String DiseaseFile
 
 		String PerlExe = "perl"
-		String PhenolyzerPath = "/mnt/Bioinfo/Softs/src/phenolyzer"
+		String PhenolyzerPath = "/phenolyzer"
 
 		## run time
     Int threads = 1
