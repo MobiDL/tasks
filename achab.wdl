@@ -21,8 +21,8 @@ task achab {
   meta {
 		author: "Olivier Ardouin"
 		email: "o-ardouin(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2021-10-26"
+		version: "0.1.0"
+		date: "2022-08-18"
 	}
   input {
     ## sample specific
@@ -58,7 +58,7 @@ task achab {
     Boolean HideACMG = false
 
     ## sytem spécific
-    File AchabExe = "wwwachab.pl"
+    String AchabExe = "wwwachab.pl"
     String PerlExe = "perl"
     ## run time
     Int threads = 1
@@ -305,13 +305,13 @@ task get_version {
   meta {
     author: "Olivier Ardouin"
     email: "o-ardouin(at)chu-montpellier.fr"
-    version: "0.0.1"
-    date: "2021-10-28"
+    version: "0.1.0"
+    date: "2022-08-18"
   }
 
   input {
-    String path_exe = "wwwachab.pl"
-    String perlExe = "perl"
+    String AchabExe = "wwwachab.pl"
+    String PerlExe = "perl"
 
     Int threads = 1
     Int memoryByThreads = 768
@@ -325,7 +325,7 @@ task get_version {
   Int memoryByThreadsMb = floor(totalMemMb/threads)
 
   command <<<
-    ~{perlExe} ~{path_exe} --version
+    ~{PerlExe} ~{AchabExe} --version
   >>>
   
   output {
@@ -338,11 +338,11 @@ task get_version {
   }
   
   parameter_meta {
-    path_exe: {
+    AchabExe: {
       description: 'Path used as executable [default: "/mnt/Bioinfo/Softs/src/Captain-ACHAB/wwwachab.pl"]',
       category: 'System'
     }
-    perlExe: {
+    PerlExe: {
       description: 'Path used as executable [default: "perl"]',
       category: 'System'
     }

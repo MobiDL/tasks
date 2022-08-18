@@ -22,8 +22,8 @@ task annovarForMpa {
   meta {
     author: "Thomas Guignard; Olivier Ardouin (modifications)"
     email: "t-guignard(at)chu-montpellier.fr;o-ardouin(at)chu-montpellier.fr"
-    version : "0.0.2"
-    date: "2021-10-22"
+    version : "0.1.0"
+    date: "2022-08-18"
   }
 
   input {
@@ -47,7 +47,7 @@ task annovarForMpa {
 
     # Annovar databases
     String HumanDb = "/humandb"
-    String CustomXref_name = "gene_customfullxref.txt"
+    String CustomXref
     String Genome = "hg19"
     String Clinvar = "clinvar_latest"
     String Dbnsfp = "dbnsfp41a"
@@ -71,7 +71,6 @@ task annovarForMpa {
   File RefVariantsReduction = if defined(RefVariantsReductionExe) then RefVariantsReductionExe else AnnovarPath + "/variants_reduction.pl"
   File RefCodingChange = if defined(RefCodingChangeExe) then RefCodingChangeExe else AnnovarPath + "/coding_change.pl"
   File RefConvert2Annovar = if defined(RefConvert2AnnovarExe) then RefConvert2AnnovarExe else AnnovarPath + "/convert2annovar.pl"
-  File CustomXref = HumanDb + "/" + CustomXref_name
 
   String Dollar = "$"
 
@@ -127,19 +126,17 @@ task CustomXrefVersion {
   meta {
     author: "Olivier Ardouin"
     email: "o-ardouin(at)chu-montpellier.fr"
-    version : "0.0.1"
-    date: "2022-03-21"
+    version : "0.1.0"
+    date: "2022-08-18"
   }
 
   input {
-    String HumanDb = "/humandb"
-    String CustomXref_name = "gene_customfullxref.txt"
+    File CustomXref
 
     Int threads = 1
     Int memoryByThreads = 768
     String? memory
   }
-  File CustomXref = HumanDb + "/" + CustomXref_name
 
   String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
   Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
