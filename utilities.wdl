@@ -1710,3 +1710,49 @@ task printSoftVersion {
 		requested_memory_mb_per_core: "${memoryByThreadsMb}"
 	}
 }
+
+task mkDir {
+	meta {
+		author: "Olivier Ardouin"
+		email: "o-ardouin(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2022-08-22"
+	}
+
+	input {
+		String outputPath
+
+		Int threads = 1
+		Int memoryByThreads = 768
+	}
+
+	command <<<
+		set -exo pipefail
+		if [[ ! -d "~{outputPath}" ]]; then mkdir -p "~{outputPath}"; fi
+	>>>
+
+	output {
+		Boolean DirCreated = true
+		String output_Path = "~{outputPath}"
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreads}"
+	}
+
+	parameter_meta {
+		outputPath: {
+			description: 'Path of the directory to create',
+			category: 'Output path/name option'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 768]',
+			category: 'System'
+		}
+	}
+}
