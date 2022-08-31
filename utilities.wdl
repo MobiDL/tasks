@@ -1669,8 +1669,8 @@ task printSoftVersion {
 	meta {
 		author: "Olivier ARDOUIN"
 		email: "o-ardouin(at)chu-montpellier.fr"
-		version: "0.0.2"
-		date: "2022-03-16"
+		version: "0.0.3"
+		date: "2022-08-31"
 	}
 
 	input {
@@ -1697,7 +1697,8 @@ task printSoftVersion {
 		if [[ ! -d $(dirname ~{outFile}) ]]; then
 			mkdir -p $(dirname ~{outFile})
 		fi
-		echo -e "~{sep='\n---\n' Soft}" ~{to} ~{outFile}
+		date ~{to} ~{outFile}
+		echo -e "~{sep='\n---\n' Soft}" >> ~{outFile}
 		echo "----" >> ~{outFile}
 	>>>
 
