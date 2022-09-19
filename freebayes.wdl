@@ -77,16 +77,18 @@ task freebayes {
 		author: "Olivier Ardouin"
 		email: "o-ardouin(at)chu-montpellier.fr"
 		version: "Beta.0.0.1"
-		date: "2022-09-15"
+		date: "2022-09-19"
 	}
 
 	input {
 		String path_exe = "freebayes"
 
 		#input and output:
-		File? in
+		File in = ""
 		Array[File]? bams
 		File? bamList
+		String? outputName
+		String ext = ".bam"
 		String? outputPath
 		File refFasta
 		File? Target
@@ -185,18 +187,185 @@ task freebayes {
 	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
 
+	# define input
+	String InputBamList = if defined(bamList) then " --bam-list ~{bamList}" else ""
+	String InputBamArray = if defined(bams) then "--bam " else ""
 
-	String outputName = if defined(prefix) then "~{prefix}.~{suffix}~{ext}" else basename(in,ext) + ".~{suffix}~{ext}"
-	String outputFile = if defined(outputPath) then "~{outputPath}/~{outputName}" else "~{outputName}"
+	# define output file
+	String OutputName = if defined(outputName) then outputName else basename(in,ext) + ".vcf"
+	String OutputFile = if defined(outputPath) then "~{outputPath}/~{outputName}" else "~{outputName}"
+
+	#input parameters
+	String InputTarget = if defined(Target) then "--targets ~{Target} " else ""
+	String InputRegions = if defined(Regions) then "--region ~{Regions} " else ""
+	String InputSamples = if defined(Samples) then "--samples ~{Samples} " else ""
+	String InputPopulations = if defined(Populations) then "--population ~{Populations} " else ""
+	String InputcnvMap = if defined(cnvMap) then "--cnv-map ~{cnvMap} " else ""
+	String InputTrace = if defined(Trace) then "--trace ~{Trace} " else ""
+	String InputFailedAlleles = if defined(FailedAlleles) then "--failed-alleles ~{FailedAlleles} " else ""
+	String InputVariantExtendedInput = if defined(VariantExtendedInput) then "--variant-input ~{VariantExtendedInput} " else ""
+	String InputVariantRestrictInput = if defined(VariantRestrictInput) then "--only-use-input-alleles ~{VariantRestrictInput} " else ""
+	String InputHaplotypeBaseVCF = if defined(HaplotypeBaseVCF) then "--haplotype-basis-alleles ~{HaplotypeBaseVCF} " else ""
+	String InputreportAllHaplotypeAlleles = if reportAllHaplotypeAlleles then "--report-all-haplotype-alleles ~{reportAllHaplotypeAlleles} " else ""
+	String InputreportMonomorphic = if reportMonomorphic then "--report-monomorphic ~{reportMonomorphic} " else ""
+
+	#reporting parameters
+	String Inputpvar = if defined(pvar) then "--pvar ~{pvar} " else ""
+
+	#Population model parameters
+	String Inputtheta = if defined(theta) then "--theta ~{theta} " else ""
+	String Inputploidy = if defined(ploidy) then "--ploidy ~{ploidy} " else ""
+	String InputPooledDicrete = if PooledDicrete then "--pooled-discrete " else ""
+	String InputPooledContinuous = if PooledContinuous then "--pooled-continuous " else ""
+
+	#Reference allele parameters
+	String InputuseRefAllele = if useRefAllele then "--use-reference-allele " else ""
+	String InputReferenceQuality = if defined(ReferenceQuality) then "--reference-quality ~{ReferenceQuality} " else ""
+
+	#allele scope parameters
+	String InputNoSNP = if NoSNP then "--no-snps " else ""
+	String InputNoIndels = if NoIndels then "--no-indels " else ""
+	String InputNoMNPs = if NoMNPs then "--no-mnps " else ""
+	String InputNoComplex = if NoComplex then "--no-complex " else ""
+	String InputuseBestN = if defined(useBestN) then "--use-best-n-alleles ~{useBestN} " else ""
+	String InputHaplotypeLenght = if defined(HaplotypeLenght) then "--haplotype-length {HaplotypeLenght} " else ""
+	String InputMinRepeatSize = if defined(MinRepeatSize) then "--min-repeat-size ~{MinRepeatSize} " else ""
+	String InputMinRepeatEntropy = if defined(MinRepeatEntropy) then "--min-repeat-entropy ~{MinRepeatEntropy} " else ""
+	String InputNoPartialObservations = if NoPartialObservations then "--no-partial-observations " else ""
+
+	#Indel realignement parameter
+	String InputDontLeftAlignIndels = if DontLeftAlignIndels then "--dont-left-align-indels " else ""
+
+	#input filters parameters
+	String InputUseDuplicateReads = if UseDuplicateReads then "--use-duplicate-reads " else ""
+	String InputMinMappingQuality = if defined(MinMappingQuality) then "--min-mapping-quality ~{MinMappingQuality} " else ""
+	String InputMinBaseQuality = if defined(MinBaseQuality) then "--min-base-quality ~{MinBaseQuality} " else ""
+	String InputMinSupportingAlleleQsum = if defined(MinSupportingAlleleQsum) then "--min-supporting-allele-qsum ~{MinSupportingAlleleQsum} " else ""
+	String InputMinSupportingMappingQsum = if defined(MinSupportingMappingQsum) then "--min-supporting-mapping-qsum ~{MinSupportingMappingQsum} " else ""
+	String InputMismatchBaseQualityThreshold = if defined(MismatchBaseQualityThreshold) then "--mismatch-base-quality-threshold ~{MismatchBaseQualityThreshold} " else ""
+	String InputReadMismatchLimit = if defined(ReadMismatchLimit) then "--read-mismatch-limit ~{ReadMismatchLimit} " else ""
+	String InputReadMaxMismatchFraction = if defined(ReadMaxMismatchFraction) then "--read-max-mismatch-fraction ~{ReadMaxMismatchFraction} " else ""
+	String InputReadSnpLimit = if defined(ReadSnpLimit) then "--read-snp-limit ~{ReadSnpLimit} " else ""
+	String InputReadIndelLimit = if defined(ReadIndelLimit) then "--read-indel-limit ~{ReadIndelLimit} " else ""
+	String InputstandardFilters = if standardFilters then "--standard-filters " else ""
+	String InputMinAlternateFraction = if defined(MinAlternateFraction) then "--min-alternate-fraction ~{MinAlternateFraction} " else ""
+	String InputMinAlternateCount = if defined(MinAlternateCount) then "--min-alternate-count ~{MinAlternateCount} " else ""
+	String InputMinAlternateQsum = if defined(MinAlternateQsum) then "--min-alternate-qsum ~{MinAlternateQsum} " else ""
+	String InputMinAlternateTotal = if defined(MinAlternateTotal) then "--min-alternate-total~{MinAlternateTotal} " else ""
+	String InputMinCoverage = if defined(MinCoverage) then "--min-coverage ~{MinCoverage} " else ""
+
+	#population priors parameter
+	String InputNoPopulationPriors = if NoPopulationPriors then "--no-population-priors " else ""
+
+	#mappability priors parameters
+	String InputhwePriorsOff = if hwePriorsOff then "--hwe-priors-off " else ""
+	String InputbinomialObsPriorsOff = if binomialObsPriorsOff then "--binomial-obs-priors-off " else ""
+	String InputalleleBalancePriorsOff = if alleleBalancePriorsOff then "--allele-balance-priors-off " else ""
+
+	#genotype likelihoods parameters
+	String InputobservationBias = if defined(observationBias) then "--observation-bias ~{observationBias} " else ""
+	String InputbaseQualityCap = if defined(baseQualityCap) then "--base-quality-cap ~{baseQualityCap} " else ""
+	String InputprobContamination = if defined(probContamination) then "--prob-contamination ~{probContamination} " else ""
+	String InputlegacyGLS = if legacyGLS then "--legacy-gls " else ""
+	String InputcontaminationEstimates = if defined(contaminationEstimates) then "--contamination-estimates ~{contaminationEstimates} " else ""
+
+	#algorithmic features parameters
+	String InputreportGenotypeLikelihoodMax = if reportGenotypeLikelihoodMax then "--report-genotype-likelihood-max " else ""
+	String InputgenotypingMaxIterations = if defined(genotypingMaxIterations) then "--genotyping-max-iterations ~{genotypingMaxIterations} " else ""
+	String InputgenotypingMaxBanddepth = if defined(genotypingMaxBanddepth) then "--genotyping-max-banddepth ~{genotypingMaxBanddepth} " else ""
+	String InputposteriorIntegrationLimits = if defined(posteriorIntegrationLimits) then "--posterior-integration-limits ~{posteriorIntegrationLimits} " else ""
+	String InputexcludeUnobservedGenotypes = if excludeUnobservedGenotypes then "--exclude-unobserved-genotypes " else ""
+	String InputgenotypeVariantThreshold = if defined(genotypeVariantThreshold) then "--genotype-variant-threshold ~{genotypeVariantThreshold} " else ""
+	String InputuseMappingQuality = if useMappingQuality then "--use-mapping-quality " else ""
+	String InputharmonicIndelQuality = if harmonicIndelQuality then "--harmonic-indel-quality " else ""
+	String InputreadDependenceFactor = if defined(readDependenceFactor) then "--read-dependence-factor ~{readDependenceFactor} " else ""
+	String InputgenotypeQualities = if genotypeQualities then "--genotype-qualities " else ""
 
 	command <<<
 		set -exo pipefail
-		if [[ ! -f ~{outputFile} ]]; then
-			mkdir -p $(dirname ~{outputFile})
+		if [[ ! -f ~{OutputFile} ]]; then
+			mkdir -p $(dirname ~{OutputFile})
 		fi
 
-		~{path_exe} 
+		if [[ -z "~{in}" && -z "~{InputBamArray}" ]]; then
+			echo "Freebayes : No entry (bam) provided. exit 1";
+			exit 1
+		fi
 
+		BamArray=""
+		if [[ -z "~{InputBamArray}" ]]; then
+			BamArray="~{InputBamArray} ~{sep=' --bam ' bams} "
+		fi
+
+		~{path_exe} " ~{in} " \
+		~{BamArray} \
+		~{InputBamList} \
+		--vcf ~{OutputFile} \
+		--fasta-reference ~{refFasta} \
+		~{InputTarget} \
+		~{InputRegions} \
+		~{InputSamples} \
+		~{InputPopulations} \
+		~{InputcnvMap} \
+		~{InputTrace} \
+		~{InputFailedAlleles} \
+		~{InputVariantExtendedInput} \
+		~{VariantRestrictInput} \
+		~{InputHaplotypeBaseVCF} \
+		~{InputreportAllHaplotypeAlleles} \
+		~{InputreportMonomorphic} \
+		~{Inputpvar} \
+		~{Inputtheta} \
+		~{Inputploidy} \
+		~{InputPooledDicrete} \
+		~{InputPooledContinuous} \
+		~{InputuseRefAllele} \
+		~{InputReferenceQuality} \
+		~{InputNoSNP} \
+		~{InputNoIndels} \
+		~{InputNoMNPs} \
+		~{InputNoComplex} \
+		~{InputuseBestN} \
+		~{InputHaplotypeLenght} \
+		~{InputMinRepeatSize} \
+		~{InputMinRepeatEntropy} \
+		~{InputNoPartialObservations} \
+		~{InputDontLeftAlignIndels} \
+		~{InputUseDuplicateReads} \
+		~{InputMinMappingQuality} \
+		~{InputMinBaseQuality} \
+		~{InputMinSupportingAlleleQsum} \
+		~{InputMinSupportingMappingQsum} \
+		~{InputMismatchBaseQualityThreshold} \
+		~{InputReadMismatchLimit} \
+		~{InputReadMaxMismatchFraction} \
+		~{InputReadSnpLimit} \
+		~{InputReadIndelLimit} \
+		~{InputstandardFilters} \
+		~{InputMinAlternateFraction} \
+		~{InputMinAlternateCount} \
+		~{InputMinAlternateQsum} \
+		~{InputMinAlternateTotal} \
+		~{InputMinCoverage} \
+		~{InputNoPopulationPriors} \
+		~{InputhwePriorsOff} \
+		~{InputbinomialObsPriorsOff} \
+		~{InputalleleBalancePriorsOff} \
+		~{InputobservationBias} \
+		~{InputbaseQualityCap} \
+		~{InputprobContamination} \
+		~{InputlegacyGLS} \
+		~{InputcontaminationEstimates} \
+		~{InputreportGenotypeLikelihoodMax} \
+		~{InputgenotypingMaxIterations} \
+		~{InputgenotypingMaxBanddepth} \
+		~{InputposteriorIntegrationLimits} \
+		~{InputexcludeUnobservedGenotypes} \
+		~{InputgenotypeVariantThreshold} \
+		~{InputuseMappingQuality} \
+		~{InputharmonicIndelQuality} \
+		~{InputreadDependenceFactor} \
+		~{InputgenotypeQualities}
 	>>>
 
 	output {
