@@ -84,7 +84,7 @@ task freebayes {
 		String path_exe = "freebayes"
 
 		#input and output:
-		File in = ""
+		File? in = ""
 		Array[File]? bams
 		File? bamList
 		String? outputName
@@ -369,7 +369,7 @@ task freebayes {
 	>>>
 
 	output {
-		File outputFile = "~{outputFile}"
+		File outputFile = "~{OutputFile}"
 	}
 
 	runtime {
