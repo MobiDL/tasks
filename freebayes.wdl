@@ -280,7 +280,7 @@ task freebayes {
 	String InputreadDependenceFactor = if defined(readDependenceFactor) then "--read-dependence-factor ~{readDependenceFactor} " else ""
 	String InputgenotypeQualities = if genotypeQualities then "--genotype-qualities " else ""
 	String Dollar = "$"
-	
+
 	command <<<
 		set -exo pipefail
 		if [[ ! -f ~{OutputFile} ]]; then
@@ -297,7 +297,7 @@ task freebayes {
 			BamArray="~{InputBamArray} ~{sep=' --bam ' bams} "
 		fi
 
-		~{path_exe} " ~{in} " \
+		~{path_exe} ~{in} \
 		~{Dollar}{BamArray} \
 		~{InputBamList} \
 		--vcf ~{OutputFile} \
