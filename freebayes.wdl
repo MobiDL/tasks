@@ -87,7 +87,7 @@ task freebayes {
 		File? in = ""
 		Array[File]? bams
 		File? bamList
-		String? outputName
+		String outputName
 		String ext = ".bam"
 		String? outputPath
 		File refFasta
@@ -192,7 +192,6 @@ task freebayes {
 	String InputBamArray = if defined(bams) then "--bam " else ""
 
 	# define output file
-	String OutputName = if defined(outputName) then outputName else basename(in,ext) + ".vcf"
 	String OutputFile = if defined(outputPath) then "~{outputPath}/~{outputName}" else "~{outputName}"
 
 	#input parameters
@@ -393,6 +392,10 @@ task freebayes {
 		bamList: {
 			description: 'A file containing a list of BAM files to be analyzed.',
 			category: 'mandatory if no in'
+		}
+		outputName: {
+			description: 'Name for freebayes output (xxx.vcf)',
+			category: 'mandatory'
 		}
 		outputPath: {
 			description: 'Output path where file (VCF) were generated.',
