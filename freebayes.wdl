@@ -84,13 +84,16 @@ task freebayes {
 		String path_exe = "freebayes"
 
 		#input and output:
-		File? in = ""
+		File in = ""
+		File? inIndex
 		Array[File]? bams
+		Array[File]? bamsIndex
 		File? bamList
 		String outputName
 		String ext = ".bam"
 		String? outputPath
 		File refFasta
+		File? refFastaIndex
 		File? Target
 		Array[String]? Regions
 		File? Samples
