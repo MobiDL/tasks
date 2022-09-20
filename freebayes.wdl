@@ -279,7 +279,8 @@ task freebayes {
 	String InputharmonicIndelQuality = if harmonicIndelQuality then "--harmonic-indel-quality " else ""
 	String InputreadDependenceFactor = if defined(readDependenceFactor) then "--read-dependence-factor ~{readDependenceFactor} " else ""
 	String InputgenotypeQualities = if genotypeQualities then "--genotype-qualities " else ""
-
+	String Dollar = "$"
+	
 	command <<<
 		set -exo pipefail
 		if [[ ! -f ~{OutputFile} ]]; then
@@ -297,7 +298,7 @@ task freebayes {
 		fi
 
 		~{path_exe} " ~{in} " \
-		~{BamArray} \
+		~{Dollar}{BamArray} \
 		~{InputBamList} \
 		--vcf ~{OutputFile} \
 		--fasta-reference ~{refFasta} \
