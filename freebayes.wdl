@@ -438,7 +438,7 @@ task freebayes {
 			description: 'VCF formated file. Only provide variant calls and genotype likelihoods for sites and alleles which are provided in this VCF input, and provide output in the VCF for all input alleles, not just those which have support in the data.',
 			category: 'option'
 		}
-		HaplotypeBaseVCF: {,
+		HaplotypeBaseVCF: {
 			description: 'When specified, only variant alleles provided in this input VCF formated files will be used for the construction of complex or haplotype alleles.'
 			category: 'option'
 		}
