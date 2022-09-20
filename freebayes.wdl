@@ -439,7 +439,7 @@ task freebayes {
 			category: 'option'
 		}
 		HaplotypeBaseVCF: {
-			description: 'When specified, only variant alleles provided in this input VCF formated files will be used for the construction of complex or haplotype alleles.'
+			description: 'When specified, only variant alleles provided in this input VCF formated files will be used for the construction of complex or haplotype alleles.',
 			category: 'option'
 		}
 		reportAllHaplotypeAlleles: {
