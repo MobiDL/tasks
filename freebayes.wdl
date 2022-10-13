@@ -84,7 +84,7 @@ task freebayes {
 		String path_exe = "freebayes"
 
 		#input and output:
-		File in = ""
+		File? in
 		File? inIndex
 		Array[File]? bams
 		Array[File]? bamsIndex
@@ -290,13 +290,13 @@ task freebayes {
 			mkdir -p $(dirname ~{OutputFile})
 		fi
 
-		if [[ -z "~{in}" && -z "~{InputBamArray}" ]]; then
+		if [[ "~{in}" == "" && "~{InputBamArray}" == ""]]; then
 			echo "Freebayes : No entry (bam) provided. exit 1";
 			exit 1
 		fi
 
 		BamArray=""
-		if [[ -z "~{InputBamArray}" ]]; then
+		if [[ "~{InputBamArray}" != ""]]; then
 			BamArray="~{InputBamArray} ~{sep=' --bam ' bams} "
 		fi
 
