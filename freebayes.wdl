@@ -290,13 +290,15 @@ task freebayes {
 			mkdir -p $(dirname ~{OutputFile})
 		fi
 
-		if [[ "~{in}" == "" && "~{InputBamArray}" == ""]]; then
+		InTest=~{in}
+		InputBamArrayTest=~{InputBamArray}
+		if [[ -z ${InTest} && -z ${InputBamArrayTest} ]]; then
 			echo "Freebayes : No entry (bam) provided. exit 1";
 			exit 1
 		fi
 
 		BamArray=""
-		if [[ "~{InputBamArray}" != ""]]; then
+		if [[ ! -z ${InputBamArrayTest} ]]; then
 			BamArray="~{InputBamArray} ~{sep=' --bam ' bams} "
 		fi
 
