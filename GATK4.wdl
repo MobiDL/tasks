@@ -566,7 +566,7 @@ task splitIntervals {
 
 	output {
 		Array[File] splittedIntervals = glob("~{outputRep}/*-scattered.interval_list")
-		String outputRep = ~{outputRep}
+		String outputRep = outputRep
 	}
 
 	runtime {
