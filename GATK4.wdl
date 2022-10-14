@@ -500,10 +500,17 @@ task depthOfCoverage {
 
 task splitIntervals {
 	meta {
-		author: "Charles VAN GOETHEM"
-		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2020-08-06"
+		author: [
+			{
+				name: "Charles VAN GOETHEM",
+				email: "c-vangoethem(at)chu-montpellier.fr"
+			},{
+				name: "Olivier Ardouin",
+				email: "o-ardouin(at)chu-montpellier.fr"
+			}
+		]
+		version: "0.0.2"
+		date: "2022-10-14"
 	}
 
 	input {
@@ -559,6 +566,7 @@ task splitIntervals {
 
 	output {
 		Array[File] splittedIntervals = glob("~{outputRep}/*-scattered.interval_list")
+		String outputRep = ~{outputRep}
 	}
 
 	runtime {
