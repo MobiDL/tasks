@@ -89,8 +89,8 @@ task freebayes {
 		Array[File]? bams
 		Array[File]? bamsIndex
 		File? bamList
-		String outputName
-		String ext = ".bam"
+		String? outputName
+		String ext = ".vcf"
 		String? outputPath
 		File refFasta
 		File? refFastaIndex
@@ -196,7 +196,7 @@ task freebayes {
 
 	# define output file
 	String outName = basename(select_first(["~{outputName}", "~{in}", select_all(~{bams})]))
-	String OutputFile = if defined(outputPath) then "~{outputPath}/~{outName}" else "~{outName}"
+	String OutputFile = if defined(outputPath) then "~{outputPath}/~{outName}~{ext}" else "~{outName}~{ext}"
 
 	#input parameters
 	String InputTarget = if defined(Target) then "--targets ~{Target} " else ""
