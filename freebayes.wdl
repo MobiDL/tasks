@@ -195,7 +195,7 @@ task freebayes {
 	String InputBamArray = if defined(bams) then "--bam " else ""
 
 	# define output file
-	String outName = basename(select_first(["~{outputName}", "~{in}", select_all(~{bams})]))
+	String outName = basename(select_first(["~{outputName}", "~{in}", select_all(bams)]))
 	String OutputFile = if defined(outputPath) then "~{outputPath}/~{outName}~{ext}" else "~{outName}~{ext}"
 
 	#input parameters
