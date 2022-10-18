@@ -2390,7 +2390,7 @@ task splitVcfs {
 		fi
 
 		~{path_exe} SplitVcfs \
-			~{true="--STRICT" false="" strict} \
+			~{true="--STRICT" false="--STRICT false " strict} \
 			~{default="" "--SEQUENCE_DICTIONARY " + refDict} \
 			--INPUT ~{in} \
 			--INDEL_OUTPUT ~{outputFileBase + ".indels"}~{"." + extOut} \
