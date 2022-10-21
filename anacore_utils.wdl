@@ -1272,3 +1272,96 @@ task sortVCF {
 		}
 	}
 }
+
+task MergeVCFCallersMobiDl {
+	meta {
+		author: "Olivier Ardouin"
+		email: "o-ardouin(at)chu-montpellier.fr"
+		version: "0.0.1"
+		date: "2022-10-21"
+	}
+
+	input {
+		String path_exe = "anacoreUtilsMergeVCFCallersMobiDL.py"
+		Array[String] callers
+		Array[File] VCFs
+		String outputFile
+
+		String? annotationsField
+		Array[String]? sharedFilter
+
+		Int threads = 1
+		Int memoryByThreads = 1000
+		String? memory
+	}
+
+	String totalMem = if defined(memory) then memory else memoryByThreads*threads + "M"
+	Boolean inGiga = (sub(totalMem,"([0-9]+)(M|G)", "$2") == "G")
+	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
+	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
+	Int memoryByThreadsMb = floor(totalMemMb/threads)
+
+	String annotField = if defined(annotationsField) then "--annotations-field ~{annotationsField} " else ""
+	String Filters = if defined(sharedFilter) then "--shared-filters [~{sep=',' sharedFilter}] " else ""
+
+
+	command <<<
+	set exo pipefail
+
+	~{path_exe} \
+		~{annotField} \
+		~{Filters} \
+		--calling-sources ~{sep=' ' callers} \
+		--inputs-variants ~{sep=' ' VCFs} \
+		--output-variants ~{outputFile}
+
+	>>>
+
+	output {
+		File outputFile = outputFile
+	}
+
+	runtime {
+		cpu: "~{threads}"
+		requested_memory_mb_per_core: "${memoryByThreadsMb}"
+	}
+
+	parameter_meta {
+		path_exe: {
+			description: 'Path used as executable [default: "anacoreUtilsMergeVCFCallersMobiDL.py"]',
+			category: 'System'
+		}
+		callers: {
+			description: 'Name of the source in same order of VCFs files.',
+			category: 'Required'
+		}
+		VCFs: {
+			description: 'Path to the variants files coming from different callers (format: VCF). The order determine the which AF and AD are retained: the first caller where it is found in this list.',
+			category: 'Required'
+		}
+		outputFile: {
+			description: 'Output Path for resulting merged VCF',
+			category: 'Required'
+		}
+		annotationsField: {
+			description: 'Field used to store annotations. [Default: ANN]',
+			category: 'Tool option'
+		}
+		sharedFilter: {
+			description: 'Filters tags applying to the variant and independent of caller like filters on annotations. These filters are not renamed to add caller ID as suffix. [Default: ["lowAF", "OOT", "homoP", "popAF", "CSQ", "ANN.COLLOC", "ANN.RNA", "ANN.CSQ", "ANN.popAF"]]',
+			category: 'Tool option'
+		}
+		threads: {
+			description: 'Sets the number of threads [default: 1]',
+			category: 'System'
+		}
+		memory: {
+			description: 'Sets the total memory to use ; with suffix M/G [default: (memoryByThreads*threads)M]',
+			category: 'System'
+		}
+		memoryByThreads: {
+			description: 'Sets the total memory to use (in M) [default: 1000]',
+			category: 'System'
+		}
+
+}

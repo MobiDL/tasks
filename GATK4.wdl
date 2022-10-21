@@ -1615,6 +1615,7 @@ task bedToIntervalList {
 			~{true="--UNIQUE" false="" unique} \
 			--OUTPUT ~{outputFile}
 
+		sleep 10
 	>>>
 
 	output {
