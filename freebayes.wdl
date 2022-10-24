@@ -27,7 +27,7 @@ task get_version {
 	input {
 		String path_exe = "freebayes"
 
-		String environement = ""
+		String? environement
 		Int threads = 1
 		Int memoryByThreads = 768
 		String? memory
@@ -38,10 +38,14 @@ task get_version {
 	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
 	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
+	String Dollar = "$"
+	String env = if defined(environement) then environement else ""
+	
 
 	command <<<
 		set -exo pipefail
-		if [[ ~{environement} != ""]]; then
+		Myenv="~{env}"
+		if [[ ! -z "~{Dollar}Myenv" ]]; then
 			conda activate ~{environement}
 		fi
 
@@ -184,7 +188,7 @@ task freebayes {
 		Float? readDependenceFactor
 		Boolean genotypeQualities = false
 
-		String environement = ""
+		String? environement
 		Int threads = 1
 		Int memoryByThreads = 768
 		String? memory
@@ -290,9 +294,12 @@ task freebayes {
 	String InputgenotypeQualities = if genotypeQualities then "--genotype-qualities " else ""
 	String Dollar = "$"
 
+	String env = if defined(environement) then environement else ""
+
 	command <<<
 		set -exo pipefail
-		if [[ ~{environement} != ""]]; then
+		Myenv="~{env}"
+		if [[ ! -z "~{Dollar}Myenv" ]]; then
 			conda activate ~{environement}
 		fi
 
