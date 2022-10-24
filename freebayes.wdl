@@ -27,6 +27,7 @@ task get_version {
 	input {
 		String path_exe = "freebayes"
 
+		String environement = ""
 		Int threads = 1
 		Int memoryByThreads = 768
 		String? memory
@@ -40,6 +41,10 @@ task get_version {
 
 	command <<<
 		set -exo pipefail
+		if [[ ~{environement} != ""]]; then
+			conda activate ~{environement}
+		fi
+
 		~{path_exe} --version
 	>>>
 
@@ -179,6 +184,7 @@ task freebayes {
 		Float? readDependenceFactor
 		Boolean genotypeQualities = false
 
+		String environement = ""
 		Int threads = 1
 		Int memoryByThreads = 768
 		String? memory
@@ -286,6 +292,10 @@ task freebayes {
 
 	command <<<
 		set -exo pipefail
+		if [[ ~{environement} != ""]]; then
+			conda activate ~{environement}
+		fi
+
 		if [[ ! -f ~{OutputFile} ]]; then
 			mkdir -p $(dirname ~{OutputFile})
 		fi
