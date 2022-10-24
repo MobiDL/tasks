@@ -46,6 +46,7 @@ task get_version {
 		set -exo pipefail
 		Myenv="~{env}"
 		if [[ ! -z "~{Dollar}Myenv" ]]; then
+			source /home/olivier/.bashrc
 			conda activate ~{environement}
 		fi
 
@@ -300,6 +301,7 @@ task freebayes {
 		set -exo pipefail
 		Myenv="~{env}"
 		if [[ ! -z "~{Dollar}Myenv" ]]; then
+			source /home/olivier/.bashrc
 			conda activate ~{environement}
 		fi
 
