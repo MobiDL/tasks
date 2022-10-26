@@ -1290,6 +1290,7 @@ task MergeVCFCallersMobiDl {
 		String? annotationsField
 		Array[String]? sharedFilter
 
+		String? environement
 		Int threads = 1
 		Int memoryByThreads = 1000
 		String? memory
@@ -1300,6 +1301,8 @@ task MergeVCFCallersMobiDl {
 	Int memoryValue = sub(totalMem,"([0-9]+)(M|G)", "$1")
 	Int totalMemMb = if inGiga then memoryValue*1024 else memoryValue
 	Int memoryByThreadsMb = floor(totalMemMb/threads)
+	String env = if defined(environement) then environement else ""
+	String Dollar = "$"
 
 	String annotField = if defined(annotationsField) then "--annotations-field ~{annotationsField} " else ""
 	String Filters = if defined(sharedFilter) then "--shared-filters [~{sep=',' sharedFilter}] " else ""
@@ -1307,6 +1310,12 @@ task MergeVCFCallersMobiDl {
 
 	command <<<
 	set exo pipefail
+
+	Myenv="~{env}"
+	if [[ ! -z "~{Dollar}Myenv" ]]; then
+		source /home/olivier/.bashrc
+		conda activate ~{environement}
+	fi
 
 	~{path_exe} \
 		~{annotField} \
