@@ -792,10 +792,10 @@ task stats {
 
 task view {
 	meta {
-		author: "Charles VAN GOETHEM"
-		email: "c-vangoethem(at)chu-montpellier.fr"
-		version: "0.0.1"
-		date: "2021-03-26"
+		author: "Charles VAN GOETHEM / Olivier Ardouin"
+		email: "c-vangoethem(at)chu-montpellier.fr / o-ardouin(at)chu-montpellier.fr"
+		version: "0.0.2"
+		date: "2022-12-02"
 	}
 
 	input {
@@ -806,6 +806,7 @@ task view {
 
 		String? name
 		String? outputPath
+		String? samplesList
 		String subString = "\.(vcf|bcf)(\.gz)?$"
 		String subStringReplace = ""
 
@@ -836,6 +837,9 @@ task view {
 	Boolean includeExpBool = defined(includeExp)
 	Boolean excludeExpBool = defined(excludeExp)
 
+	String sampleslist = if defined(samplesList) then "--samples ~{samplesList}" else ""
+	
+
 	command <<<
 
 		if [[ ! -f ~{outputFile} ]]; then
@@ -846,6 +850,7 @@ task view {
 			~{default="" "--regions '" + region}~{true="'" false="" regionBool} \
 			~{default="" "--include '" + includeExp}~{true="'" false="" includeExpBool} \
 			~{default="" "--exclude '" + excludeExp}~{true="'" false="" excludeExpBool} \
+			~{sampleslist} \
 			--output-type ~{outputType} \
 			--output-file ~{outputFile} \
 			~{in}
