@@ -802,7 +802,7 @@ task view {
 		String path_exe = "bcftools"
 
 		File in
-		File index
+		File? index
 
 		String? name
 		String? outputPath
