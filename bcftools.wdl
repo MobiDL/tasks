@@ -806,7 +806,7 @@ task view {
 
 		String? name
 		String? outputPath
-		String? samplesList
+		Array[String]? samplesList
 		String subString = "\.(vcf|bcf)(\.gz)?$"
 		String subStringReplace = ""
 
@@ -837,8 +837,8 @@ task view {
 	Boolean includeExpBool = defined(includeExp)
 	Boolean excludeExpBool = defined(excludeExp)
 
-	String sampleslist = if defined(samplesList) then "--samples ~{samplesList}" else ""
-	
+	String sampleslist = if defined(samplesList) then "--samples " else ""
+	String Dollar = "$"
 
 	command <<<
 
@@ -846,11 +846,15 @@ task view {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
+		samples = ~{sampleslist}
+		if [[ ! -z ${sampleTest} ]]; then
+			samples="~{sampleslist} ~{sep=',' samplesList} "
+		fi
 		~{path_exe} view \
 			~{default="" "--regions '" + region}~{true="'" false="" regionBool} \
 			~{default="" "--include '" + includeExp}~{true="'" false="" includeExpBool} \
 			~{default="" "--exclude '" + excludeExp}~{true="'" false="" excludeExpBool} \
-			~{sampleslist} \
+			~{Dollar}{samples} \
 			--output-type ~{outputType} \
 			--output-file ~{outputFile} \
 			~{in}
