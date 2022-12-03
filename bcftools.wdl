@@ -847,7 +847,7 @@ task view {
 		fi
 
 		samples = ~{sampleslist}
-		if [[ ! -z ${sampleTest} ]]; then
+		if [[ ! -z ${samples} ]]; then
 			samples="~{sampleslist} ~{sep=',' samplesList} "
 		fi
 		~{path_exe} view \
