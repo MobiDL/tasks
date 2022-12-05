@@ -837,7 +837,7 @@ task view {
 	Boolean includeExpBool = defined(includeExp)
 	Boolean excludeExpBool = defined(excludeExp)
 
-	String sampleslist = if defined(samplesList) then "--samples " else ""
+	Boolean sampleslist = if defined(samplesList) then true else false
 	String Dollar = "$"
 
 	command <<<
@@ -846,9 +846,11 @@ task view {
 			mkdir -p $(dirname ~{outputFile})
 		fi
 
-		samples = ~{sampleslist}
-		if [[ ! -z ${samples} ]]; then
-			samples="~{sampleslist} ~{sep=',' samplesList} "
+		#samples="~{sampleslist}"
+		#if [[ ! -z ${samples} ]]; then
+		samples=""
+		if ~{sampleslist}; then 
+			samples="--samples ~{sep=',' samplesList} "
 		fi
 		~{path_exe} view \
 			~{default="" "--regions '" + region}~{true="'" false="" regionBool} \
