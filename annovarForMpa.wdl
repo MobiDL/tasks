@@ -50,7 +50,7 @@ task annovarForMpa {
     String CustomXref
     String Genome = "hg19"
     String Clinvar = "clinvar_latest"
-    String Dbnsfp = "dbnsfp41a"
+    String Dbnsfp = "dbnsfp42a"
 
     String Dbscsnv = "dbscsnv11"
     String GnomadExome = "gnomad_exome"
